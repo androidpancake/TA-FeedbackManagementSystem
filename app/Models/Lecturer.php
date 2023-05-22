@@ -15,8 +15,26 @@ class Lecturer extends Authenticatable
     protected $fillable = [
         'name',
         'username',
-        'nip',
+        'nim',
         'email',
         'password'
     ];
+
+    //feedback
+    // public function feedback()
+    // {
+    //     return $this->hasMany(Feedback::class);
+    // }
+
+    // //mata kuliah
+    // public function course()
+    // {
+    //     return $this->hasMany(Kelas::class);
+    // }
+        
+    public function class()
+    {
+        return $this->hasMany(Kelas::class);
+    }
+
 }

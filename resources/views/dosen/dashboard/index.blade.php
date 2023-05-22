@@ -1,4 +1,4 @@
-@extends('template.template')
+@extends('template.dosen.template')
 
 @section('content')
 <h1 class="font-bold text-3xl">Selamat Datang, {{ Auth::user()->name }}</h1>

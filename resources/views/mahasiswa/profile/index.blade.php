@@ -31,7 +31,7 @@
                 
             <div class="w-full mt-4 sm:col-span-2 items-start space-x-5">
                 <div>
-                    <input type="text" class="block w-full p-2 border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-green-500 focus:border-green-500" placeholder="{{ Auth::user()->name }}">
+                    <input type="text" class="block w-full p-2 border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-green-500 focus:border-green-500" placeholder="{{ $user->name }}">
                 </div>
             </div>
         </div>
@@ -62,4 +62,16 @@
         </div>
     </div>
 </form>
+<div class="mt-4 space-y-1">
+    <h1 class="font-bold text-xl">Mata kuliah yang diikuti</h1>
+    <div class="grid grid-cols-4 space-x-2">
+        @foreach($class as $data)
+        <div class="bg-white border rounded-lg p-4 space-y-2">
+            <h1 class="font-bold">{{$data->name}}</h1>
+            <p class="text-base text-gray-500">{{$data->course->name}}</p>
+            <p class="text-base text-gray-800">{{ $data->lecturer->name }}</p>
+        </div>
+        @endforeach
+    </div>
+</div>
 @endsection

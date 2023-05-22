@@ -7,7 +7,7 @@
             <img src="../../images/S__14942228.jpg" class="rounded w-20 h-20" alt="">
         </div>
         <div class="col-span-2">
-            <h2 class="text-2xl font-semibold">Beri umpan balik ke dosen</h2>
+            <h2 class="text-2xl font-semibold">Beri umpan balik ke lab</h2>
             <p class="text-gray-700">Bantu tingkatkan kualitas pengajaran dengan memberikan umpan balik Anda <br> kepada dosen</p>
         </div>
     </div>

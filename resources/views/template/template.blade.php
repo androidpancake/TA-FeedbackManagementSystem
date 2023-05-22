@@ -7,7 +7,7 @@
     <!-- <link rel="stylesheet" href="../../css/tailwind.css"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    @vite('resource/css/app.css')
+    @vite(['resource/css/app.css', 'resource/js/app.js'])
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <title>Test</title>
@@ -68,7 +68,7 @@
                 <div>
                     <ul class="space-y-2">
                         <li>
-                            <a href="{{ route('mahasiswa.profile') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <a href="{{ route('mahasiswa.profile', Auth()->id()) }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path></svg>
                                 <span class="ml-3 font-semibold text-gray-700">Profil Saya</span>
                             </a>
@@ -88,10 +88,7 @@
             </div>
         </aside>
         
-        
- 
-        
-        <div class="p-4 sm:ml-64">
+        <div class="p-4 sm:ml-64 bg-gray-50">
             <div class="container mt-2">
             @yield('content')
             </div>
