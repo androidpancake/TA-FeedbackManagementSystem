@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class Lecturer extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'lecturer';
 
@@ -17,7 +18,8 @@ class Lecturer extends Authenticatable
         'username',
         'nim',
         'email',
-        'password'
+        'password',
+        'profile_photo'
     ];
 
     //feedback
@@ -34,7 +36,7 @@ class Lecturer extends Authenticatable
         
     public function class()
     {
-        return $this->hasMany(Kelas::class);
+        return $this->hasMany(Kelas::class, 'lecturer_id');
     }
 
 }

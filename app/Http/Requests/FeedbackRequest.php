@@ -30,7 +30,7 @@ class FeedbackRequest extends FormRequest
             'status' => 'required',
             'file' => 'nullable|file',
             'anonymous' => 'boolean',
-            'class_id' => 'required|exists:class,id'
+            'kelas_id' => 'required|exists:class,id'
         ];
     }
 }

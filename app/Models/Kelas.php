@@ -21,7 +21,7 @@ class Kelas extends Model
     //mahasiswa
     public function user()
     {
-        return $this->belongsToMany(User::class, 'mahasiswa_kelas', 'user_id', 'class_id');
+        return $this->belongsToMany(User::class, 'mahasiswa_kelas', 'class_id', 'user_id');
     }
 
     //mata kuliah
@@ -33,12 +33,17 @@ class Kelas extends Model
     //dosen
     public function lecturer()
     {
-        return $this->belongsTo(Lecturer::class);    
+        return $this->belongsTo(Lecturer::class, 'lecturer_id');    
     }
 
     public function feedback()
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    public function survey()
+    {
+        return $this->hasMany(Survey::class);
     }
 
 }

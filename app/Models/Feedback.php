@@ -16,11 +16,12 @@ class Feedback extends Model
         'content',
         'status',
         'date',
+        'closed_date',
         'anonymous',
         'file',
         'category_id',
         'user_id',
-        'class_id'
+        'kelas_id'
     ];
 
     public function category()
@@ -35,7 +36,7 @@ class Feedback extends Model
 
     public function class()
     {
-        return $this->belongsTo(Kelas::class, 'class_id');
+        return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 
     public function reply()
@@ -43,8 +44,4 @@ class Feedback extends Model
         return $this->hasMany(Reply::class);
     }
 
-    public function lecturer_reply()
-    {
-        return $this->hasMany(LecturerReply::class);
-    }
 }

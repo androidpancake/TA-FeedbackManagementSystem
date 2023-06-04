@@ -4,7 +4,10 @@
 <div class="grid justify-center">
     <div class="flex items-start gap-2 mt-6">
         <div>
-            <img src="../../images/S__14942228.jpg" class="rounded w-20 h-20" alt="">
+            <div class="relative bg-gray-300 p-6">
+                <img src="{{ asset('storage/image/Teacher.png') }}" class="w-8 h-8" alt="">
+                <img src="{{ asset('storage/image/Teacher.png') }}" class="w-4 h-4 z-10" alt="">
+            </div>
         </div>
         <div class="col-span-2">
             <h2 class="text-2xl font-semibold">Beri umpan balik ke dosen</h2>
@@ -26,9 +29,9 @@
             <input type="hidden" name="status" value="sent">
             <!-- <input type="date" name="date" value="{{ now() }}" hidden> -->
             <div>
-                <label for="class_id" class="block mb-2 text-sm font-medium text-gray-900">Dosen</label>
-                <select name="class_id" class="w-full bg-white border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-4 text-start inline-flex justify-between items-center">
-                    @foreach($class as $data)    
+                <label for="kelas_id" class="block mb-2 text-sm font-medium text-gray-900">Dosen</label>
+                <select name="kelas_id" class="w-full bg-white border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-4 text-start inline-flex justify-between items-center">
+                    @forelse($class as $data)    
                     <option value="{{ $data->id }}" class="py-2 px-3 ">
                         <div class="flex flex-col space-x-3">
                             <img src="{ url('storage/images/S__14942228.jpg')}" class="rounded-full w-8 h-8" alt="">
@@ -41,7 +44,9 @@
                             </div>
                         </div>
                     </option>
-                    @endforeach
+                    @empty
+                    <option value="" selected>Tidak ada mata kuliah yang diikuti</option>
+                    @endforelse
                 </select>
             </div>
             <div>
@@ -68,7 +73,7 @@
                 <textarea id="message" name="content" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
                 <p class="text-gray-500 text-sm">Ingatlah untuk menjaga komentar dengan sopan</p>
             </div>
-            <div>
+            <!-- <div>
                 <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Media (opsional)</label>    
                 <div class="flex items-center justify-center w-full">
                     <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -77,9 +82,13 @@
                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                         </div>
-                        <input id="dropzone-file" type="file" name="file" class="hidden" />
+                        <input id="dropzone-file" type="file" name="file" class="hidden" multiple/>
                     </label>
                 </div> 
+            </div> -->
+            <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Upload file pendukung (opsional)</label>
+                <input name="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple>
             </div>
             <div class="border-y p-4">
                 <div class="flex justify-between">
@@ -87,12 +96,9 @@
                         <h2 class="font-semibold">Sembunyikan Identitas</h2>
                         <p class="font-base text-sm text-gray-600">Aktifkan ini untuk memberikan umpan balik tanpa menampilkan identitas Anda</p>
                     </div>
-                    <div>
-                        <input type="checkbox" value="0" name="anonymous">
-                    </div>
                     <div>                  
                         <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="anonymous" id="anonymous" value="false" class="sr-only peer">
+                            <input type="checkbox" name="anonymous" id="anonymous" value="1" class="sr-only peer">
                             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
                         </label>
                     </div>

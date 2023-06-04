@@ -14,9 +14,9 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::create([
-            'name' => 'cat1',
-            'desc' => 'test',
-            'label' => ''
+            'name' => 'akhlak',
+            'desc' => 'akhlak dosen',
+            'for' => 'feedback'
         ]);
     }
 }

@@ -28,6 +28,7 @@ class CourseController extends Controller
         $item = Course::with([
             'kelas'
         ])->findOrFail($id);
+
         $kelas = $item->kelas;
         
         // dd($kelas);
@@ -38,16 +39,20 @@ class CourseController extends Controller
         ]);
     }
 
-    public function getUserByCourse($courseID)
+    public function class($classId)
     {
-        $course = Course::find($courseID);
-        $kelas = $course->kelas;
-        $mahasiswa = User::join('mahasiswa_kelas', 'users.id','=','mahasiswa_kelas.user_id')
-        ->join('class','class.id','=','mahasiswa_kelas.class_id')
-        ->join('course','course.id','=','class.course_id')
-        ->where('course.id', $courseID)
-        ->select('users.id', 'users.name', 'users.nim')
-        ->get();
+        $class = Kelas::with([
+            'course'
+        ])->find($classId);
+        // dd($class);
+        $user = $class->user()->get();
+        // dd($user);
+        // $mahasiswa = User::join('mahasiswa_kelas', 'users.id','=','mahasiswa_kelas.user_id')
+        // ->join('class','class.id','=','mahasiswa_kelas.class_id')
+        // ->join('course','course.id','=','class.course_id')
+        // ->where('course.id', $courseID)
+        // ->select('users.id', 'users.name', 'users.nim')
+        // ->get();
         
         // dd($kelas->name);
         // dd($mahasiswa);
@@ -64,9 +69,8 @@ class CourseController extends Controller
         // }
 
         return view('admin.class.user_detail', [
-            'mahasiswa' => $mahasiswa,
-            'course' => $course,
-            'kelas' => $kelas
+            'mahasiswa' => $user,
+            'class' => $class
         ]);
     }
 }

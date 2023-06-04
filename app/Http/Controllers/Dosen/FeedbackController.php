@@ -7,12 +7,14 @@ use App\Http\Requests\ReplyRequest;
 use App\Models\Feedback;
 use App\Models\Lecturer;
 use App\Models\Reply;
+use App\Notifications\ReplyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class FeedbackController extends Controller
 {
-    public function index($dosenId)
+    public function index(Request $request, $dosenId)
     {
         $dosen = Lecturer::findOrFail(auth()->id());
 
@@ -21,7 +23,6 @@ class FeedbackController extends Controller
         //     'user', 'category', 'class'
         // ])->where('feedback','feedback.class_id', '=', 'class.lecturer_id', '=', $dosen)->get();
         
-        // dd($feedback);
 
         $feedbacks = Feedback::with([
             'category', 'class', 'user'
@@ -37,12 +38,37 @@ class FeedbackController extends Controller
         // ->select('feedback.*')
         ->get();
 
-        // dd($feedbacks);
+        // dd(count($feedbacks));
     
         // dd($feedbacks);
 
+        $wait = Feedback::where('status', 'sent')->whereHas('class.lecturer', function($query) use ($dosenId){
+            $query->where('id', $dosenId);
+        })->get();
+        $read = Feedback::where('status', 'read')->whereHas('class.lecturer', function($query) use ($dosenId){
+            $query->where('id', $dosenId);
+        })->get();
+        $done = Feedback::where('status', 'done')->whereHas('class.lecturer', function($query) use ($dosenId){
+            $query->where('id', $dosenId);
+        })->get();
+
+        $sortBy = $request->get('sort');
+
+        if($sortBy === 'latest'){
+            $feedbacks = Feedback::orderBy('created_at', 'desc')->where('user_id', auth()->id())->get();
+        } 
+        elseif($sortBy === 'oldest') {
+            $feedbacks = Feedback::orderBy('created_at', 'asc')->where('user_id', auth()->id())->get();
+        } else {
+            $feedbacks = Feedback::orderBy('created_at', 'desc')->where('user_id', auth()->id())->get();
+        }
+
         return view('dosen.feedback.index', [
-            'feedback' => $feedbacks
+            'feedback' => $feedbacks,
+            'wait' => $wait,
+            'read' => $read,
+            'done' => $done,
+            'sortBy' => $sortBy
         ]);
     }
 
@@ -59,12 +85,11 @@ class FeedbackController extends Controller
         ])
         ->findOrFail($id);
         
-        // dd($feedback->reply);
         // dd($reply_dosen);
         
         $feedback->date = now();
         
-        if($feedback->status != 'done'){
+        if($feedback->status == 'sent'){
             $feedback->status = 'read';
         }
 
@@ -86,7 +111,10 @@ class FeedbackController extends Controller
 
         Reply::create($data);
 
+        // dd($reply);
         $feedback->save();
+
+        $feedback->user->notify(new ReplyNotification($feedback));
 
         // dd($feedback);
 

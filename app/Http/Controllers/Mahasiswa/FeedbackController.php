@@ -12,46 +12,44 @@ use App\Models\Lecturer;
 use App\Models\LecturerReply;
 use App\Models\Reply;
 use App\Models\User;
+use App\Notifications\LecturerReplyNotification;
+use App\Notifications\ReplyNotification;
 use GrahamCampbell\ResultType\Error;
 use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = User::where('id', auth()->id())
-        ->get();
-        // dd($user->id);
-
         $feedback = Feedback::with([
-            'user', 'class', 'category'
+            'user', 'class', 'category', 'reply'
         ])
-        // ->where('feedback', 'feedback.class_id','=','mahasiswa_kelas.class_id','=', 'mahasiswa_kelas.user_id', '=', auth()->id())
+        ->where('user_id', auth()->id())
         ->get();
-        // dd($feedback);
 
-        // foreach($feedback as $data){
-        //     '<br>' . $data->user->name  . '<br>';
-        //     '<br>' . $data->class->name  . '<br>';
-        //     '<br>' . $data->category->name  . '<br>';
-        // }
+        // dd(count($feedback));
         
+        $wait = Feedback::where('status', 'sent')->where('user_id', auth()->id())->get();
+        $read = Feedback::where('status', 'read')->where('user_id', auth()->id())->get();
+        $done = Feedback::where('status', 'done')->where('user_id', auth()->id())->get();
 
-        // $testdata = Lecturer::with([
-        //     'course', 'feedback'
-        // ])
-        // ->join('lecturer','lecturer.id','=','feedback.lecturer_id')
-        // ->where('user_id', auth()->id())->get();
-        
-        $wait = Feedback::where('status', 'sent')->count();
-        $read = Feedback::where('status', 'read')->count();
-        $done = Feedback::where('status', 'done')->count();
+        $sortBy = $request->get('sort');
+
+        if($sortBy === 'latest'){
+            $feedback = Feedback::orderBy('created_at', 'desc')->where('user_id', auth()->id())->get();
+        } 
+        elseif($sortBy === 'oldest') {
+            $feedback = Feedback::orderBy('created_at', 'asc')->where('user_id', auth()->id())->get();
+        } else {
+            $feedback = Feedback::orderBy('created_at', 'desc')->where('user_id', auth()->id())->get();
+        }
 
         return view('mahasiswa.feedback.index', [
             'feedback' => $feedback,
             'wait' => $wait,
             'read' => $read,
-            'done' => $done
+            'done' => $done,
+            'sortBy' => $sortBy,
             // 'test' => $testdata
         ]);
     }
@@ -73,7 +71,7 @@ class FeedbackController extends Controller
 
         // dd($kelas);
 
-        $category = Category::all();
+        $category = Category::where('for', 'feedback')->get();
         
         return view('mahasiswa.feedback.create.dosen.create', [
             'user' => $user,
@@ -102,18 +100,14 @@ class FeedbackController extends Controller
         }
 
         if($request->hasFile('file')){
-            $file = $request->file('file');
-
-            $path = $file->store('feedback_files', 'public');
-
-            $data['file'] = $path;
+            $data['file'] = $request->file('file')->store(
+                'file', 'public'
+            );
         }
             
-
         $data['user_id'] = Auth::user()->id;
 
         Feedback::create($data);
-
 
         // dd($data);
         return redirect()->route('mahasiswa.feedback.index');
@@ -158,6 +152,8 @@ class FeedbackController extends Controller
 
         Reply::create($data);
 
+        $feedback->class->lecturer->notify(new LecturerReplyNotification($feedback));
+
         return redirect()->route('mahasiswa.feedback.detail', $feedbackId);
     }
 
@@ -166,6 +162,7 @@ class FeedbackController extends Controller
         $feedback = Feedback::findOrFail($feedbackId);
 
         $feedback->status = 'done';
+        $feedback->closed_date = now();
 
         $feedback->save();
 

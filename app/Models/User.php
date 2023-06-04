@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'username',
         'nim',
+        'profile_photo',
         'email',
         'password',
     ];
@@ -49,6 +50,18 @@ class User extends Authenticatable
         return $this->belongsToMany(Kelas::class, 'mahasiswa_kelas', 'user_id','class_id');
     }
 
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class);
+    }
 
+    public function complaint()
+    {
+        return $this->hasMany(Complaint::class);
+    }
 
+    public function survey()
+    {
+        return $this->hasMany(Survey::class);
+    }
 }

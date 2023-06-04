@@ -30,6 +30,6 @@ class Reply extends Model
 
     public function lecturer()
     {
-        return $this->belongsTo(Lecturer::class, 'user_id');
+        return $this->belongsTo(Lecturer::class, 'lecturer_id');
     }
 }
