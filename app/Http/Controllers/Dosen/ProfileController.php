@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Dosen;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Lecturer;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -41,5 +43,21 @@ class ProfileController extends Controller
         $dosen->update($data);
         
         return redirect()->route('lecturer.profile', $dosen->id);
+    }
+
+    public function delete($id)
+    {
+        $dosen = Lecturer::findOrFail($id);
+        // Mendapatkan path foto saat ini dari model User
+        $currentPhotoPath = auth()->user()->profile_photo;
+
+        // Menghapus foto saat ini dari sistem penyimpanan
+        if ($currentPhotoPath) {
+            Storage::delete('public/profile/' . $currentPhotoPath);
+            $dosen->profile_photo = null;
+            $dosen->save();
+        }        
+
+        return redirect()->route('lecturer.profile', $id);
     }
 }

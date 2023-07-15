@@ -45,6 +45,11 @@ return [
             'provider' => 'lecturer'
 
         ],
+        'lab' => [
+            'driver' => 'session',
+            'provider' => 'lab'
+
+        ],
         'admin' => [
             'driver' => 'session',
             'provider' => 'admin'
@@ -77,6 +82,11 @@ return [
         'lecturer' => [
             'driver' => 'eloquent',
             'model' => App\Models\Lecturer::class,
+        ],
+
+        'lab' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Lab::class,
         ],
 
         'admin' => [

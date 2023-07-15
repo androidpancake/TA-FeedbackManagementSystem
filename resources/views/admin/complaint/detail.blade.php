@@ -30,6 +30,13 @@
                     <div class="mt-4 space-y-1">
                         <h1 class="font-bold">{{ $complaint->subject }}</h1>
                         <p class="text-sm">{{ $complaint->content }}</p>
+                        @if(Str::contains($complaint->file, ['.jpg','.png','.jpeg']))
+                            <img src="{{ Storage::url($complaint->file) }}" class="w-8 h-auto rounded-lg" alt="gambar">
+                        @elseif(Str::contains($complaint->file, ['.pdf']))
+                            <a href="{{ Storage::url($complaint->file) }}" target="_blank" class="max-w-sm h-8 bg-green-400 rounded-lg p-2" alt="file">
+                                {{ $complaint->file }}
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -39,7 +46,7 @@
                 <div class="w-64 md:w-1/2 bg-green-100 rounded-lg border">
                     <div class="p-4">
                         <div class="flex space-x-2 items-center border-b pb-3">
-                            <img src="../../../icons/Teacher.png" alt="" class="rounded-full">
+                            <img src="{{ Storage::url($replies->user->profile_photo) }}" alt="" class="rounded-full">
                             <h1 class="text-gray-500 font-semibold">{{ $replies->user->name }}</h1>
                             <p>•</p>
                             <p class="text-sm text-gray-500 font-medium">{{ $replies->created_at }}</p>
@@ -127,16 +134,13 @@
                             <div class="flex justify-between items-center">
                                 <p class="text-sm text-gray-500">Status</p>
                                 <div class="bg-gray-200 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
-                                    <span>
-                                        <img src="../../../icons/Lab.png" class="w-4 h-4" alt="">
-                                    </span>
                                     <p>{{ $complaint->status }}</p>
                                 </div>
                             </div>
                             <div class="flex justify-between items-center">
                                 <p class="text-sm text-gray-500">Mahasiswa</p>
                                 <div class="px-2 py-1 rounded-lg text-sm font-medium inline-flex items-center space-x-2">
-                                    <img src="../../../images/S__14942228.jpg" class="rounded-full w-6 h-6" alt="">
+                                    <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
                                     <p>{{ $complaint->user->name }}</p>
                                 </div>
                             </div>
@@ -144,6 +148,9 @@
                             <div class="flex justify-between items-center">
                                 <p class="text-sm text-gray-500">Kategori</p>
                                 <div class="bg-red-100 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border border-red-400">
+                                    <span>
+                                        <img src="{{ Storage::url($complaint->category->label) }}" class="w-4 h-4" alt="">
+                                    </span>
                                     <p class="text-red-600">{{ $complaint->category->name }}</p>
                                 </div>
                             </div>
@@ -223,21 +230,21 @@
                         <div class="flex flex-wrap lg:flex-row justify-between items-center">
                             <p class="text-sm text-gray-500">Mahasiswa</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
-                                <img src="../../../images/S__14942228.jpg" class="rounded-full w-6 h-6" alt="">
+                                <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
                                 <p>{{ $complaint->user->name }}</p>
                             </div>
                         </div>
-                        
-                        
-                        <div class="flex flex-col lg:flex-row justify-between">
-                            <p class="text-sm text-gray-500">Prodi</p>
-                            <p class="text-sm font-medium">Prodi</p>
+                        <div class="flex flex-wrap lg:flex-row justify-between items-center">
+                            <p class="text-sm text-gray-500">NIM</p>
+                            <div class="text-sm font-medium inline-flex items-center space-x-2">
+                                <p>{{ $complaint->user->nim }}</p>
+                            </div>
                         </div>
                         <div class="flex flex-wrap lg:flex-col justify-between items-center">
                             <p class="text-sm text-gray-500">Kategori</p>
                             <div class="bg-red-100 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border border-red-400">
                                 <span>
-                                    <img src="../../../icons/Lab.png" class="w-4 h-4" alt="">
+                                    <img src="{{ Storage::url($complaint->category->label) }}" class="w-4 h-4" alt="">
                                 </span>
                                 <p class="text-red-600">{{ $complaint->category->name }}</p>
                             </div>

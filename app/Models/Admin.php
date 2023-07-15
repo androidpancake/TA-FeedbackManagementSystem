@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Admin extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'admin';
 
@@ -16,8 +17,10 @@ class Admin extends Authenticatable
         'name',
         'username',
         'nip',
+        'role',
         'email',
-        'password'
+        'password',
+        'profile_photo'
     ];
 
     public function complaint()

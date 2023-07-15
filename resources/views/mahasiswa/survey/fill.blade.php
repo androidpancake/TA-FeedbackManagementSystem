@@ -35,7 +35,11 @@
                 <div class="flex space-x-1 sm:bg-white p-2 border-2 rounded-lg space-x-3">
                     <img src="{{ asset('storage/image/Teacher.png') }}" class="w-6 h-6 sm:w-8 h-8 rounded-full" alt="">
                     <div>
+                        @if($survey->class->lecturer)
                         <h1 class="font-semibold">{{ $survey->class->lecturer->name }}</h1>
+                        @elseif($survey->class->lab)
+                        <h1 class="font-semibold">{{ $survey->class->lab->name }}</h1>
+                        @endif
                         <div class="inline-flex items-center space-x-2">
                             <p class="text-sm text-gray-500">{{ $survey->class->course->name }}</p>
                             <p class="text-sm text-gray-500">•</p>

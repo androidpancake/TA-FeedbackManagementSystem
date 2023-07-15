@@ -13,6 +13,7 @@ class complaintReply extends Model
 
     protected $fillable = [
         'reply',
+        'attachment',
         'complaint_id',
         'user_id',
         'admin_id'

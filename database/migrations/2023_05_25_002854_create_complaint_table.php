@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('content');
             $table->enum('status', ['sent','read','response','done']);
             $table->datetime('date');
+            $table->string('file');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

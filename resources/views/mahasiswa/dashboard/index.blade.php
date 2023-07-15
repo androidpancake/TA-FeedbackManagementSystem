@@ -24,9 +24,7 @@
                 <h1 class="font-semibold">Lihat aktivitas</h1>
                 <p class="text-sm text-gray-500">Berikan respon survey dan melihat balasan</p>
             </a>
-
         </div>
     </div>
 </div>
-
 @endsection

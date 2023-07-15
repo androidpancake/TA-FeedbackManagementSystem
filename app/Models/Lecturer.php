@@ -17,6 +17,7 @@ class Lecturer extends Authenticatable
         'name',
         'username',
         'nim',
+        'role',
         'email',
         'password',
         'profile_photo'

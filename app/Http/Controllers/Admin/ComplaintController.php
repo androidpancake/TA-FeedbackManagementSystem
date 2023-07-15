@@ -4,22 +4,27 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplainReplyRequest;
+use App\Models\Category;
 use App\Models\Complaint;
 use App\Models\complaintReply;
+use App\Notifications\AdminReplyNotification;
 use Illuminate\Http\Request;
 
 class ComplaintController extends Controller
 {
     public function index(Request $request)
     {
+        $category = Category::where('for', 'complaint')->get();
         $complaint = Complaint::with([
-            'category', 'user', 'admin'
+            'category', 'user', 'admin', 'complaint_reply'
         ])->get();
         
         $wait = Complaint::where('status', 'sent')->get();
         $read = Complaint::where('status', 'read')->get();
+        $process = Complaint::where('status', 'response')->get();
         $done = Complaint::where('status', 'done')->get();
         
+
         $sortBy = $request->get('sort');
 
         if($sortBy === 'latest'){
@@ -31,14 +36,53 @@ class ComplaintController extends Controller
             $complaint = Complaint::orderBy('created_at', 'desc')->get();
         }
 
-        return view('admin.complaint.index', [
+        return view('admin.complaint.index2', [
             'complaint' => $complaint,
+            'category' => $category,
             'wait' => $wait,
             'read' => $read,
+            'process' => $process,
             'done' => $done,
             'sortBy' => $sortBy
         ]);
 
+    }
+
+    public function byCategory(Request $request, $categoryName)
+    {
+        $category = Category::where('name', $categoryName)->firstOrFail();
+
+        // dd($category);
+
+        $listCategory = Category::where('for', 'complaint')->get();
+
+        $complaint = Complaint::where('category_id', $category->id)->get();
+        
+        $wait = $complaint->where('status', 'sent')->values();
+        $read = $complaint->where('status', 'read')->values();
+        $process = $complaint->where('status', 'response')->values();
+        $done = $complaint->where('status', 'done')->values();
+
+        $sortBy = $request->get('sort');
+
+        if($sortBy === 'latest'){
+            $complaint = Complaint::orderBy('created_at', 'desc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        } 
+        elseif($sortBy === 'oldest') {
+            $complaint = Complaint::orderBy('created_at', 'asc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        } else {
+            $complaint = Complaint::orderBy('created_at', 'desc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        }
+
+        return view('admin.complaint.filter.filter', [
+            'category' => $category,
+            'listCategory' => $listCategory,
+            'complaint' => $complaint,
+            'wait' => $wait,
+            'read' => $read,
+            'process' => $process,
+            'done' => $done
+        ]);
     }
 
     public function detail($id)
@@ -56,7 +100,7 @@ class ComplaintController extends Controller
 
         $complaint->save();
 
-        return view('admin.complaint.detail', [
+        return view('admin.complaint.detail2', [
             'complaint' => $complaint
         ]);
     }
@@ -70,9 +114,20 @@ class ComplaintController extends Controller
 
         $complaint->status = 'response';
 
-        complaintReply::create($data);
+        if($request->hasFile('attachment')){
+
+            $data['attachment'] = $request->file('attachment')->store(
+                'complaint_replies', 'public'
+            );
+        }
+
+        $reply = complaintReply::create($data);
 
         $complaint->save();
+
+        // dd($reply->admin->name);
+
+        $complaint->user->notify(new AdminReplyNotification($complaint));
 
         // dd($complaint);
 

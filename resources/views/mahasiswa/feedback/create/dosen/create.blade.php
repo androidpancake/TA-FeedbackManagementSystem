@@ -27,7 +27,20 @@
         <form action="{{ route('mahasiswa.feedback.store') }}" method="POST" class="space-y-8" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="status" value="sent">
-            <!-- <input type="date" name="date" value="{{ now() }}" hidden> -->
+            <div class="border-y p-4">
+                <div class="flex justify-between">
+                    <div>
+                        <h2 class="font-semibold">Sembunyikan Identitas</h2>
+                        <p class="font-base text-sm text-gray-600">Aktifkan ini untuk memberikan umpan balik tanpa menampilkan identitas Anda</p>
+                    </div>
+                    <div>                  
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="anonymous" id="anonymous" value="1" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div>
                 <label for="kelas_id" class="block mb-2 text-sm font-medium text-gray-900">Dosen</label>
                 <select name="kelas_id" class="w-full bg-white border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-4 text-start inline-flex justify-between items-center">
@@ -89,20 +102,6 @@
             <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Upload file pendukung (opsional)</label>
                 <input name="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple>
-            </div>
-            <div class="border-y p-4">
-                <div class="flex justify-between">
-                    <div>
-                        <h2 class="font-semibold">Sembunyikan Identitas</h2>
-                        <p class="font-base text-sm text-gray-600">Aktifkan ini untuk memberikan umpan balik tanpa menampilkan identitas Anda</p>
-                    </div>
-                    <div>                  
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="anonymous" id="anonymous" value="1" class="sr-only peer">
-                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-                        </label>
-                    </div>
-                </div>
             </div>
             <div class="flex justify-end">
                 <button class="bg-green-500 py-2 px-3 rounded text-white font-semibold" type="submit">Kirim umpan balik</button>

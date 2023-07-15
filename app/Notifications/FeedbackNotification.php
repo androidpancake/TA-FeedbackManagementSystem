@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Feedback;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,14 +11,16 @@ use Illuminate\Notifications\Notification;
 class FeedbackNotification extends Notification
 {
     use Queueable;
+
+    private $feedback;
     
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($feedback)
     {
-        //
+        $this->feedback = $feedback;
     }
 
     /**
@@ -27,19 +30,9 @@ class FeedbackNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
 
     /**
      * Get the array representation of the notification.
@@ -48,8 +41,18 @@ class FeedbackNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
+
+        $anonymous = $this->feedback->anonymous ? 'Anonymous' : 'Not anonymous';
+        $message = $this->feedback->anonymous ? 'Ada feedback baru' : 'Ada feedback baru oleh';
         return [
-            //
+            'message' => $message,
+            'name' => $this->feedback->user->name,
+            'subject' => $this->feedback->subject,
+            'class' => $this->feedback->class->name,
+            'course' => $this->feedback->class->course->name,
+            'img' => $this->feedback->user->profile_photo,
+            'anonymous' => $anonymous,
+            'url' => route('lecturer.feedback.detail', ['id' => $this->feedback->id]),
         ];
     }
 }

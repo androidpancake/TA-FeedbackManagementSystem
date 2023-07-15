@@ -44,4 +44,5 @@ require __DIR__.'/auth.php';
 require __DIR__.'/mahasiswa.php';
 require __DIR__.'/lecturer.php';
 require __DIR__.'/admin.php';
+require __DIR__.'/lab.php';
 

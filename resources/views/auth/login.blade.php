@@ -19,7 +19,7 @@
                 <div class="flex justify-center">
                     <img src="{{ asset('storage/image/logo.png')}}" class="h-auto max-w-xs" alt="">
                 </div>
-                <h5 class="text-3xl font-semibold text-center text-gray-900 dark:text-white">Log in</h5>
+                <h5 class="text-3xl font-semibold text-center text-gray-900 dark:text-white">Login</h5>
                 <p class="text-center text-gray-600">Silakan log in untuk melanjutkan</p>
                 <div>
                     <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SSO</label>
@@ -32,7 +32,7 @@
                 <div class="flex items-start">
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="remember" type="checkbox" value="" class="w-4 h-4 text-green-500 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-green-300" required>
+                            <input id="remember" name="remember" {{ old('remember') ? 'checked' : '' }} type="checkbox" value="" class="w-4 h-4 text-green-500 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-green-300">
                         </div>
                         <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
                     </div>

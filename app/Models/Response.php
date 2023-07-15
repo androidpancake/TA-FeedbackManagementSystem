@@ -16,7 +16,7 @@ class Response extends Model
         'comment',
         'additional',
         'user_id',
-        'survey_id'
+        'survey_id',
     ];
 
     public function survey()
@@ -28,5 +28,6 @@ class Response extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     
 }

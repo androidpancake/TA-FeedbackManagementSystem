@@ -15,6 +15,7 @@ Route::group(['middleware' => 'auth:mahasiswa'], function(){
     Route::get('mahasiswa/dashboard', function(){
         return view('mahasiswa.dashboard.index');
     })->name('mahasiswa.dashboard');
+    
     //profile
     Route::get('mahasiswa/profile/{id}', [ProfileController::class, 'index'])->name('mahasiswa.profile')->middleware('auth:mahasiswa');
     Route::put('mahasiswa/profile/update/{id}', [ProfileController::class, 'update'])->name('mahasiswa.profile.update');
@@ -22,20 +23,24 @@ Route::group(['middleware' => 'auth:mahasiswa'], function(){
 
     //feedback
     Route::get('mahasiswa/feedback', [FeedbackController::class, 'index'])->name('mahasiswa.feedback.index');
+    Route::get('mahasiswa/feedback/{categoryName}', [FeedbackController::class, 'byCategory'])->name('mahasiswa.feedback.category');
+    Route::post('choice', [FeedbackController::class, 'choice'])->name('mahasiswa.feedback.choice');
     Route::get('mahasiswa/feedback/send/dosen', [FeedbackController::class, 'dosen'])->name('mahasiswa.feedback.create.dosen');
     Route::get('mahasiswa/feedback/send/lab', [FeedbackController::class, 'lab'])->name('mahasiswa.feedback.create.lab');
 
     Route::post('send_feedback', [FeedbackController::class, 'store'])->name('mahasiswa.feedback.store');
     
     Route::get('mahasiswa/feedback/detail/{id}', [FeedbackController::class, 'detail'])->name('mahasiswa.feedback.detail');
-    Route::post('send_reply/{feedbackId}', [FeedbackController::class, 'm_send_reply'])->name('mahasiswa.reply.m_send');
+    Route::post('send_reply/{feedbackId}', [FeedbackController::class, 'mahasiswa_reply'])->name('mahasiswa.reply.m_send');
 
     Route::post('feedback_done/{id}', [FeedbackController::class, 'close_feedback'])->name('mahasiswa.feedback.done');
     Route::delete('feedback/delete/{id}', [FeedbackController::class, 'destroy'])->name('mahasiswa.feedback.delete');
 
     //complaint
     Route::get('mahasiswa/complaint', [ComplaintController::class, 'index'])->name('mahasiswa.complaint.index');
-    Route::get('mahasiswa/complaint/create', [ComplaintController::class, 'create'])->name('mahasiswa.complaint.create');
+    Route::get('mahasiswa/complaint/{categoryName}', [ComplaintController::class, 'byCategory'])->name('mahasiswa.complaint.category');
+    Route::get('complaint/create', [ComplaintController::class, 'create'])->name('mahasiswa.complaint.create');
+    
     Route::post('send_complaint', [ComplaintController::class, 'store'])->name('mahasiswa.complaint.store');
     Route::get('mahasiswa/complaint/detail/{id}', [ComplaintController::class, 'detail'])->name('mahasiswa.complaint.detail');
     Route::post('send_complaint_reply/{id}', [ComplaintController::class, 'send_complaint_reply'])->name('mahasiswa.complaint.m_send_complaint_reply');
@@ -49,6 +54,11 @@ Route::group(['middleware' => 'auth:mahasiswa'], function(){
 
     //notifikasi
     Route::get('mahasiswa/notification', [NotificationController::class, 'index'])->name('mahasiswa.notification');
+
+    //test
+    Route::get('mahasiswa/feedback/detail', function(){
+        return view('mahasiswa.feedback.detail.detail2');
+    });
 
 })
 ?>

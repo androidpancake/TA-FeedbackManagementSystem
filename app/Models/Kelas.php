@@ -15,7 +15,8 @@ class Kelas extends Model
         'name',
         'header',
         'course_id',
-        'lecturer_id'
+        'lecturer_id',
+        'lab_id'
     ];
 
     //mahasiswa
@@ -36,6 +37,12 @@ class Kelas extends Model
         return $this->belongsTo(Lecturer::class, 'lecturer_id');    
     }
 
+    //lab
+    public function lab()
+    {
+        return $this->belongsTo(Lab::class, 'lab_id');
+    }
+
     public function feedback()
     {
         return $this->hasMany(Feedback::class);
@@ -44,6 +51,11 @@ class Kelas extends Model
     public function survey()
     {
         return $this->hasMany(Survey::class);
+    }
+
+    public function responses()
+    {
+        return $this->hasManyThrough(Response::class, Survey::class);
     }
 
 }

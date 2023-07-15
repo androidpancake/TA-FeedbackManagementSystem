@@ -25,6 +25,9 @@ class AuthUserController extends Controller
     } elseif(Auth::guard('lecturer')->attempt(['username' => $request->username, 'password' => $request->password])){
         $request->session()->regenerate();
         return redirect()->route('dosen.dashboard');
+    } elseif(Auth::guard('lab')->attempt(['username' => $request->username, 'password' => $request->password])){
+        $request->session()->regenerate();
+        return redirect()->route('lab.dashboard');
     } elseif(Auth::guard('admin')->attempt(['username' => $request->username, 'password' => $request->password])){
         $request->session()->regenerate();
         return redirect()->route('admin.dashboard');

@@ -25,7 +25,8 @@ class ReplyRequest extends FormRequest
             'user_id' => 'exists:users,id',
             'feedback_id' => 'exists:feedback,id',
             'lecturer_id' => 'exists:lecturer,id',
-            'reply' => 'required|string'
+            'reply' => 'required|string',
+            'attachment' => 'nullable|file'
         ];
     }
 }

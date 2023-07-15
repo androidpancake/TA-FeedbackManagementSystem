@@ -14,11 +14,11 @@
             <div>
                 @if($dosen->profile_photo)
                 <div>
-                    <img src="{{ Storage::url($dosen->profile_photo) }}" class="h-auto max-w-xs rounded-full" alt="">
+                    <img src="{{ Storage::url($dosen->profile_photo) }}" class="h-12 w-12 rounded-full" alt="">
                 </div>
                 @else
                 <div>
-                    <img src="{{ asset('storage/image/Teacher.png') }}" class="rounded-full" alt="">
+                    <img src="{{ asset('storage/image/Teacher.png') }}" class="h-12 w-12 rounded-full" alt="">
                 </div>
                 @endif
             </div>
@@ -27,9 +27,11 @@
                     @csrf
                     @method('PUT')
                     <input type="file" name="profile_photo">
-                    <button type="submit" class="bg-transparent font-semibold text-blue-500">Update</button>
+                    <button type="submit" class="bg-transparent font-semibold text-green-500">Update</button>
                 </form>
-                <form action="">
+                <form action="{{ route('lecturer.profile.delete', Auth()->id()) }}" method="POST">
+                    @csrf
+                    @method('PUT')
                     <button type="submit" class="bg-transparent">Delete</button>
                 </form>
             </div>
@@ -47,20 +49,20 @@
             </div>
         </div>
     </div>
-    <div class="grid grid-cols-1 border-b border-gray-200 py-5 sm:flex items-start">
+    <!-- <div class="grid grid-cols-1 border-b border-gray-200 py-5 sm:flex items-start">
         <div class="w-1/2">
             <p class="font-medium text-base text-gray-700">Tipe User</p>
         </div>
             
         <div class="w-full mt-4 sm:col-span-2 items-start space-x-5">
             <div>
-                <input type="text" class="block w-full p-2 border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-green-500 focus:border-green-500" placeholder="...">
+                <input type="text" class="block w-full p-2 border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-green-500 focus:border-green-500" placeholder="{{ $dosen->role }}">
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="grid grid-cols-1 border-b border-gray-200 py-5 sm:flex items-start">
         <div class="w-1/2">
-            <p class="font-medium text-base text-gray-700">NIM</p>
+            <p class="font-medium text-base text-gray-700">NIP</p>
         </div>
             
         <div class="w-full mt-4 sm:col-span-2 space-x-5">
@@ -76,9 +78,9 @@
         @foreach($class as $data)
         <div class="bg-white border rounded-lg p-4 space-y-2">
             <h1 class="font-bold">{{$data->name}}</h1>
-            <h1 class="font-bold">{{ $data->id }}</h1>
+            <!-- <h1 class="font-bold">{{ $data->id }}</h1> -->
             <p class="text-base text-gray-500">{{$data->course->name}}</p>
-            <p class="text-base text-gray-500">{{$data->course->id}}</p>
+            <p class="text-base text-gray-500">{{$data->course->code}}</p>
 
             <p class="text-base text-gray-800">{{ $data->lecturer->name }}</p>
         </div>

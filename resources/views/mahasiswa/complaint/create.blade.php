@@ -1,17 +1,20 @@
 @extends('template.template')
+@section('breadcrumb')
 
+@endsection
 @section('content')
 <div class="grid justify-center">
     <div class="flex items-start gap-2 mt-6">
-        <div>
-            <img src="../../images/S__14942228.jpg" class="rounded w-20 h-20" alt="">
+        <div class="relative bg-gray-300 p-6">
+            <img src="{{ asset('storage/image/Teacher.png') }}" class="w-8 h-8" alt="">
+            <img src="{{ asset('storage/image/Book.png') }}" class="w-4 h-4 z-10" alt="">
         </div>
         <div class="col-span-2">
             <h2 class="text-2xl font-semibold">Sampaikan pengaduan ke Prodi</h2>
             <p class="text-gray-700">Bantu tingkatkan kualitas pengajaran dengan memberikan umpan balik Anda <br> kepada dosen</p>
         </div>
     </div>
-    <div class="mt-10">
+    <div class="mt-10 pb-4">
         @if ($errors->any())
             <div class="bg-red py-2 px-3">
                 <div>
@@ -24,15 +27,14 @@
         <form action="{{ route('mahasiswa.complaint.store') }}" method="POST" class="space-y-8" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="status" value="sent">
-            <!-- <input type="date" name="date" value="{{ now() }}" hidden> -->
-            
+            <input type="date" name="date" value="{{ now() }}" hidden>
             <div>
                 <label for="category_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori</label>
                 <select name="category_id" class="w-full bg-white border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-4 text-start inline-flex justify-between items-center">
-                    @foreach($category as $data)    
+                    @foreach($category as $data)   
                     <option value="{{ $data->id }}" class="py-2 px-3 ">
                         <div class="flex flex-col space-x-3">
-                            <img src="{ url('storage/images/S__14942228.jpg')}" class="rounded-full w-8 h-8" alt="">
+                            <img src="{{ Storage::url($data->label) }}" class="rounded-full w-8 h-8" alt="">
                             <div>
                                 <p class="font-bold">{{ $data->name }}</p>                                
                             </div>
@@ -51,7 +53,7 @@
                 <p class="text-gray-500 text-sm">Ingatlah untuk menjaga komentar dengan sopan</p>
             </div>
             <div>
-                <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Media (opsional)</label>    
+                <!-- <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File tambahan (opsional)</label>    
                 <div class="flex items-center justify-center w-full">
                     <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -61,7 +63,10 @@
                         </div>
                         <input id="dropzone-file" type="file" name="file" class="hidden" />
                     </label>
-                </div> 
+                </div> -->
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Upload file pendukung (opsional)</label>
+                <input name="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple>
+            </div> 
             </div>
             
             <div class="flex justify-end">

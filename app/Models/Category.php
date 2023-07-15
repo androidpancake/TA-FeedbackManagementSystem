@@ -15,11 +15,17 @@ class Category extends Model
         'name',
         'desc',
         'for',
-        'label'
+        'label',
+        'bg'
     ];
 
     public function feedback()
     {
         return $this->hasMany(Feedback::class, 'feedback_id','id');
+    }
+
+    public function complaint()
+    {
+        return $this->hasMany(Complaint::class, 'complaint_id');
     }
 }

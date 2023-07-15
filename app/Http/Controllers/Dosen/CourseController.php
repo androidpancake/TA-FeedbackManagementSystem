@@ -7,6 +7,8 @@ use App\Models\Course;
 use App\Models\Feedback;
 use App\Models\Kelas;
 use App\Models\Lecturer;
+use App\Models\Response;
+use App\Models\Survey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,17 +18,21 @@ class CourseController extends Controller
     {
         $dosen = Lecturer::with('class.course')->find(auth()->id());
 
-        // dd($dosen);
-        // $course = Lecturer::join('class', 'lecturer.id', '=', 'class.lecturer_id')
-        // ->join('course', 'class.course_id', '=', 'course.id')
-        // ->select('course.id', 'course.name', 'course.code')
-        // ->where('lecturer.id', $dosen)
-        // ->get();
-
         $course = $dosen->class->pluck('course');
+        $courses = $dosen->class->pluck('course')->unique();
+
+        $courseCounts = [];
+
+        foreach ($course as $course) {
+            $classCount = $dosen->class->where('course_id', $course->id)->count();
+            $courseCounts[$course->id] = $classCount;
+        }
+
+        // dd($courses);
 
         return view('dosen.course.index', [
-            'course' => $course
+            'course' => $courses,
+            'courseCounts' => $courseCounts,
         ]);
     }
 
@@ -44,13 +50,17 @@ class CourseController extends Controller
 
         // dd($course->id);
 
-        $class = Kelas::with([
-            'course', 'lecturer'
-        ])->where('course_id', $courseId)
+        $classes = Kelas::with(['course', 'lecturer', 'survey.responses'])
+        ->where('course_id', $courseId)
         ->where('lecturer_id', auth()->id())
         ->get();
 
-        // dd($class);
+        $classes->each(function ($class) {
+            $class->average_rating = $class->responses->avg('rating');
+        });
+
+        // dd($classes);
+
 
         // $feedbacks = Feedback::join('class', 'feedback.class_id', '=', 'class.id')
         // ->join('course', 'class.course_id', '=', 'course.id')
@@ -64,41 +74,71 @@ class CourseController extends Controller
         $feedback_count = Kelas::withCount('feedback')->find($courseId);
 
         $class_user_count = Kelas::withCount('user')->find($courseId);
-
-        // dd($class);
+        
+        $survey_count = Kelas::withCount('survey')->find($courseId);
 
         return view('dosen.course.class', [
+            'course' => $course,
             'feedback' => $feedback_count,
-            'class' => $class,
-            'user_count' => $class_user_count
+            'class' => $classes,
+            'user_count' => $class_user_count,
+            'survey_count' => $survey_count
         ]);
     }
 
     public function feedback_class($id)
     {
-        $class = Kelas::findOrFail($id);
+        $class = Kelas::with([
+            'survey.responses'
+        ])->findOrFail($id);
+        
+        $averageRating = $class->responses->avg('rating');
+
+        // dd($averageRating);
 
         // dd($class);
         $feedback = Feedback::with([
-            'class.course', 'class'
+            'class', 'user', 'reply'
         ])
-        ->whereHas('class.course', function($query) use ($id){
-            $query->where('id', $id);
-        })
+        // ->whereHas('class.course', function($query) use ($id){
+        //     $query->where('id', $id);
+        // })
+        ->where('kelas_id', $id)
         ->get();
 
-        // $classData = Feedback::join('class', 'feedback.class_id', '=', 'class.id')
-        // ->join('course', 'class.course_id', '=', 'course.id')
-        // ->where('course.id', $id)
-        // ->select('class.name as classname', 'course.name')
-        // ->get();
-        // dd($classData);
+        // dd($feedback);
         $feedbackCount = $feedback->count();
+
+        $surveys = Survey::with([
+            'responses'
+        ])->where('kelas_id', $id)->get()
+
+        ->map(function ($survey){
+            $now = now();
+            if($now->between($survey->date, $survey->limit_date)){
+                $survey->remaining_time = $now->diffInHours($survey->limit_date);
+            } else {
+                $survey->remaining_time = 'Survey telah selesai';
+            }
+
+            return $survey;
+        });
+
+        $countSurvey = $surveys->count();
+
+        foreach($surveys as $survey){
+            $survey->commentCount = $survey->responses()->whereNotNull('comment')->count();
+            $survey->avgrating = round($survey->responses()->average('rating'),1);
+        }
+
 
         return view('dosen.feedback.class.index', [
             'class' => $class,
             'feedback' => $feedback,
-            'count' => $feedbackCount
+            'count' => $feedbackCount,
+            'survey' => $surveys,
+            'count_survey' => $countSurvey,
+            'avg_rating' => $averageRating
         ]);
     }
 }

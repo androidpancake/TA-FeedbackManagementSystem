@@ -28,7 +28,7 @@ class ComplaintRequest extends FormRequest
             'date' => 'nullable|date',
             'category_id' => 'required|exists:category,id',
             'status' => 'required',
-            'file' => 'nullable|file',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
     }
 }

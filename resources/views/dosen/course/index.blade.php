@@ -13,10 +13,10 @@
         <div>
             <!-- name -->
             <h1 class="text-lg font-semibold text-gray-800">{{ $data->name }}</h1>
-            <!-- rating -->
-            <div class="inline-flex space-x-2">
-                <p class="font-semibold text-gray-800">4.5/5.0</p>
-                <p class="text-gray-500">dari 4 kelas</p>
+            <!-- info -->
+            <div class="flex-col">
+                <p class="text-sm text-gray-800">Kode : {{ $data->code }}</p>
+                <p class="text-sm text-gray-600">{{ $courseCounts[$data->id] }} kelas</p>
             </div>
         </div>
     </a>

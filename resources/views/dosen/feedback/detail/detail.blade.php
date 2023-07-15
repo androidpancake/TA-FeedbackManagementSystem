@@ -18,7 +18,7 @@
     <!-- replies -->
     <div class="hidden h-screen sm:h-screen flex flex-col justify-between w-full py-2" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
         <div class="mt-4 space-y-2 overflow-y-auto">
-            <div class="w-full bg-white rounded-lg border">
+            <div class="w-full bg-white rounded-lg border-2 shadow-lg">
                 <div class="p-4">
                     <div class="flex space-x-2 items-center border-b pb-3">
                         @if($feedback->anonymous == 0)
@@ -41,29 +41,33 @@
             @foreach($feedback->reply as $replies)
                 @if(!$replies->user)
                 <div class="flex justify-end">
-                    <div class="w-96 md:w-96 bg-white rounded-lg border">
+                    <div class="w-96 md:w-96 bg-green-500 rounded-lg border">
                         <div class="p-4">
                             <div class="flex space-x-2 items-center border-b border-green-300 pb-3">
-                                <img src="../../../icons/Teacher.png" alt="" class="rounded-full">
-                                <h1 class="text-gray-500 font-semibold">{{ $feedback->class->lecturer->name }}</h1>
-                                <p>•</p>
-                                <p class="text-sm text-gray-500 font-medium">{{ $replies->created_at }}</p>
+                                <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" alt="" class="w-6 h-6 rounded-full">
+                                <h1 class="text-white font-semibold">{{ $feedback->class->lecturer->name }}</h1>
+                                <p class="text-white">•</p>
+                                <p class="text-sm text-white font-medium">{{ $replies->created_at->diffForHumans() }}</p>
                             </div>
                             <div class="mt-4 space-y-1">
-                                <p class="text-gray-600 text-sm">{{ $replies->reply }}</p>
+                                <p class="text-white text-sm">{{ $replies->reply }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 @else
                 <div class="flex justify-start">
-                    <div class="w-96 md:w-1/2 bg-green-50 rounded-lg border">
+                    <div class="w-96 md:w-1/2 bg-white rounded-lg border-2">
                         <div class="p-4">
-                            <div class="flex space-x-2 items-center border-b border-green-300 pb-3">
-                                <img src="../../../icons/Teacher.png" alt="" class="rounded-full">
+                            <div class="flex space-x-2 items-center border-b border-gray-300 pb-3">
+                                @if($feedback->anonymous == 0)
+                                <img src="{{ Storage::url($feedback->user->profile_photo) }}" alt="" class="w-6 h-6 rounded-full">
                                 <h1 class="text-gray-500 font-semibold">{{ $replies->user->name }}</h1>
+                                @else
+                                <h1 class="text-gray-500 font-semibold">Anonymous</h1>
+                                @endif
                                 <p>•</p>
-                                <p class="text-sm text-gray-500 font-medium">{{ $replies->created_at }}</p>
+                                <p class="text-sm text-gray-500 font-medium">{{ $replies->created_at->diffForHumans() }}</p>
                             </div>
                             <div class="mt-4 space-y-1">
                                 <p class="text-gray-600 text-sm">{{ $replies->reply }}</p>
@@ -99,7 +103,7 @@
                     <div class="flex items-center justify-between px-3 py-2 border-t">
                         
                         <div class="flex pl-0 space-x-1 sm:pl-2">
-                            <input class="w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none" id="file_input" type="file">
+                            <input name="attachment" class="w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" id="file_input" type="file">
                         </div>
                         @if($feedback->status == 'done')
                         <button type="submit" class="inline-flex items-center space-x-2 py-2.5 px-4 text-xs font-medium text-center text-white bg-gray-300 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900" disabled>
@@ -131,16 +135,13 @@
                             <div class="flex justify-between items-center">
                                 <p class="text-sm text-gray-500">Status</p>
                                 <div class="bg-gray-200 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
-                                    <span>
-                                        <img src="../../../icons/Lab.png" class="w-4 h-4" alt="">
-                                    </span>
                                     <p>{{ $feedback->status }}</p>
                                 </div>
                             </div>
                             <div class="flex justify-between items-center">
                                 <p class="text-sm text-gray-500">Mahasiswa</p>
                                 <div class="px-2 py-1 rounded-lg text-sm font-medium inline-flex items-center space-x-2">
-                                    <img src="../../../images/S__14942228.jpg" class="rounded-full w-6 h-6" alt="">
+                                    <img src="{{ Storage::url($feedback->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
                                     <p>{{ $feedback->user->name }}</p>
                                 </div>
                             </div>
@@ -152,11 +153,18 @@
                                 <p class="text-sm text-gray-500">Kelas</p>
                                 <p class="text-sm">{{ $feedback->class->name }}</p>
                             </div>
+                            <div class="flex justify-between">
+                                <p class="text-sm text-gray-500">Dosen</p>
+                                <div class="inline-flex space-x-2 items-center">
+                                    <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" alt="" class="w-8 h-8 rounded-full">
+                                    <p class="text-sm font-medium">{{ $feedback->class->lecturer->name }}</p>
+                                </div>
+                            </div>
                             <div class="flex justify-between items-center">
                                 <p class="text-sm text-gray-500">Kategori</p>
                                 <div class="bg-red-100 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border border-red-400">
                                     <span>
-                                        <img src="../../../icons/Lab.png" class="w-4 h-4" alt="">
+                                        <img src="{{ Storage::url($feedback->category->label) }}" class="w-4 h-4" alt="">
                                     </span>
                                     <p class="text-red-600">{{ $feedback->category->name }}</p>
                                 </div>
@@ -228,17 +236,18 @@
                         <div class="flex flex-wrap lg:flex-col justify-between items-center">
                             <p class="text-sm text-gray-500">Status</p>
                             <div class="bg-gray-200 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
-                                <span>
-                                    <img src="../../../icons/Lab.png" class="w-4 h-4" alt="">
-                                </span>
                                 <p>{{ $feedback->status }}</p>
                             </div>
                         </div>
                         <div class="flex flex-wrap lg:flex-row justify-between items-center">
                             <p class="text-sm text-gray-500">Mahasiswa</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
+                                @if($feedback->anonymous == 0)
                                 <img src="{{ Storage::url($feedback->user->profile_photo) }}" class="rounded-full w-8 h-8" alt="">
                                 <p>{{ $feedback->user->name }}</p>
+                                @else
+                                <p>Anonymous</p>
+                                @endif
                             </div>
                         </div>
                         <div class="flex flex-col lg:flex-row justify-between">
@@ -260,7 +269,7 @@
                             <p class="text-sm text-gray-500">Kategori</p>
                             <div class="bg-red-100 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border border-red-400">
                                 <span>
-                                    <img src="../../../icons/Lab.png" class="w-4 h-4" alt="">
+                                    <img src="{{ Storage::url($feedback->category->label) }}" class="w-4 h-4" alt="">
                                 </span>
                                 <p class="text-red-600">{{ $feedback->category->name }}</p>
                             </div>

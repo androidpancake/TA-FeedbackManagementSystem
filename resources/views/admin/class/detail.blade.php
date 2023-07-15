@@ -20,7 +20,11 @@
                         <tr class="border-b dark:border-gray-700">
                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $data->id }}</th>
                             <td class="px-4 py-3">{{ $data->name }}</td>
+                            @if($data->lecturer)
                             <td class="px-4 py-3">{{ $data->lecturer->name }}</td>
+                            @elseif($data->lab)
+                            <td class="px-4 py-3">{{ $data->lab->name }}</td>
+                            @endif
                             <td class="px-4 py-3">{{ $data->user->count() }}</td>
                             <td class="px-4 py-3 flex items-center justify-end">
                                 <button id="dropdownID{{ $data->id }}" data-dropdown-toggle="dropdown{{ $data->id }}" class="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">

@@ -35,6 +35,7 @@ class SettingController extends Controller
     public function edit($id)
     {
         $category = Category::findOrFail($id);
+        
         return view('admin.setting.edit', [
             'category' => $category
         ]);

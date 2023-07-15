@@ -68,7 +68,11 @@
         <div class="bg-white border rounded-lg p-4 space-y-2">
             <h1 class="font-bold">{{$data->name}}</h1>
             <p class="text-base text-gray-500">{{$data->course->name}}</p>
+            @if($data->lecturer)
             <p class="text-base text-gray-800">{{ $data->lecturer->name }}</p>
+            @elseif($data->lab)
+            <p class="text-base text-gray-800">{{ $data->lab->name }}</p>
+            @endif
         </div>
         @endforeach
     </div>

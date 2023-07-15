@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Mahasiswa;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplainReplyRequest;
 use App\Http\Requests\ComplaintRequest;
+use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Complaint;
 use App\Models\complaintReply;
+use App\Notifications\ComplaintNotification;
+use App\Notifications\UserComplaintReplyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,6 +26,7 @@ class ComplaintController extends Controller
 
         $wait = Complaint::where('status', 'sent')->where('user_id', auth()->id())->get();
         $read = Complaint::where('status', 'read')->where('user_id', auth()->id())->get();
+        $process = Complaint::where('status', 'process')->where('user_id', auth()->id())->get();
         $done = Complaint::where('status', 'done')->where('user_id', auth()->id())->get();
         
         $sortBy = $request->get('sort');
@@ -36,21 +40,54 @@ class ComplaintController extends Controller
             $complaint = Complaint::orderBy('created_at', 'desc')->where('user_id', auth()->id())->get();
         }
 
+        $category = Category::where('for', 'complaint')->get();
+
         return view('mahasiswa.complaint.index', [
             'complaint' => $complaint,
             'wait' => $wait,
             'read' => $read,
+            'process' => $process,
             'done' => $done,
-            'sortBy' => $sortBy
+            'sortBy' => $sortBy,
+            'category' => $category
+        ]);
+    }
+
+    public function byCategory($categoryName)
+    {
+        $category = Category::where('name', $categoryName)->firstOrFail();
+
+        $listCategory = Category::where('for', 'complaint')->get();
+        // dd($listCategory);
+        $complaint = Complaint::where('category_id', $category->id)->get();
+
+        $wait = $complaint->where('status', 'sent')->where('user_id', auth()->id())->values();
+        $read = $complaint->where('status', 'read')->where('user_id', auth()->id())->values();
+        $process = $complaint->where('status', 'response')->where('user_id', auth()->id())->values();
+        $done = $complaint->where('status', 'done')->where('user_id', auth()->id())->values();
+
+        return view('mahasiswa.complaint.filter.filter', [
+            'categoryName' => $category,
+            'complaint' => $complaint,
+            'wait' => $wait,
+            'read' => $read,
+            'process' => $process,
+            'done' => $done,
+            'category' => $listCategory
         ]);
     }
 
     public function create()
     {
-        $category = Category::whereBetween('id', [6,9])->get();
+        $category = Category::where('for', 'complaint')->get();
         return view('mahasiswa.complaint.create', [
             'category' => $category
         ]);
+    }
+
+    public function create_complaint()
+    {
+        return view('mahasiswa.complaint.create');
     }
 
     public function store(ComplaintRequest $request)
@@ -68,7 +105,14 @@ class ComplaintController extends Controller
 
         $data['user_id'] = Auth::user()->id;
 
-        Complaint::create($data);
+        $complaint = Complaint::create($data);
+
+        $admins = Admin::all();
+
+        // dd($admins);
+        foreach($admins as $admin){
+            $admin->notify(new ComplaintNotification($complaint));
+        }
 
         return redirect()->route('mahasiswa.complaint.index');
 
@@ -80,7 +124,9 @@ class ComplaintController extends Controller
             'user', 'category', 'complaint_reply'
         ])->findOrFail($id);
 
-        return view('mahasiswa.complaint.detail', [
+        // dd($complaint);
+
+        return view('mahasiswa.complaint.detail2', [
             'complaint' => $complaint
         ]);
     }
@@ -92,7 +138,21 @@ class ComplaintController extends Controller
 
         $data['complaint_id'] = $complaint->id;
 
+        if($request->hasFile('attachment')){
+
+            $data['attachment'] = $request->file('attachment')->store(
+                'complaint_replies', 'public'
+            );
+        }
+
         complaintReply::create($data);
+        // dd($complaint->admin);
+        $admins = Admin::all();
+        foreach($admins as $admin)
+        {
+            $admin->notify(new UserComplaintReplyNotification($complaint));
+
+        }
 
         return redirect()->route('mahasiswa.complaint.detail', $complaintId);
     }

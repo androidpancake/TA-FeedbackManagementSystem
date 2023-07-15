@@ -15,7 +15,9 @@ class Reply extends Model
         'reply',
         'feedback_id',
         'user_id',
-        'lecturer_id'
+        'lecturer_id',
+        'lab_id',
+        'attachment'
     ];
 
     public function feedback()
@@ -31,5 +33,10 @@ class Reply extends Model
     public function lecturer()
     {
         return $this->belongsTo(Lecturer::class, 'lecturer_id');
+    }
+
+    public function lab()
+    {
+        return $this->belongsTo(Lab::class, 'lab_id');
     }
 }

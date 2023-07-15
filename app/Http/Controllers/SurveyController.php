@@ -22,7 +22,7 @@ class SurveyController extends Controller
             'class', 'responses'
         ])->whereIn('kelas_id', $classes)->get();
         
-        
+        // dd($surveys);
         foreach($surveys as $survey){
             $existingResponse = Response::where('survey_id', $survey->id)->where('user_id', $user->id)->first();
 
@@ -81,7 +81,7 @@ class SurveyController extends Controller
 
         Response::create($data);
 
-        return redirect()->route('mahasiswa.survey.index');
+        return redirect()->route('mahasiswa.notification');
         
     }
 }

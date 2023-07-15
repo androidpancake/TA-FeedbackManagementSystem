@@ -19,6 +19,7 @@ class Complaint extends Model
         'file',
         'category_id',
         'user_id',
+        'closed_date'
     ];
 
     public function user()

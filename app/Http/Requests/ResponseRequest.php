@@ -24,7 +24,7 @@ class ResponseRequest extends FormRequest
         return [
             'user_id' => 'exists:users,id',
             'survey_id' => 'exists:surveys,id',
-            'rating' => 'required',
+            'rating' => 'required|integer',
             'comment' => 'nullable|string',
             'additional' => 'array',
             'additional.*' => 'nullable|string'

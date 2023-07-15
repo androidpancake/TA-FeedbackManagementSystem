@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
             $table->string('reply');
+            $table->string('attachment');
             $table->unsignedBigInteger('feedback_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('lecturer_id');
