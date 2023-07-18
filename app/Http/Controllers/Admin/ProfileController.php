@@ -20,28 +20,28 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'profile_photo' => 'required',
-        ]);
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'profile_photo' => 'required|',
+    //     ]);
 
-        if($request->hasFile('profile_photo')){
-            $data['profile_photo'] = $request->file('profile_photo')->store(
-                'profile', 'public'
-            );
-        }
-        $admin = Admin::findOrFail($id);
-        $admin->update($data);
-        // dd($admin);
+    //     if($request->hasFile('profile_photo')){
+    //         $data['profile_photo'] = $request->file('profile_photo')->store(
+    //             'profile', 'public'
+    //         );
+    //     }
+    //     $admin = Admin::findOrFail($id);
+    //     $admin->update($data);
+    //     // dd($admin);
         
-        return redirect()->route('admin.profile', $admin->id);
-    }
+    //     return redirect()->route('admin.profile', $admin->id);
+    // }
 
     public function update_profile_photo(Request $request, $id)
     {
         $request->validate([
-            'profile_photo' => 'required',
+            'profile_photo' => 'required|image|max:10240',
         ]);
 
         if($request->hasFile('profile_photo'))

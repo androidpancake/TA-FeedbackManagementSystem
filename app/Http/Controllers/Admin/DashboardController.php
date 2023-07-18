@@ -31,6 +31,11 @@ class DashboardController extends Controller
 
         // dd($complaintDaily);
 
+        if($complaintDaily->isEmpty())
+        {
+            $complaintDailyArray = [];
+        }
+
         foreach($complaintDaily as $day => $count){
             $complaintDailyArray[] = [
                 'day' => $day,
@@ -49,6 +54,12 @@ class DashboardController extends Controller
         // });
         // $counts = $complaintDaily->pluck('count');
         // dd($complaints);
+        
+
+        if($complaints->isEmpty())
+        {
+            $complaintCategory = [];
+        }
 
         foreach($complaints as $data){
             $complaintCategory[] = [

@@ -7,7 +7,7 @@
     <!-- <link rel="stylesheet" href="../../css/tailwind.css"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    @vite(['resource/css/app.css', 'resource/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     @stack('script')
     <title>Test</title>
@@ -27,7 +27,7 @@
                             </svg>
                         </button>
                         <a href="#" class="flex ml-2 md:mr-24">
-                            <img src="{{ asset('storage/image/logo-si.png') }}" class="w-8 sm:w-72 h-auto mr-3" alt="FRI Logo" />
+                            <img src="{{ asset('storage/image/logo-si.png') }}" class="w-8 h-auto mr-3" alt="FRI Logo" />
                         </a>
                     </div>
                     <div>
@@ -62,12 +62,6 @@
                             <span class="ml-3 font-semibold text-gray-700">Beranda</span>
                         </a>
                     </li>
-                    <!-- <li>
-                        <a href="{{ route('mahasiswa.feedback.index') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128ZM84,116a12,12,0,1,0,12,12A12,12,0,0,0,84,116Zm88,0a12,12,0,1,0,12,12A12,12,0,0,0,172,116Zm60,12A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-16,0A88,88,0,1,0,51.81,172.06a8,8,0,0,1,.66,6.54L40,216,77.4,203.53a7.85,7.85,0,0,1,2.53-.42,8,8,0,0,1,4,1.08A88,88,0,0,0,216,128Z"></path></svg>
-                            <span class="ml-3 font-semibold text-gray-700">Umpan Balik</span>
-                        </a>
-                    </li> -->
                     <li>
                         <a href="{{ route('admin.complaint.index') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M240,120a48.05,48.05,0,0,0-48-48H152.2c-2.91-.17-53.62-3.74-101.91-44.24A16,16,0,0,0,24,40V200a16,16,0,0,0,26.29,12.25c37.77-31.68,77-40.76,93.71-43.3v31.72A16,16,0,0,0,151.12,214l11,7.33A16,16,0,0,0,186.5,212l11.77-44.36A48.07,48.07,0,0,0,240,120ZM40,199.93V40h0c42.81,35.91,86.63,45,104,47.24v65.48C126.65,155,82.84,164.07,40,199.93Zm131,8,0,.11-11-7.33V168h21.6ZM192,152H160V88h32a32,32,0,1,1,0,64Z"></path></svg>                            <span class="ml-3 font-semibold text-gray-700">Keluhan</span>

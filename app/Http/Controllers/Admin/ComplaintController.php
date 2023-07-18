@@ -24,6 +24,12 @@ class ComplaintController extends Controller
         $process = Complaint::where('status', 'response')->get();
         $done = Complaint::where('status', 'done')->get();
         
+        $byCategory = $request->get('filter');
+        if($byCategory === 'kemahasiswaan'){
+            $complaint = Complaint::where('category', $byCategory)->get();
+            dd($complaint);
+        }
+        
 
         $sortBy = $request->get('sort');
 

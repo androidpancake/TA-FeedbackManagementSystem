@@ -1,7 +1,8 @@
 @extends('template.admin.template')
 
 @section('content')
-<h1 class="font-bold text-3xl">Profil Saya</h1>
+<div class="px-8">
+    <h1 class="font-bold text-3xl text-gray-700">Profil Saya</h1>
 
     <div class="mt-6 space-y-auto">
         <div class="grid grid-cols-1 border-b border-gray-200 py-5 sm:flex items-start">
@@ -9,28 +10,43 @@
                 <p class="font-medium text-base text-gray-700">Foto Profil</p>
                 <p class="font-medium text-sm text-gray-500">Foto yang akan ditampilkan</p>
             </div>
-            <div class="flex justify-between w-full mt-4 sm:col-span-2 items-start space-x-5">
+            <div class="flex items-top justify-between w-full sm:col-span-2 items-start space-x-5">
                 @if($admin->profile_photo)
                     <div>
-                        <img src="{{ Storage::url($admin->profile_photo) }}" class="h-12 w-12 max-w-xs rounded-full" alt="">
+                        <img src="{{ Storage::url($admin->profile_photo) }}" class="h-12 w-12 max-w-xs rounded-full object-cover" alt="">
                     </div>
                 @else
                     <div>
-                        <img src="{{ asset('storage/image/Teacher.png') }}" class="rounded-full" alt="">
+                        <div class="h-12 w-12 max-w-xs bg-gray-100 rounded-full"></div>
                     </div>
                 @endif
-                <div class="inline-flex items-center space-x-3">
-                    <form action="{{ route('admin.profile.update_photo', Auth()->id()) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <input type="file" name="profile_photo">
-                        <button type="submit" class="bg-transparent font-semibold text-green-500">Update</button>
-                    </form>
-                    <form action="{{ route('admin.profile.delete', Auth()->id()) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <button type="submit" name="profile_photo" class="bg-transparent font-semibold text-gray-500">Delete</button>
-                    </form>
+                <div class="flex flex-col">
+                    <div class="inline-flex items-center space-x-3">
+                        <form action="{{ route('admin.profile.update_photo', Auth()->id()) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <input type="file" name="profile_photo">
+                            <button type="submit" class="bg-transparent font-semibold text-green-500">Update</button>
+                        </form>
+                        <form action="{{ route('admin.profile.delete', Auth()->id()) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" name="profile_photo" class="bg-transparent font-semibold text-gray-500">Delete</button>
+                        </form>
+                    </div>
+                        @if ($errors->any())
+                            <div class="py-2">
+                                <div>
+                                    @foreach ($errors->all() as $error)
+                                        <p class="text-red-500">{{ $error }}</p>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @else
+                        <div class="py-2">
+                            <p class="text-gray-500">File gambar maksimum 10 MB</p>
+                        </div>
+                        @endif
                 </div>
             </div>
         </div>
@@ -68,5 +84,6 @@
             </div>
         </div>
     </div>
+</div>
 
 @endsection
