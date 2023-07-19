@@ -29,6 +29,13 @@
                     <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                     <input name="password" type="password" id="password" placeholder="*******" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring focus:ring-green-500 focus:border-green-500 block w-full p-2.5" required>
                 </div>
+                @if ($errors -> has('password'))
+                    <div class="py-2">
+                        <p class="text-red-600">
+                         {{ $errors->first('password') }}
+                        </p>
+                    </div>
+                @endif
                 <div class="flex items-start">
                     <div class="flex items-start">
                         <div class="flex items-center h-5">

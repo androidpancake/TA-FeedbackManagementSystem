@@ -63,7 +63,7 @@
         <div class="hidden" id="all" role="tabpanel" aria-labelledby="all-tab">
             <div class="divide-y divide-gray-400 mt-6">
                 @forelse($complaint as $data)
-                <div class="sm:bg-white py-6 space-y-3">
+                <div class="bg-white pt-6 pb-10 space-y-3">
                     <div class="flex sm:flex justify-between items-center space-x-2">
                         <div class="flex md:flex-row items-center justify-start space-x-2">
                             @if($data->user->profile_photo)
