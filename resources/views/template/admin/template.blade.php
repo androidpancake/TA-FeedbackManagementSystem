@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="../../css/tailwind.css"> -->p
+    <!-- <link rel="stylesheet" href="../../css/tailwind.css"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -92,7 +92,7 @@
                                     </svg>
                                     <span class="ml-3 font-semibold text-gray-700">Aktivitas</span>
                                 </div>
-                                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full">{{ Auth::user()->unreadNotifications->count() }}</span>
+                                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full text-xs">{{ Auth::user()->unreadNotifications->count() }}</span>
                             </a>
                         </li>
                     </ul>
@@ -130,7 +130,7 @@
             </div>
         </aside>
 
-        <div class="bg-white sm:ml-64 pt-20 h-full">
+        <div class="bg-white sm:ml-64 pt-20 h-screen">
             @yield('content')
         </div>
         @yield('right-sidebar')

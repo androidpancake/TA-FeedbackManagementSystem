@@ -60,21 +60,21 @@ use Illuminate\Support\Str;
                         </div>
                         @if($complaint->file)
                         <div class="flex flex-row w-full space-x-2 px-4 pb-4">
-                            <div class="bg-white rounded-lg border-2 px-2.5 py-2 grow">
+                            <a href="{{ Storage::url($complaint->file) }}" class="bg-white rounded-lg border-2 px-2.5 py-2 grow hover:bg-gray-50">
                                 <div class="flex space-x-2 items-center">
                                     <!-- icon -->
-                                    <span class="bg-gray-200 rounded-lg p-2">
+                                    <span class="bg-gray-200 rounded-md p-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
                                             <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
                                         </svg>
                                     </span>
                                     <div>
                                         <!-- file name -->
-                                        <a href="{{ Storage::url($complaint->file) }}" class="font-medium text-sm">{{ $complaint->file }}</a>
+                                        <p class="text-sm">{{ basename($complaint->file) }}</p>
                                         <!-- size -->
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         @else
                         @endif
@@ -97,7 +97,22 @@ use Illuminate\Support\Str;
                             <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
                             @if($reply->attachment)
                             @if (Str::endsWith($reply->attachment, '.pdf'))
-                            <a href="{{ Storage::url($reply->attachment) }}" class="bg-white border-2 rounded-lg px-2.5 py-2">{{ $reply->attachment }}</a>
+                            <a href="{{ Storage::url($complaint->file) }}" class="bg-white rounded-lg border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                <div class="flex space-x-2 items-center">
+                                    <!-- icon -->
+                                    <span class="bg-gray-200 rounded-md p-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                            <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <!-- file name -->
+                                        <p class="text-sm">{{ basename($reply->attachment) }}</p>
+                                        <!-- size -->
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- <a href="{{ Storage::url($reply->attachment) }}" class="text-sm bg-white border-2 rounded-lg px-2.5 py-2">{{ basename($reply->attachment) }}</a> -->
                             @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
                             <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
                             @else
@@ -123,7 +138,22 @@ use Illuminate\Support\Str;
                             <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
                             @if($reply->attachment)
                             @if (Str::endsWith($reply->attachment, '.pdf'))
-                            <a href="{{ Storage::url($reply->attachment) }}" class="bg-white border-2 rounded-lg px-2.5 py-2">{{ $reply->attachment }}</a>
+                            <a href="{{ Storage::url($complaint->file) }}" class="bg-white rounded-md border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                <div class="flex space-x-2 items-center">
+                                    <!-- icon -->
+                                    <span class="bg-gray-200 rounded-md p-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                            <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <!-- file name -->
+                                        <p class="text-sm">{{ basename($reply->attachment) }}</p>
+                                        <!-- size -->
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- <a href="{{ Storage::url($reply->attachment) }}" class="text-sm bg-white border-2 rounded-lg px-2.5 py-2">{{ basename($reply->attachment) }}</a> -->
                             @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
                             <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
                             @else
@@ -217,13 +247,13 @@ use Illuminate\Support\Str;
                                 <span>
                                     <img src="{{ Storage::url($complaint->category->label) }}" class="w-4 h-4" alt="">
                                 </span>
-                                <p class="text-red-600">{{ $complaint->category->name }}</p>
+                                <p class="text-red-600 text-xs">{{ $complaint->category->name }}</p>
                             </div>
                         </div>
                     </div>
                     <!-- timeline -->
                     <div class="mt-2 h-full overflow-y-auto">
-                        <h1 class="text-gray-500 font-semibold">Timeline</h1>
+                        <p class="text-gray-500 sm">Timeline</p>
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
@@ -282,13 +312,27 @@ use Illuminate\Support\Str;
                     <div class="flex flex-col space-y-2 w-full">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Status</p>
-                            <div class="bg-gray-200 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
-                                <p>{{ $complaint->status }}</p>
+                            @if($complaint->status == 'sent')
+                            <div class="bg-gray-100 px-2 p-1 text-gray-700 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Menunggu Respon</p>
                             </div>
+                            @elseif($complaint->status == 'read')
+                            <div class="bg-gray-100 px-2 p-1 text-gray-700 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Dibaca</p>
+                            </div>
+                            @elseif($complaint->status == 'response')
+                            <div class="bg-yellow-100 px-2 p-1 text-yellow-500 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Dalam Proses</p>
+                            </div>
+                            @elseif($complaint->status == 'done')
+                            <div class="bg-green-100 px-2 p-1 text-green-500 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Selesai</p>
+                            </div>
+                            @endif
                         </div>
                         <div class="flex justify-between items-center">
-                            <p class="text-sm text-gray-500">Mahasiswa</p>
-                            <div class="px-2 py-1 rounded-lg text-sm font-medium flex justify-between items-center space-x-2">
+                            <p class="text-sm text-gray-500 text-right">Mahasiswa</p>
+                            <div class="rounded-lg text-sm font-medium flex justify-between items-center space-x-2">
                                 <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
                                 <p>{{ $complaint->user->name }}</p>
                             </div>
@@ -296,7 +340,19 @@ use Illuminate\Support\Str;
                         <div class="flex justify-between">
                             <p class="text-sm text-gray-500">NIM</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
-                                <p class="text-sm font-medium">{{ $complaint->user->nim }}</p>
+                                <p class="text-sm font-medium text-right">{{ $complaint->user->nim }}</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <p class="text-sm text-gray-500 whitespace-nowrap">Dosen Wali</p>
+                            <div class="text-sm font-medium inline-flex items-center space-x-2">
+                                <p class="text-sm font-medium text-right">{{ $complaint->user->homeroom }}</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <p class="text-sm text-gray-500">Kelas Asal</p>
+                            <div class="text-sm font-medium inline-flex items-center space-x-2">
+                                <p class="text-sm font-medium text-right">{{ $complaint->user->real_class }}</p>
                             </div>
                         </div>
                         <div class="flex justify-between items-center">
@@ -305,13 +361,13 @@ use Illuminate\Support\Str;
                                 <span>
                                     <img src="{{ Storage::url($complaint->category->label) }}" class="w-4 h-4" alt="">
                                 </span>
-                                <p>{{ $complaint->category->name }}</p>
+                                <p class="text-xs">{{ $complaint->category->name }}</p>
                             </div>
                         </div>
                     </div>
                     <!-- timeline -->
                     <div class="mt-2 h-full overflow-y-auto">
-                        <h1 class="text-gray-500 font-semibold">Timeline</h1>
+                        <p class="text-gray-500 text-sm">Timeline</p>
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>

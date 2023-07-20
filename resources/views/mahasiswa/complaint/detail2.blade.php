@@ -2,31 +2,35 @@
 
 @section('content')
 @php
-    use Illuminate\Support\Str;
+use Illuminate\Support\Str;
 @endphp
 <!-- breadcrumb -->
 @section('breadcrumb')
 
 <nav class="flex" aria-label="Breadcrumb">
-  <ol class="inline-flex items-center space-x-1 md:space-x-3">
-    <li class="inline-flex items-center">
-      <a href="{{ route('mahasiswa.feedback.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-green-600 dark:text-gray-400 dark:hover:text-white">
-        <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-        Home
-      </a>
-    </li>
-    <li aria-current="page" class="active">
-      <div class="flex items-center">
-        <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-        <span class="ml-1 text-sm font-semibold text-gray-900 md:ml-2 dark:text-gray-400">{{ $complaint->subject }}</span>
-      </div>
-    </li>
-  </ol>
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+        <li class="inline-flex items-center">
+            <a href="{{ route('mahasiswa.complaint.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-green-600 dark:text-gray-400 dark:hover:text-white">
+                <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                </svg>
+                Home
+            </a>
+        </li>
+        <li aria-current="page" class="active">
+            <div class="flex items-center">
+                <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="ml-1 text-sm font-semibold text-gray-900 md:ml-2 dark:text-gray-400">{{ $complaint->subject }}</span>
+            </div>
+        </li>
+    </ol>
 </nav>
 
 @endsection
 
-<div class="h-full bg-white rounded-lg p-2 w-full space-y-3">    
+<div class="h-full bg-white rounded-lg p-2 w-full space-y-3">
     <!-- layout -->
     <div class="flex flex-col justify-between space-y-2 h-full">
         <!-- tabs < sm -->
@@ -35,7 +39,7 @@
             <button id="info-tab" data-tabs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="false" class="grow text-center">Informasi</button>
         </div>
         <div class="flex w-full md:flex justify-between space-x-3 h-full">
-        <!-- chat room -->
+            <!-- chat room -->
             <div class="flex flex-col md:flex space-y-2 h-max grow min-h-screen" id="complaint" role="tabpanel" aria-labelledby="complaint-tab">
                 <!-- header -->
                 <div class="bg-white rounded-lg border-2 border-gray-200 p-4">
@@ -58,12 +62,15 @@
                             <div class="flex space-x-2 items-center">
                                 <!-- icon -->
                                 <span class="bg-gray-200 rounded-lg p-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256"><path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                    </svg>
                                 </span>
                                 <div>
                                     <!-- file name -->
-                                    <a href="{{ Storage::url($complaint->file) }}" class="font-medium text-sm">{{ $complaint->file }}</a>
+                                    <a href="{{ Storage::url($complaint->file) }}" class="text-sm">{{ \Illuminate\Support\Str::afterLast($complaint->file, '/') }}</a>
                                     <!-- size -->
+                                    <!-- <p>({{ ($complaint->file_size) }})</p> -->
                                 </div>
                             </div>
                         </div>
@@ -71,55 +78,55 @@
                     @else
                     @endif
                 </div>
-                
-            
+
+
                 <!-- replies -->
                 <div class="flex flex-col h-72 bg-white border-2 border-gray-200 rounded-lg p-2 space-y-3 overflow-y-auto grow max-h-fit md:h-96">
                     @foreach($complaint->complaint_reply as $reply)
-                        @if($reply->user)
-                        <div class="bg-white border-2 rounded-lg p-4 text-gray-800 space-y-2">
-                            <div class="flex justify-between border-b py-2">
-                                <div class="inline-flex space-x-2">
-                                    @if($reply->user->profile_photo)
-                                    <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
-                                    @else
-                                    @endif
-                                    <p class="font-semibold">{{ $complaint->user->name }}</p>
-                                </div>
-                                <p class="font-base text-gray-100 text-sm">{{ $reply->created_at->diffForHumans() }}</p>
-                            </div>
-                            <p>{{ $reply->reply }}</p>
-                            @if($reply->attachment)
-                                @if (Str::endsWith($reply->attachment, '.pdf'))
-                                <a href="{{ Storage::url($reply->attachment) }}" class="bg-white border-2 rounded-lg px-2.5 py-2">{{ $reply->attachment }}</a>
-                                @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
-                                <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
+                    @if($reply->user)
+                    <div class="bg-white border-2 rounded-lg p-4 text-gray-800 space-y-2">
+                        <div class="flex justify-between border-b py-2">
+                            <div class="inline-flex space-x-2">
+                                @if($reply->user->profile_photo)
+                                <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
                                 @else
                                 @endif
-                            @else
-                            @endif
+                                <p class="font-semibold">{{ $complaint->user->name }}</p>
+                            </div>
+                            <p class="font-base text-gray-100 text-sm">{{ $reply->created_at->diffForHumans() }}</p>
                         </div>
+                        <p>{{ $reply->reply }}</p>
+                        @if($reply->attachment)
+                        @if (Str::endsWith($reply->attachment, '.pdf'))
+                        <a href="{{ Storage::url($reply->attachment) }}" class="bg-white border-2 rounded-lg px-2.5 py-2">{{ $reply->attachment }}</a>
+                        @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
+                        <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
                         @else
-                        <div class="bg-white border rounded-lg p-4 space-y-2">
-                            <div class="flex justify-between border-b py-2">
-                                <div class="inline-flex space-x-2">
-                                    <img src="{{ Storage::url($reply->admin->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
-                                    <p>{{ $reply->admin->name }}</p>
-                                </div>
-                                <p class="font-base text-sm text-gray-100">{{ $reply->created_at->diffForHumans() }}</p>
-                            </div>
-                            <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
-                            @if($reply->attachment)
-                                @if (Str::endsWith($reply->attachment, '.pdf'))
-                                <a href="{{ Storage::url($reply->attachment) }}" class="bg-white border-2 rounded-lg px-2.5 py-2">{{ $reply->attachment }}</a>
-                                @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
-                                <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
-                                @else
-                                @endif
-                            @else
-                            @endif
-                        </div>
                         @endif
+                        @else
+                        @endif
+                    </div>
+                    @else
+                    <div class="bg-white border rounded-lg p-4 space-y-2">
+                        <div class="flex justify-between border-b py-2">
+                            <div class="inline-flex space-x-2">
+                                <img src="{{ Storage::url($reply->admin->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                <p>{{ $reply->admin->name }}</p>
+                            </div>
+                            <p class="font-base text-sm text-gray-100">{{ $reply->created_at->diffForHumans() }}</p>
+                        </div>
+                        <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
+                        @if($reply->attachment)
+                        @if (Str::endsWith($reply->attachment, '.pdf'))
+                        <a href="{{ Storage::url($reply->attachment) }}" class="bg-white border-2 rounded-lg px-2.5 py-2">{{ $reply->attachment }}</a>
+                        @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
+                        <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
+                        @else
+                        @endif
+                        @else
+                        @endif
+                    </div>
+                    @endif
                     @endforeach
                 </div>
                 <!-- chat box -->
@@ -128,9 +135,9 @@
                     <div class="flex">
                         @if ($errors->any())
                         <div class="bg-red py-2 px-3">
-                        <div>
+                            <div>
                                 @foreach ($errors->all() as $error)
-                                    <p>{{ $error }}</p>
+                                <p>{{ $error }}</p>
                                 @endforeach
                             </div>
                         </div>
@@ -144,18 +151,22 @@
                             <input type="hidden" name="user_id" value="{{ $complaint->user->id }}">
                             <input type="hidden" name="complaint_id" value="{{ $complaint->id }}">
                             <div class="flex items-center justify-between px-3 py-2 border-t">
-                                
+
                                 <div class="flex pl-0 space-x-1 sm:pl-2">
                                     <input id="file_input" type="file" name="attachment" class="w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none">
                                 </div>
                                 @if($complaint->status == 'done')
                                 <button type="submit" class="inline-flex items-center space-x-2 py-2.5 px-4 text-xs font-medium text-center text-white bg-gray-300 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900" disabled>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256"><path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path>
+                                    </svg>
                                     <p>Kirim</p>
                                 </button>
                                 @else
                                 <button type="submit" class="inline-flex items-center space-x-2 py-2.5 px-4 text-xs font-medium text-center text-white bg-green-600 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256"><path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                                        <path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path>
+                                    </svg>
                                     <p>Kirim</p>
                                 </button>
                                 @endif
@@ -206,13 +217,13 @@
                     </div>
                     <!-- timeline -->
                     <div class="mt-2 h-full overflow-y-auto">
-                        <h1 class="text-gray-500 font-semibold">Timeline</h1>                  
+                        <h1 class="text-gray-500 font-semibold">Timeline</h1>
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                 <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda mengirim pengaduan</div>
                                 <time class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {{  date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
+                                    {{ date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
                                 </time>
                             </li>
                             @if($complaint->status == 'read')
@@ -241,7 +252,7 @@
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
                             </li>
-                            
+
                             @elseif(!$replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
@@ -252,7 +263,7 @@
                             </li>
                             @endif
                             @endforeach
-                            
+
                         </ol>
                     </div>
                     <!-- done -->
@@ -260,7 +271,9 @@
                         <p class="text-center text-sm text-gray-600">Jika puas dengan respon dan tindakan Admin, klik untuk menyelesaikan proses umpan balik</p>
                         <form action="">
                             <button type="button" class="w-full inline-flex justify-center space-x-2 bg-white border hover:bg-gray-200 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256">
+                                    <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
+                                </svg>
                                 <p class="text-base disabled:text-gray-500">Selesai</p>
                             </button>
                         </form>
@@ -307,13 +320,13 @@
                     </div>
                     <!-- timeline -->
                     <div class="mt-2 h-full overflow-y-auto">
-                        <h1 class="text-gray-500 font-semibold">Timeline</h1>                  
+                        <h1 class="text-gray-500 font-semibold">Timeline</h1>
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                 <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda mengirim pengaduan</div>
                                 <time class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {{  date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
+                                    {{ date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
                                 </time>
                             </li>
                             @if($complaint->status == 'read')
@@ -342,7 +355,7 @@
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
                             </li>
-                            
+
                             @elseif(!$replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
@@ -353,7 +366,7 @@
                             </li>
                             @endif
                             @endforeach
-                            
+
                         </ol>
                     </div>
                     <!-- done -->
@@ -361,7 +374,9 @@
                         <p class="text-center text-sm text-gray-600">Jika puas dengan respon dan tindakan Admin, klik untuk menyelesaikan proses umpan balik</p>
                         <form action="">
                             <button type="button" class="w-full inline-flex justify-center space-x-2 bg-white border hover:bg-gray-200 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256">
+                                    <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
+                                </svg>
                                 <p class="text-base disabled:text-gray-500">Selesai</p>
                             </button>
                         </form>
