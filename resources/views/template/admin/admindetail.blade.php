@@ -130,7 +130,7 @@
             </div>
         </aside>
 
-        <div class="bg-white sm:ml-64 pt-20 h-full">
+        <div class="bg-white sm:ml-64 pt-8 h-screen">
             @yield('content')
         </div>
         @yield('right-sidebar')

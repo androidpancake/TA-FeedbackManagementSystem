@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use App\Http\Controllers\Admin\ComplaintController;
 use App\Http\Controllers\Admin\CourseController;
@@ -17,7 +17,6 @@ Route::group(['middleware' => 'auth:admin'], function(){
     Route::get('admin/profile/{id}', [ProfileController::class, 'index'])->name('admin.profile');
     Route::put('admin/profile/update/{id}', [ProfileController::class, 'update'])->name('admin.profile.update');
     Route::delete('admin/profile/delete/{id}', [ProfileController::class, 'delete'])->name('admin.profile.delete');
-    Route::put('admin/profile/update_photo/{id}', [ProfileController::class, 'update_profile_photo'])->name('admin.profile.update_photo');
     //matkul
     Route::get('admin/course', [CourseController::class, 'index'])->name('admin.course.index');
 

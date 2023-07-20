@@ -38,23 +38,21 @@ class ProfileController extends Controller
     //     return redirect()->route('admin.profile', $admin->id);
     // }
 
-    public function update_profile_photo(Request $request, $id)
+    public function update(ProfileRequest $request, $id)
     {
-        $request->validate([
-            'profile_photo' => 'required|image|max:10240',
-        ]);
+        $data = $request->all();
 
-        if($request->hasFile('profile_photo'))
-        {
+        if($request->hasFile('profile_photo')){
             $data['profile_photo'] = $request->file('profile_photo')->store(
                 'profile', 'public'
             );
+
+            $user = Admin::findOrFail($id);
+            $user->update($data);
+            
         }
-
-        $admin = Admin::findOrFail($id);
-        $admin->update($data);
-
-        return redirect()->back();
+        
+        return redirect()->route('admin.profile', $user->id);
     }
 
     public function delete($id)

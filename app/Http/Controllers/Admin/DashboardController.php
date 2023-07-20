@@ -42,7 +42,6 @@ class DashboardController extends Controller
                 'count' => $count,
             ];
         }
-
         $countComplaintSent = Complaint::where('status', 'sent')->count();
         $countComplaintRead = Complaint::where('status', 'read')->count();
         $countComplaintResponse = Complaint::where('status', 'response')->count();
@@ -63,12 +62,14 @@ class DashboardController extends Controller
 
         foreach($complaints as $data){
             $complaintCategory[] = [
-                'name' => $data->name,
+                // 'key' => $key,
+                'categoryName' => $data->name,
                 'count' => $data->count
             ];
+
         }
 
-        // dd($complaintCategory);
+        //dd($complaintCategory);
 
         return view('admin.dashboard.index', [
             'complaint' => $complaints,

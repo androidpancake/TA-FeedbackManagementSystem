@@ -37,6 +37,7 @@ class ProfileController extends Controller
 
             $user = User::findOrFail($id);
             $user->update($data);
+            
         }
         
         return redirect()->route('mahasiswa.profile', $user->id);
