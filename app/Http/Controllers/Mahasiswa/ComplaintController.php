@@ -9,6 +9,7 @@ use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Complaint;
 use App\Models\complaintReply;
+use App\Notifications\complaintDoneNotification;
 use App\Notifications\ComplaintNotification;
 use App\Notifications\UserComplaintReplyNotification;
 use Illuminate\Http\Request;
@@ -213,6 +214,12 @@ class ComplaintController extends Controller
         $complaint->status = 'done';
 
         $complaint->save();
+
+        $admins = Admin::all();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new complaintDoneNotification($complaint));
+        }
 
         return redirect()->route('mahasiswa.complaint.detail', $id);
     }

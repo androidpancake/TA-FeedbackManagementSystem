@@ -269,7 +269,7 @@ use Illuminate\Support\Str;
                     <!-- done -->
                     <div class="border-t py-2 flex flex-col space-y-2">
                         <p class="text-center text-sm text-gray-600">Jika puas dengan respon dan tindakan Admin, klik untuk menyelesaikan proses umpan balik</p>
-                        <form action="">
+                        <form action="{{ route('mahasiswa.complaint.done', $complaint->id) }}" method="POST">
                             <button type="button" class="w-full inline-flex justify-center space-x-2 bg-white border hover:bg-gray-200 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256">
                                     <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
@@ -372,13 +372,19 @@ use Illuminate\Support\Str;
                     <!-- done -->
                     <div class="border-t py-2 flex flex-col space-y-2">
                         <p class="text-center text-sm text-gray-600">Jika puas dengan respon dan tindakan Admin, klik untuk menyelesaikan proses umpan balik</p>
-                        <form action="">
-                            <button type="button" class="w-full inline-flex justify-center space-x-2 bg-white border hover:bg-gray-200 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2">
+                        <form action="{{ route('mahasiswa.complaint.done', $complaint->id) }}" method="POST">
+                            @csrf
+                            @if($complaint->status == 'done')
+
+                            @else
+                            <button type="submit" class="w-full inline-flex justify-center space-x-2 bg-white border hover:bg-gray-200 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256">
                                     <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
                                 </svg>
                                 <p class="text-base disabled:text-gray-500">Selesai</p>
                             </button>
+
+                            @endif
                         </form>
                     </div>
                 </div>

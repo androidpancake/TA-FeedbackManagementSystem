@@ -41,14 +41,29 @@
                 </button>
             </div>
             <div class="flex w-64 space-x-2">
-                <form action="{{ route('admin.complaint.index') }}" method="GET" class="w-full">
-                    <select id="dropdownCategory" name="filter" onchange="this.form.submit()" class="w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-green-500 focus:border-green-500">
-                        <option selected>Kategori</option>
+                <button id="dropdownCategory" data-dropdown-toggle="dropdown" class="grow bg-white border border-gray-300 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-green-500 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center" type="button">Kategori
+                    <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <!-- Dropdown menu -->
+                <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                    <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownCategory">
+                        <li>
+                            <a href="{{ route('admin.complaint.index') }}" class="block px-4 py-2 hover:bg-gray-100">Semua</a>
+                        </li>
                         @foreach($category as $data)
-                        <option value="{{ $data->name }}">{{ $data->name }}</option>
+                        <li>
+                            <a href="{{ route('admin.complaint.category', $data->name) }}" class="block space-x-2 px-4 py-2 hover:bg-gray-100">
+                                <div class="flex flex-row space-x-3">
+                                    <img src="{{ Storage::url($data->label) }}" class="w-4 h-4" alt="">
+                                    <p>{{ $data->name }}</p>
+                                </div>
+                            </a>
+                        </li>
                         @endforeach
-                    </select>
-                </form>
+                    </ul>
+                </div>
                 <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                 </div>
                 <form action="{{ route('admin.complaint.index') }}" method="GET" class="w-full">
@@ -61,52 +76,8 @@
         </div>
     </div>
 
-    <!-- feedback -->
+    <!-- list -->
     <div id="#myTabContent" class="h-screen">
-        <!-- <div class="h-screen border-t overflow-y-auto" id="all" role="tabpanel" aria-labelledby="all-tab">
-            <div class="divide-y divide-gray-200">
-                @forelse($complaint as $data)
-                <a href="{{ route('admin.complaint.detail', $data->id) }}" class="block">
-                        <div class="sm:bg-white py-6 px-8 hover:bg-gray-50">
-                        <div class="flex justify-between items-center space-x-2">
-                            <div class="flex flex-row items-center justify-center space-x-2 pb-2">
-                                @if($data->user->profile_photo)
-                                <img src="{{ Storage::url($data->user->profile_photo) }}" class="w-6 h-6 rounded-full" alt="">
-                                @else
-                                @endif
-                                <p class="text-sm text-gray-600">{{ $data->user->name }}</p>
-                            </div>
-                            <div class="inline-flex space-x-2">
-                                <p class="text-sm font-medium text-gray-400">{{ date('D, d M Y, H:i', strtotime($data->created_at)) }}</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-col">
-                            <div class="flex space-x-2">
-                                <h2 class="font-semibold text-gray-700 text-base">{{ $data->subject }}</h2>
-                                <span class="{{ $data->category->bg }} text-xs font-semibold inline-flex items-center px-2 py-0.5 rounded-md mr-2">
-                                    <img src="{{ Storage::url($data->category->label) }}" class="w-4 h-4 mr-1" alt="">
-                                    {{ $data->category->name }}
-                                </span>
-                            </div>
-                            <p class="text-sm mt-1 text-gray-500">
-                                {{ $data->content }}
-                            </p>
-                            <div class="flex items-center mt-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 256 256"><path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128ZM84,116a12,12,0,1,0,12,12A12,12,0,0,0,84,116Zm88,0a12,12,0,1,0,12,12A12,12,0,0,0,172,116Zm60,12A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-16,0A88,88,0,1,0,51.81,172.06a8,8,0,0,1,.66,6.54L40,216,77.4,203.53a7.85,7.85,0,0,1,2.53-.42,8,8,0,0,1,4,1.08A88,88,0,0,0,216,128Z"></path></svg>
-                                @if(count($data->complaint_reply) != 0)
-                                    <p class="text-sm text-blue-500">{{ count($data->complaint_reply) }} balasan</p>
-                                @else
-                                    <p class="text-sm text-blue-500">0</p>
-                                @endif
-                            </div>
-                        </div>
-                        </div>
-                </a>
-                @empty
-                <p class="p-8">Tidak ada data</p>
-                @endforelse
-            </div>
-        </div> -->
         <div class="border-t" id="wait" role="tabpanel" aria-labelledby="wait-tab">
             <div class="divide-y divide-gray-200">
                 @forelse($wait as $data)
