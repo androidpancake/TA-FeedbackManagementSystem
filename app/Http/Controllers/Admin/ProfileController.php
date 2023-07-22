@@ -20,41 +20,39 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'profile_photo' => 'required|',
+    //     ]);
+
+    //     if($request->hasFile('profile_photo')){
+    //         $data['profile_photo'] = $request->file('profile_photo')->store(
+    //             'profile', 'public'
+    //         );
+    //     }
+    //     $admin = Admin::findOrFail($id);
+    //     $admin->update($data);
+    //     // dd($admin);
+        
+    //     return redirect()->route('admin.profile', $admin->id);
+    // }
+
+    public function update(ProfileRequest $request, $id)
     {
-        $request->validate([
-            'profile_photo' => 'required',
-        ]);
+        $data = $request->all();
 
         if($request->hasFile('profile_photo')){
             $data['profile_photo'] = $request->file('profile_photo')->store(
                 'profile', 'public'
             );
+
+            $user = Admin::findOrFail($id);
+            $user->update($data);
+            
         }
-        $admin = Admin::findOrFail($id);
-        $admin->update($data);
-        // dd($admin);
         
-        return redirect()->route('admin.profile', $admin->id);
-    }
-
-    public function update_profile_photo(Request $request, $id)
-    {
-        $request->validate([
-            'profile_photo' => 'required',
-        ]);
-
-        if($request->hasFile('profile_photo'))
-        {
-            $data['profile_photo'] = $request->file('profile_photo')->store(
-                'profile', 'public'
-            );
-        }
-
-        $admin = Admin::findOrFail($id);
-        $admin->update($data);
-
-        return redirect()->back();
+        return redirect()->route('admin.profile', $user->id);
     }
 
     public function delete($id)

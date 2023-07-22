@@ -18,21 +18,21 @@ class DashboardController extends Controller
 
         $recentFeedback = Feedback::with([
             'category', 'class', 'user', 'reply'
-        ])->whereHas('class.lecturer', function($query) use ($dosenId){
+        ])->whereHas('class.lecturer', function ($query) use ($dosenId) {
             $query->where('id', $dosenId);
         })
-        ->latest()
-        ->get();
-        
+            ->latest()
+            ->get();
+
         $dosen = Auth::user();
         $recentSurveys = Survey::with([
-            'class.user','responses' 
+            'class.user', 'responses'
         ])
-        ->whereHas('class.lecturer', function($query) use ($dosen){
-            $query->where('id', $dosen->id);
-        })
-        ->latest()
-        ->get();
+            ->whereHas('class.lecturer', function ($query) use ($dosen) {
+                $query->where('id', $dosen->id);
+            })
+            ->latest()
+            ->get();
 
         $recentSurveys->each(function ($survey) {
             $now = now();
@@ -41,52 +41,52 @@ class DashboardController extends Controller
             } else {
                 $survey->remaining_time = '0';
             }
-    
+
             $survey->commentCount = $survey->responses()->whereNotNull('comment')->count();
             $survey->avgrating = round($survey->responses()->average('rating'), 1);
-            
+
             return $survey;
         });
 
         $feedbacks = Feedback::join('category', 'feedback.category_id', '=', 'category.id')
-        ->join('class', 'feedback.kelas_id', '=', 'class.id')
-        ->join('lecturer', 'class.lecturer_id', '=', 'lecturer.id')
-        ->where('lecturer.id', $dosenId)
-        ->select('category.name', DB::raw('count(*) as count'))
-        ->groupBy('feedback.category_id', 'category.name')
-        ->get();
+            ->join('class', 'feedback.class_id', '=', 'class.id')
+            ->join('lecturer', 'class.lecturer_id', '=', 'lecturer.id')
+            ->where('lecturer.id', $dosenId)
+            ->select('category.name', DB::raw('count(*) as count'))
+            ->groupBy('feedback.category_id', 'category.name')
+            ->get();
 
-        if($feedbacks->isEmpty()){
+        if ($feedbacks->isEmpty()) {
             $feedbackByCategory = [];
         } else {
-            foreach($feedbacks as $data){
+            foreach ($feedbacks as $data) {
                 $feedbackByCategory[] = [
                     'name' => $data->name,
                     'count' => $data->count
                 ];
             }
         }
-        
+
 
         $feedbackDaily = Feedback::select(DB::raw('CONCAT(DAY(date), " ", MONTHNAME(date)) as day'), DB::raw('count(*) as total_feedback'))
-        ->whereHas('class.lecturer', function($query) use ($dosenId){
-            $query->where('id', $dosenId);
-        })
-        ->groupBy('day')
-        ->orderByRaw('DATE_FORMAT(date, "%m-%d") ASC')
-        ->pluck('total_feedback', 'day');
+            ->whereHas('class.lecturer', function ($query) use ($dosenId) {
+                $query->where('id', $dosenId);
+            })
+            ->groupBy('day')
+            ->orderByRaw('DATE_FORMAT(date, "%m-%d") ASC')
+            ->pluck('total_feedback', 'day');
 
-        if($feedbackDaily->isEmpty()){
+        if ($feedbackDaily->isEmpty()) {
             $feedbackDailyArray = [];
         } else {
-            foreach($feedbackDaily as $day => $count){
+            foreach ($feedbackDaily as $day => $count) {
                 $feedbackDailyArray[] = [
                     'day' => $day,
                     'count' => $count,
                 ];
             }
         }
-        
+
         return view('dosen.dashboard.index', [
             'feedbacks' => $feedbacks,
             'feedbackByCategory' => $feedbackByCategory,

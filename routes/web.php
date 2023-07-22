@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
+use App\Http\Controllers\Lab\DashboardController as LabDashboardController;
 use App\Http\Controllers\Mahasiswa\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,12 +27,20 @@ Route::group(['middleware' => 'auth:mahasiswa'], function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('mahasiswa.dashboard');
 });
 
+Route::group(['middleware' => 'auth:lab'], function(){
+
+    //dashboard
+    Route::get('/lab/dashboard', [LabDashboardController::class, 'index'])->name('lab.dashboard');
+
+});
+
 Route::group(['middleware' => 'auth:lecturer'], function(){
 
     //dashboard
     Route::get('/dosen/dashboard', [DosenDashboardController::class, 'index'])->name('dosen.dashboard');
 
 });
+
 
 Route::group(['middleware' => 'auth:admin'], function(){
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');

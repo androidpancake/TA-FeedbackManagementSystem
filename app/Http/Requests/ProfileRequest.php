@@ -22,7 +22,14 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'profile_photo' => 'image'
+            'profile_photo' => 'image|max:10240'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'profile_photo.max' => 'File gambar maksimum 10 MB',
         ];
     }
 }

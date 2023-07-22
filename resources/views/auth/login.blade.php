@@ -7,7 +7,7 @@
     <!-- <link rel="stylesheet" href="../../public/css/tailwind.css"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    @vite('resource/css/app.css')
+    @vite('resources/css/app.css')
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <title>Document</title>
 </head>
@@ -20,7 +20,7 @@
                     <img src="{{ asset('storage/image/logo.png')}}" class="h-auto max-w-xs" alt="">
                 </div>
                 <h5 class="text-3xl font-semibold text-center text-gray-900 dark:text-white">Login</h5>
-                <p class="text-center text-gray-600">Silakan log in untuk melanjutkan</p>
+                <p class="text-center text-gray-600">Silakan log in menggunakan akun SSO untuk melanjutkan</p>
                 <div>
                     <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SSO</label>
                     <input type="text" name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-green-500 focus:ring focus:border-green-500 block w-full p-2.5" placeholder="username SSO" required>
@@ -29,6 +29,13 @@
                     <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                     <input name="password" type="password" id="password" placeholder="*******" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring focus:ring-green-500 focus:border-green-500 block w-full p-2.5" required>
                 </div>
+                @if ($errors -> has('password'))
+                    <div class="py-2">
+                        <p class="text-red-600">
+                         {{ $errors->first('password') }}
+                        </p>
+                    </div>
+                @endif
                 <div class="flex items-start">
                     <div class="flex items-start">
                         <div class="flex items-center h-5">

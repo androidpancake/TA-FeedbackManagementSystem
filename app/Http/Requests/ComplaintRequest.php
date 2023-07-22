@@ -28,7 +28,19 @@ class ComplaintRequest extends FormRequest
             'date' => 'nullable|date',
             'category_id' => 'required|exists:category,id',
             'status' => 'required',
-            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'file' => 'required|file|mimes:jpg,jpeg,png,pdf',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'category_id.required' => 'Silahkan pilih kategori',
+            'subject.required' => 'Subjek tidak boleh kosong',
+            'content.required' => 'Komentar tidak boleh kosong',
+            'file.required' => 'Harus menambahkan file',
+            'file.mimes' => 'Format file hanya jpg, jpeg, png, pdf'
+            // You can specify other custom messages here
         ];
     }
 }
