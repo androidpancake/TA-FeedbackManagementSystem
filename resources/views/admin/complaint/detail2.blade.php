@@ -1,4 +1,4 @@
-@extends('template.admin.admindetail')
+@extends('template.admin.dashboard')
 
 @section('content')
 @php
@@ -30,7 +30,7 @@ use Illuminate\Support\Str;
 
 @endsection
 
-<div class=" bg-gray-100 px-2 w-full space-y-3">
+<div class="pt-16 bg-gray-100 px-2 w-full space-y-3">
     <!-- layout -->
     <div class="flex flex-col justify-between space-y-2 h-full">
         <!-- tabs < sm -->
@@ -59,6 +59,7 @@ use Illuminate\Support\Str;
                             <p class="text-gray-700">{{ $complaint->content }}</p>
                         </div>
                         @if($complaint->file)
+                        @if (Str::endsWith($complaint->file, '.pdf'))
                         <div class="flex flex-row w-full space-x-2 px-4 pb-4">
                             <a href="{{ Storage::url($complaint->file) }}" class="bg-white rounded-lg border-2 px-2.5 py-2 grow hover:bg-gray-50">
                                 <div class="flex space-x-2 items-center">
@@ -76,6 +77,11 @@ use Illuminate\Support\Str;
                                 </div>
                             </a>
                         </div>
+                        @elseif (Str::endsWith($complaint->file, ['.jpg', '.jpeg', '.png', '.gif']))
+                        <div class="flex flex-row w-full space-x-2 px-4 pb-4">
+                            <img src="{{ Storage::url($complaint->file) }}" class="w-full bg-white border rounded-lg px-2.5 py-2">
+                        </div>
+                        @endif
                         @else
                         @endif
                     </div>
@@ -371,7 +377,7 @@ use Illuminate\Support\Str;
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda menerima pengaduan</div>
+                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Keluhan telah dibuat</div>
                                 <time class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
                                 </time>
@@ -379,7 +385,7 @@ use Illuminate\Support\Str;
                             @if($complaint->status == 'read')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->date)) }}
                                 </p>
@@ -397,7 +403,7 @@ use Illuminate\Support\Str;
                             @if($replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Mahasiswa membalas pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Mahasiswa membalas keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>

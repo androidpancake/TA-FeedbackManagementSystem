@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth:mahasiswa'], function () {
 
     //notifikasi
     Route::get('mahasiswa/notification', [NotificationController::class, 'index'])->name('mahasiswa.notification');
+    Route::get('mahasiswa/notification/{id}/read', [NotificationController::class, 'markAsRead'])->name('mahasiswa.notification.read');
 
     //test
     Route::get('mahasiswa/feedback/detail', function () {

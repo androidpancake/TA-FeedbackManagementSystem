@@ -40,8 +40,8 @@ class AdminReplyNotification extends Notification
         $latestReply = $this->complaint->complaint_reply()->latest()->first();
         return [
             'complaint' => $this->complaint->id,
-            'message' => 'Anda mendapatkan balasan pengaduan dari Admin',
-            'reply' => $latestReply ? $latestReply->reply : null,
+            'message' => 'membalas keluhan anda tentang',
+            'subject' => $this->complaint->subject,
             'url' => route('mahasiswa.complaint.detail', ['id' => $this->complaint->id]),
         ];
     }

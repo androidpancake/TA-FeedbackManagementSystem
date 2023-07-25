@@ -15,33 +15,36 @@ class DashboardController extends Controller
         $recentComplaint =  Complaint::with([
             'category', 'user', 'admin', 'complaint_reply'
         ])
-        ->latest()
-        ->take(5)
-        ->get();
-        
-        $complaints = Complaint::join('category', 'complaint.category_id','=','category.id')
-        ->select('category.name', DB::raw('count(*) as count'))
-        ->groupBy('complaint.category_id', 'category.name')
-        ->get();
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $complaints = Complaint::join('category', 'complaint.category_id', '=', 'category.id')
+            ->select('category.name', DB::raw('count(*) as count'))
+            ->groupBy('complaint.category_id', 'category.name')
+            ->get();
 
         $complaintDaily = Complaint::select(DB::raw('CONCAT(DAY(date), " ", MONTHNAME(date)) as day'), DB::raw('count(*) as total_complaints'))
-        ->groupBy('day')
-        ->orderByRaw('DATE_FORMAT(date, "%m-%d") ASC')
-        ->pluck('total_complaints', 'day');
+            ->groupBy('day')
+            ->orderByRaw('DATE_FORMAT(date, "%m-%d") ASC')
+            ->pluck('total_complaints', 'day');
 
         // dd($complaintDaily);
 
-        if($complaintDaily->isEmpty())
-        {
+        if ($complaintDaily->isEmpty()) {
             $complaintDailyArray = [];
         }
 
-        foreach($complaintDaily as $day => $count){
+        foreach ($complaintDaily as $day => $count) {
+            // dd($day);
             $complaintDailyArray[] = [
                 'day' => $day,
                 'count' => $count,
             ];
+            // dd($complaintDailyArray);
+
         }
+
         $countComplaintSent = Complaint::where('status', 'sent')->count();
         $countComplaintRead = Complaint::where('status', 'read')->count();
         $countComplaintResponse = Complaint::where('status', 'response')->count();
@@ -53,20 +56,18 @@ class DashboardController extends Controller
         // });
         // $counts = $complaintDaily->pluck('count');
         // dd($complaints);
-        
 
-        if($complaints->isEmpty())
-        {
+
+        if ($complaints->isEmpty()) {
             $complaintCategory = [];
         }
 
-        foreach($complaints as $data){
+        foreach ($complaints as $data) {
             $complaintCategory[] = [
                 // 'key' => $key,
                 'categoryName' => $data->name,
                 'count' => $data->count
             ];
-
         }
 
         //dd($complaintCategory);
