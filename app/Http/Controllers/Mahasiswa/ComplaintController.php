@@ -27,9 +27,8 @@ class ComplaintController extends Controller
 
         $wait = Complaint::where('status', 'sent')->where('user_id', auth()->id())->get();
         $read = Complaint::where('status', 'read')->where('user_id', auth()->id())->get();
-        $process = Complaint::where('status', 'process')->where('user_id', auth()->id())->get();
+        $process = Complaint::where('status', 'response')->where('user_id', auth()->id())->get();
         $done = Complaint::where('status', 'done')->where('user_id', auth()->id())->get();
-
         $sortBy = $request->get('sort');
 
         if ($sortBy === 'latest') {
