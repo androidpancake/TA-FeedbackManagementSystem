@@ -1,7 +1,7 @@
 @extends('template.admin.dashboard')
 
 @section('content')
-<div class="bg-gray-50 pt-16 mt-4 p-8">
+<div class="bg-gray-50 pt-16 mt-4 p-8 h-screen">
     <h1 class="font-semibold text-3xl text-gray-700">Selamat Datang, {{ Auth::user()->name }}</h1>
     <div class="grid grid-cols-2 gap-6 mt-6">
         <!-- statistic -->
@@ -78,41 +78,6 @@
                 <p class="font-semibold text-md w-full text-gray-700">Selesai:</p>
                 <p class="text-2xl font-semibold text-gray-">{{ $complaintDone }}</p>
             </div>
-            <!-- <div class="grid grid-cols-2 gap-4 p-2 h-96 mt-2">
-            <div class="bg-white rounded border-2 flex items-center p-2">
-                <div class="flex justify-between items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-800" fill="currentColor" viewBox="0 0 256 256"><path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path></svg>                    <div class="order-last">
-                        <h1 class="font-semibold text-sm text-gray-500">Belum direspon</h1>
-                        <p class="text-2xl font-semibold">{{ $complaintSent }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded border-2 flex items-center p-2">
-                <div class="flex justify-between items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-800" fill="currentColor" viewBox="0 0 256 256"><path d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78ZM40,200V111.53l65.9,47a8,8,0,0,0,4.65,1.49h34.9a8,8,0,0,0,4.65-1.49l65.9-47V200Z"></path></svg>                    <div class="order-last">
-                        <h1 class="font-semibold text-sm text-gray-500">Dibaca</h1>
-                        <p class="text-2xl font-semibold">{{ $complaintRead }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded border-2 flex items-center p-2">
-                <div class="flex justify-between items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-800" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"></path></svg>                    
-                    <div class="order-last">
-                        <h1 class="font-semibold text-sm text-gray-500">Direspon</h1>
-                        <p class="text-2xl font-semibold">{{ $complaintResponse }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded border-2 flex items-center p-2">
-                <div class="flex justify-between items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-800" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>                    <div class="order-last">
-                        <h1 class="font-semibold text-sm text-gray-500">Selesai</h1>
-                        <p class="text-2xl font-semibold">{{ $complaintDone }}</p>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         </div>
         <div class="bg-white rounded-lg border border-gray-200 drop-shadow-sm">
             <div class="font-semibold text-gray-800 text-lg p-4 border-b">Keluhan Berdasarkan Kategori</div>

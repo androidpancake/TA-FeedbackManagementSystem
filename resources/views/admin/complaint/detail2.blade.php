@@ -349,7 +349,7 @@ use Illuminate\Support\Str;
                                 <p class="text-sm font-medium text-right">{{ $complaint->user->nim }}</p>
                             </div>
                         </div>
-                        <div class="flex justify-between">
+                        <!-- <div class="flex justify-between">
                             <p class="text-sm text-gray-500 whitespace-nowrap">Dosen Wali</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
                                 <p class="text-sm font-medium text-right">{{ $complaint->user->homeroom }}</p>
@@ -360,7 +360,7 @@ use Illuminate\Support\Str;
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
                                 <p class="text-sm font-medium text-right">{{ $complaint->user->real_class }}</p>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Kategori</p>
                             <div class="{{ $complaint->category->bg }} px-2 py-1 rounded-md text-sm font-medium inline-flex space-x-2">
