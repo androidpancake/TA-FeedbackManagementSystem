@@ -13,6 +13,15 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     @stack('script')
     <title>Test</title>
+    <style>
+        .selected {
+            background-color: rgb(243 244 246);
+        }
+
+        .selected:hover {
+            color: #374151;
+        }
+    </style>
 </head>
 
 <body>
@@ -96,7 +105,7 @@
                                     </svg>
                                     <span class="ml-3 font-semibold text-gray-700">Aktivitas</span>
                                 </div>
-                                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full">{{ Auth::user()->unreadNotifications->count() }}</span>
+                                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">{{ Auth::user()->unreadNotifications->count() }}</span>
                             </a>
                         </li>
                     </ul>

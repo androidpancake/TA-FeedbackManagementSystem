@@ -14,7 +14,9 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@material-tailwind/html": "^2.0.0",
         "animatejs": "^1.0.1",
-        "chart.js": "^4.3.0"
+        "chart.js": "^4.3.0",
+        "preline": "^1.9.0"
     }
 }

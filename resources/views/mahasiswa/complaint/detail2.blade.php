@@ -1,4 +1,4 @@
-@extends('template.template')
+@extends('template.templatedetail')
 
 @section('content')
 @php
@@ -6,7 +6,6 @@ use Illuminate\Support\Str;
 @endphp
 <!-- breadcrumb -->
 @section('breadcrumb')
-
 <nav class="flex" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
@@ -22,7 +21,7 @@ use Illuminate\Support\Str;
                 <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                 </svg>
-                <span class="ml-1 text-sm font-semibold text-gray-900 md:ml-2 dark:text-gray-400">{{ $complaint->subject }}</span>
+                <span class="ml-1 text-sm font-base text-gray-600 md:ml-2 dark:text-gray-400">Detail Keluhan</span>
             </div>
         </li>
     </ol>
@@ -30,7 +29,7 @@ use Illuminate\Support\Str;
 
 @endsection
 
-<div class="h-full bg-white rounded-lg p-2 w-full space-y-3">
+<div class="pt-16 bg-gray-100 px-2 w-full space-y-3">
     <!-- layout -->
     <div class="flex flex-col justify-between space-y-2 h-full">
         <!-- tabs < sm -->
@@ -42,46 +41,137 @@ use Illuminate\Support\Str;
             <!-- chat room -->
             <div class="flex flex-col md:flex space-y-2 h-max grow min-h-screen" id="complaint" role="tabpanel" aria-labelledby="complaint-tab">
                 <!-- header -->
-                <div class="bg-white rounded-lg border-2 border-gray-200 p-4">
-                    <div class="flex justify-start space-x-2 border-b pb-2">
-                        @if($complaint->user->profile_photo)
-                        <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                <div class="flex flex-col h-72 rounded-lg overflow-y-auto space-y-3 grow max-h-fit md:h-96">
+                    <div class="bg-white rounded-lg border-2 border-gray-200">
+                        <div class="flex justify-start space-x-2 border-b p-4 items-center">
+                            @if($complaint->user->profile_photo)
+                            <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                            @else
+                            @endif
+                            <h1 class="text-base text-gray-700">{{ $complaint->user->name }}</h1>
+                            <p class="text-sm text-gray-400">•</p>
+                            <p class="text-sm text-gray-500">{{ $complaint->created_at->diffForHumans() }}</p>
+                        </div>
+                        <div class="p-4">
+                            <p class="font-semibold text-gray-700">{{ $complaint->subject }}</p>
+                            <p class="text-gray-700">{{ $complaint->content }}</p>
+                        </div>
+                        @if($complaint->file)
+                        @if (Str::endsWith($complaint->file, '.pdf'))
+                        <div class="flex flex-row w-full space-x-2 px-4 pb-4">
+                            <a href="{{ Storage::url($complaint->file) }}" class="bg-white rounded-lg border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                <div class="flex space-x-2 items-center">
+                                    <!-- icon -->
+                                    <span class="bg-gray-200 rounded-md p-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                            <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <!-- file name -->
+                                        <p class="text-sm">{{ basename($complaint->file) }}</p>
+                                        <!-- size -->
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        @elseif (Str::endsWith($complaint->file, ['.jpg', '.jpeg', '.png', '.gif']))
+                        <div class="flex flex-row w-full space-x-2 px-4 pb-4">
+                            <img src="{{ Storage::url($complaint->file) }}" class="w-1/2 bg-white border rounded-lg px-2.5 py-2">
+                        </div>
+                        @endif
                         @else
                         @endif
-                        <h1 class="font-semibold text-base">{{ $complaint->user->name }}</h1>
-                        <p class="text-sm text-gray-400">•</p>
-                        <p class="text-sm text-gray-500">{{ $complaint->created_at->diffForHumans() }}</p>
                     </div>
-                    <div>
-                        <p class="font-semibold text-gray-700">{{ $complaint->subject }}</p>
-                        <p class="text-gray-700">{{ $complaint->content }}</p>
-                    </div>
-                    @if($complaint->file)
-                    <div class="flex flex-row w-full space-x-2">
-                        <div class="bg-white rounded-lg border-2 px-2.5 py-2 grow">
-                            <div class="flex space-x-2 items-center">
-                                <!-- icon -->
-                                <span class="bg-gray-200 rounded-lg p-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
-                                        <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
-                                    </svg>
-                                </span>
-                                <div>
-                                    <!-- file name -->
-                                    <a href="{{ Storage::url($complaint->file) }}" class="text-sm">{{ \Illuminate\Support\Str::afterLast($complaint->file, '/') }}</a>
-                                    <!-- size -->
-                                    <!-- <p>({{ ($complaint->file_size) }})</p> -->
-                                </div>
+                    @foreach($complaint->complaint_reply as $reply)
+                    @if($reply->user)
+                    <!-- replies -->
+                    <div class="bg-white border-2 rounded-lg">
+                        <div class="flex justify-start items-center border-b p-4 space-x-2">
+                            <div class="inline-flex space-x-2">
+                                @if($reply->user->profile_photo)
+                                <img src="{{ Storage::url($reply->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @else
+                                @endif
+                                <p>{{ $reply->user->name }}</p>
                             </div>
+                            <p class="text-sm text-gray-400">•</p>
+                            <p class="font-base text-sm text-gray-500">{{ $reply->created_at->diffForHumans() }}</p>
+                        </div>
+                        <div class="p-4 space-y-2 flex flex-col">
+                            <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
+                            @if($reply->attachment)
+                            @if (Str::endsWith($reply->attachment, '.pdf'))
+                            <a href="{{ Storage::url($complaint->file) }}" class="bg-white rounded-lg border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                <div class="flex space-x-2 items-center">
+                                    <!-- icon -->
+                                    <span class="bg-gray-200 rounded-md p-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                            <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <!-- file name -->
+                                        <p class="text-sm">{{ basename($reply->attachment) }}</p>
+                                        <!-- size -->
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- <a href="{{ Storage::url($reply->attachment) }}" class="text-sm bg-white border-2 rounded-lg px-2.5 py-2">{{ basename($reply->attachment) }}</a> -->
+                            @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
+                            <img src="{{ Storage::url($reply->attachment) }}" class="w-1/2 bg-white border rounded-lg px-2.5 py-2">
+                            @else
+                            @endif
+                            @else
+                            @endif
                         </div>
                     </div>
                     @else
+                    <div class="bg-white border-2 rounded-lg">
+                        <div class="flex justify-start items-center border-b p-4 space-x-2">
+                            <div class="inline-flex space-x-2">
+                                @if($reply->admin->profile_photo)
+                                <img src="{{ Storage::url($reply->admin->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @else
+                                @endif
+                                <p>{{ $reply->admin->name }}</p>
+                            </div>
+                            <p class="text-sm text-gray-400">•</p>
+                            <p class="font-base text-sm text-gray-500">{{ $reply->created_at->diffForHumans() }}</p>
+                        </div>
+                        <div class="p-4 space-y-2 flex flex-col">
+                            <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
+                            @if($reply->attachment)
+                            @if (Str::endsWith($reply->attachment, '.pdf'))
+                            <a href="{{ Storage::url($complaint->file) }}" class="bg-white rounded-md border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                <div class="flex space-x-2 items-center">
+                                    <!-- icon -->
+                                    <span class="bg-gray-200 rounded-md p-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                            <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <!-- file name -->
+                                        <p class="text-sm">{{ basename($reply->attachment) }}</p>
+                                        <!-- size -->
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- <a href="{{ Storage::url($reply->attachment) }}" class="text-sm bg-white border-2 rounded-lg px-2.5 py-2">{{ basename($reply->attachment) }}</a> -->
+                            @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
+                            <img src="{{ Storage::url($reply->attachment) }}" class="w-1/2 bg-white border rounded-lg px-2.5 py-2">
+                            @else
+                            @endif
+                            @else
+                            @endif
+                        </div>
+                    </div>
                     @endif
+                    @endforeach
                 </div>
-
-
                 <!-- replies -->
-                <div class="flex flex-col h-72 bg-white border-2 border-gray-200 rounded-lg p-2 space-y-3 overflow-y-auto grow max-h-fit md:h-96">
+                <!-- <div class="flex flex-col h-72 bg-white border-2 border-gray-200 rounded-lg p-2 space-y-3 overflow-y-auto grow max-h-fit md:h-96">
                     @foreach($complaint->complaint_reply as $reply)
                     @if($reply->user)
                     <div class="bg-white border-2 rounded-lg p-4 text-gray-800 space-y-2">
@@ -128,7 +218,7 @@ use Illuminate\Support\Str;
                     </div>
                     @endif
                     @endforeach
-                </div>
+                </div> -->
                 <!-- chat box -->
                 <form action="{{ route('mahasiswa.complaint.m_send_complaint_reply', $complaint->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -146,9 +236,9 @@ use Illuminate\Support\Str;
                         <div class="border border-gray-200 rounded-lg grow bg-gray-50 shadow-lg">
                             <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                                 <label for="comment" class="sr-only">Your comment</label>
-                                <textarea name="reply" id="comment" rows="3" class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0" placeholder="Write a comment..." required></textarea>
+                                <textarea name="reply" id="comment" rows="3" class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0" placeholder="Tulis balasan..." required></textarea>
                             </div>
-                            <input type="hidden" name="user_id" value="{{ $complaint->user->id }}">
+                            <input type="hidden" name="user_id" value="{{ Auth()->id() }}">
                             <input type="hidden" name="complaint_id" value="{{ $complaint->id }}">
                             <div class="flex items-center justify-between px-3 py-2 border-t">
 
@@ -283,8 +373,139 @@ use Illuminate\Support\Str;
 
             <!-- information -->
             <div class="hidden md:flex">
-                <div class="flex flex-col bg-white p-2 w-72">
+                <div class="flex flex-col bg-white p-4 rounded-md w-72">
                     <!-- header -->
+                    <div class="flex flex-col space-y-2 w-full">
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500">Status</p>
+                            @if($complaint->status == 'sent')
+                            <div class="bg-gray-100 px-2 p-1 text-gray-700 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Menunggu Respon</p>
+                            </div>
+                            @elseif($complaint->status == 'read')
+                            <div class="bg-gray-100 px-2 p-1 text-gray-700 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Dibaca</p>
+                            </div>
+                            @elseif($complaint->status == 'response')
+                            <div class="bg-yellow-100 px-2 p-1 text-yellow-500 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Dalam Proses</p>
+                            </div>
+                            @elseif($complaint->status == 'done')
+                            <div class="bg-green-100 px-2 p-1 text-green-500 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Selesai</p>
+                            </div>
+                            @endif
+                        </div>
+                        <!-- <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500 text-right">Mahasiswa</p>
+                            <div class="rounded-lg text-sm font-medium flex justify-between items-center space-x-2">
+                                <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                <p>{{ $complaint->user->name }}</p>
+                            </div>
+                        </div> -->
+                        <!-- <div class="flex justify-between">
+                        <p class="text-sm text-gray-500">NIM</p>
+                        <div class="text-sm font-medium inline-flex items-center space-x-2">
+                            <p class="text-sm font-medium text-right">{{ $complaint->user->nim }}</p>
+                        </div>
+                    </div> -->
+                        <!-- <div class="flex justify-between">
+                            <p class="text-sm text-gray-500 whitespace-nowrap">Dosen Wali</p>
+                            <div class="text-sm font-medium inline-flex items-center space-x-2">
+                                <p class="text-sm font-medium text-right">{{ $complaint->user->homeroom }}</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <p class="text-sm text-gray-500">Kelas Asal</p>
+                            <div class="text-sm font-medium inline-flex items-center space-x-2">
+                                <p class="text-sm font-medium text-right">{{ $complaint->user->real_class }}</p>
+                            </div>
+                        </div> -->
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500">Kategori</p>
+                            <div class="{{ $complaint->category->bg }} px-2 py-1 rounded-md text-sm font-medium inline-flex space-x-2">
+                                <span>
+                                    <img src="{{ Storage::url($complaint->category->label) }}" class="w-4 h-4" alt="">
+                                </span>
+                                <p class="text-xs">{{ $complaint->category->name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- timeline -->
+                    <div class="mt-2 h-full overflow-y-auto">
+                        <p class="text-gray-500 text-sm">Timeline</p>
+                        <ol class="relative border-l border-gray-200 mt-3 ml-2">
+                            <li class="mb-10 ml-4">
+                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Keluhan telah dibuat</div>
+                                <time class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {{ date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
+                                </time>
+                            </li>
+                            @if($complaint->status == 'read')
+                            <li class="mb-10 ml-4">
+                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca keluhan</time>
+                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {{ date('D, d M Y, H:i', strtotime($complaint->date)) }}
+                                </p>
+                            </li>
+                            @endif
+                            @foreach($complaint->complaint_reply as $replies)
+                            @if($replies->user)
+                            <li class="mb-10 ml-4">
+                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Mahasiswa membalas keluhan</time>
+                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
+                                </p>
+                            </li>
+
+                            @elseif(!$replies->user)
+                            <li class="mb-10 ml-4">
+                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membalas keluhan</time>
+                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
+                                </p>
+                            </li>
+                            @endif
+                            @endforeach
+                            @if($complaint->status == 'done')
+                            <li class="mb-10 ml-4">
+                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Pengaduan ditutup</time>
+                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {{ date('D, d M Y, H:i', strtotime($complaint->closed_date)) }}
+                                </p>
+                            </li>
+                            @endif
+                        </ol>
+                    </div>
+                    <!-- mark as done -->
+                    @if($complaint->status != 'done')
+                    <div class="border-t py-2 flex flex-col space-y-2">
+                        <p class="text-sm text-gray-600">Jika puas dengan respon dan tindakan admin, klik untuk menyelesaikan proses umpan balik</p>
+                        <form action="{{ route('mahasiswa.complaint.done', $complaint->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full inline-flex items-center justify-center space-x-2 bg-white border hover:bg-gray-100 hover:shadow-smfocus:ring-2 focus:ring-green-200 font-medium rounded px-5 py-2.5 mr-2 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path>
+                                </svg>
+                                <p class="text-sm text-base disabled:text-gray-500">Selesai</p>
+                            </button>
+
+
+                        </form>
+                    </div>
+                    @else
+
+                    @endif
+                </div>
+            </div>
+            <!-- <div class="hidden md:flex">
+                <div class="flex flex-col bg-white p-2 w-72">
+                     header 
                     <div class="flex flex-col space-y-2 w-full">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Status</p>
@@ -318,7 +539,7 @@ use Illuminate\Support\Str;
                             </div>
                         </div>
                     </div>
-                    <!-- timeline -->
+                     timeline 
                     <div class="mt-2 h-full overflow-y-auto">
                         <h1 class="text-gray-500 font-semibold">Timeline</h1>
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
@@ -369,7 +590,7 @@ use Illuminate\Support\Str;
 
                         </ol>
                     </div>
-                    <!-- done -->
+                     done 
                     <div class="border-t py-2 flex flex-col space-y-2">
                         <p class="text-center text-sm text-gray-600">Jika puas dengan respon dan tindakan Admin, klik untuk menyelesaikan proses umpan balik</p>
                         <form action="{{ route('mahasiswa.complaint.done', $complaint->id) }}" method="POST">
@@ -388,7 +609,7 @@ use Illuminate\Support\Str;
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

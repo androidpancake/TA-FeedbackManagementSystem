@@ -52,7 +52,7 @@ class ComplaintController extends Controller
         ]);
     }
 
-    public function byCategory($categoryName)
+    public function byCategory(Request $request, $categoryName)
     {
         $category = Category::where('name', $categoryName)->firstOrFail();
 
@@ -64,6 +64,16 @@ class ComplaintController extends Controller
         $read = $complaint->where('status', 'read')->where('user_id', auth()->id())->values();
         $process = $complaint->where('status', 'response')->where('user_id', auth()->id())->values();
         $done = $complaint->where('status', 'done')->where('user_id', auth()->id())->values();
+
+        $sortBy = $request->get('sort');
+
+        if ($sortBy === 'latest') {
+            $complaint = Complaint::orderBy('created_at', 'desc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        } elseif ($sortBy === 'oldest') {
+            $complaint = Complaint::orderBy('created_at', 'asc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        } else {
+            $complaint = Complaint::orderBy('created_at', 'desc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        }
 
         return view('mahasiswa.complaint.filter.filter', [
             'categoryName' => $category,
@@ -211,7 +221,7 @@ class ComplaintController extends Controller
         $complaint = Complaint::findOrFail($id);
 
         $complaint->status = 'done';
-
+        $complaint->closed_date = now();
         $complaint->save();
 
         $admins = Admin::all();

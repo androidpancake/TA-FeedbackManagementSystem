@@ -4,7 +4,7 @@
 <div class="p-8 mt-14 bg-gray-50 w-full h-screen space-y-6">
     @forelse($groupedNotification as $date => $notifications)
     <div class="space-y-2">
-        <!-- <p class="w-1/2 mx-auto pb-2 border-b font-medium text-gray-400">{{ $date }}</p> -->
+        <p class="w-1/2 mx-auto pb-2 border-b font-medium text-gray-400">{{ $date }}</p>
         <div class="flex flex-col space-y-3">
             @forelse($notifications as $notification)
             @if($notification->type === 'App\Notifications\ComplaintNotification')

@@ -1,7 +1,7 @@
 @extends('template.admin.dashboard')
 
 @section('content')
-<div class="bg-gray-50 pt-16 mt-4 p-8 h-screen">
+<div class="bg-gray-50 pt-16 mt-4 p-8 h-full">
     <h1 class="font-semibold text-3xl text-gray-700">Selamat Datang, {{ Auth::user()->name }}</h1>
     <div class="grid grid-cols-2 gap-6 mt-6">
         <!-- statistic -->

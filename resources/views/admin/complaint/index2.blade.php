@@ -1,34 +1,34 @@
 @extends('template.admin.template')
-
 @section('content')
 
 <div class="">
     <div class="px-8">
         <h1 class="font-semibold text-gray-700 text-2xl">Keluhan</h1>
         <div class="flex justify-between py-2 mt-2 items-center">
+            <!-- tabs -->
             <div class="flex space-x-2 overflow-x-auto" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-                <button id="wait-tab" role="tab" data-tabs-target="#wait" aria-selected="true" aria-controls="wait" type="button" class="py-2 px-3 bg-gray-100 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
+                <button id="wait-tab" role="tab" data-tabs-target="#wait" aria-selected="true" aria-controls="wait" type="button" class="hover:bg-gray-100 py-2 px-3 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 256 256">
                         <path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path>
                     </svg>
                     <p>Menunggu Respon</p>
                     <p>{{ count($wait) }}</p>
                 </button>
-                <button id="read-tab" role="tab" data-tabs-target="#read" aria-selected="false" aria-controls="read" type="button" class="py-2 px-3 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
+                <button id="read-tab" role="tab" data-tabs-target="#read" aria-selected="false" aria-controls="read" type="button" class="hover:bg-gray-100 py-2 px-3 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 256 256">
                         <path d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM96.72,152,40,192V111.53Zm16.37,8h29.82l56.63,40H56.46Zm46.19-8L216,111.53V192ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78Z"></path>
                     </svg>
                     <p>Dibaca</p>
                     <p>{{ count($read) }}</p>
                 </button>
-                <button id="process-tab" role="tab" data-tabs-target="#process" aria-selected="false" aria-controls="process" type="button" class="py-2 px-3 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
+                <button id="process-tab" role="tab" data-tabs-target="#process" aria-selected="false" aria-controls="process" type="button" class="hover:bg-gray-100 py-2 px-3 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 256 256">
                         <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"></path>
                     </svg>
                     <p>Diproses</p>
                     <p>{{ count($process) }}</p>
                 </button>
-                <button id="done-tab" role="tab" data-tabs-target="#done" aria-selected="false" aria-controls="done" type="button" class="py-2 px-3 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
+                <button id="done-tab" role="tab" data-tabs-target="#done" aria-selected="false" aria-controls="done" type="button" class="hover:bg-gray-100 py-2 px-3 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 256 256">
                         <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
                     </svg>
@@ -288,4 +288,30 @@
         </div>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let initButton = document.querySelector('button[aria-selected="true"]');
+            if (initButton) {
+                initButton.classList.add('selected');
+            }
+            let buttons = document.querySelectorAll('button[role="tab"]');
+            console.log(buttons.length)
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function() {
+
+                    // Remove the 'selected' class from all buttons
+                    buttons.forEach(function(btn) {
+                        btn.classList.remove('selected');
+                        btn.setAttribute('aria-selected', 'false');
+                    });
+
+                    // Add the 'selected' class to the clicked button
+                    this.classList.add('selected');
+                    this.setAttribute('aria-selected', 'true');
+                });
+            });
+
+        });
+    </script>
     @endsection

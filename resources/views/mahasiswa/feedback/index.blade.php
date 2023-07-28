@@ -4,6 +4,7 @@
 <div class="px-8">
     <h1 class="font-semibold text-gray-700 text-2xl">Keluhan</h1>
     <div class="flex justify-between py-2 mt-2 items-center">
+        <!-- tabs -->
         <div class="flex space-x-2 w-full overflow-x-auto" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <button id="all-tab" role="tab" data-tabs-target="#all" aria-selected="true" aria-controls="all" type="button" class="py-2 px-2 bg-gray-200 rounded-lg font-bold text-gray-700 text-sm inline-flex items-center space-x-1">
                 <p>Semua</p>
@@ -84,11 +85,11 @@
                     <div class="flex sm:flex justify-between items-center space-x-2">
                         <div class="flex sm:flex-row items-center justify-start space-x-2">
                             @if($data->class->lecturer)
-                                <img src="{{ Storage::url($data->class->lecturer->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
-                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
+                            <img src="{{ Storage::url($data->class->lecturer->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
                             @elseif($data->class->lab)
-                                <img src="{{ Storage::url($data->class->lab->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
-                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
+                            <img src="{{ Storage::url($data->class->lab->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
                             @endif
                             <p class="hidden md:flex text-sm text-gray-500">•</p>
                             <p class="text-sm font-medium text-gray-400">{{ $data->class->course->name }}</p>
@@ -680,4 +681,29 @@
     </div>
 </div>
 <!-- end feedback modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let initButton = document.querySelector('button[aria-selected="true"]');
+        if (initButton) {
+            initButton.classList.add('selected');
+        }
+        let buttons = document.querySelectorAll('button[role="tab"]');
+        console.log(buttons.length)
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+
+                // Remove the 'selected' class from all buttons
+                buttons.forEach(function(btn) {
+                    btn.classList.remove('selected');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+
+                // Add the 'selected' class to the clicked button
+                this.classList.add('selected');
+                this.setAttribute('aria-selected', 'true');
+            });
+        });
+
+    });
+</script>
 @endsection

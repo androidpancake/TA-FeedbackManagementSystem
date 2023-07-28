@@ -41,14 +41,13 @@ use Illuminate\Support\Str;
         <div class="flex w-full md:flex justify-between space-x-3 h-full">
             <!-- chat room -->
             <div class="flex flex-col md:flex space-y-2 h-max grow min-h-screen" id="complaint" role="tabpanel" aria-labelledby="complaint-tab">
-                <!-- replies -->
+                <!-- header -->
                 <div class="flex flex-col h-72 rounded-lg space-y-3 overflow-y-auto grow max-h-fit md:h-96">
                     <div class="bg-white rounded-lg border-2 border-gray-200">
                         <div class="flex justify-start space-x-2 border-b p-4 items-center">
                             @if($complaint->user->profile_photo)
                             <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
                             @else
-
                             @endif
                             <h1 class="text-base text-gray-700">{{ $complaint->user->name }}</h1>
                             <p class="text-sm text-gray-400">•</p>
@@ -79,7 +78,7 @@ use Illuminate\Support\Str;
                         </div>
                         @elseif (Str::endsWith($complaint->file, ['.jpg', '.jpeg', '.png', '.gif']))
                         <div class="flex flex-row w-full space-x-2 px-4 pb-4">
-                            <img src="{{ Storage::url($complaint->file) }}" class="w-full bg-white border rounded-lg px-2.5 py-2">
+                            <img src="{{ Storage::url($complaint->file) }}" class="w-1/2 bg-white border rounded-lg px-2.5 py-2">
                         </div>
                         @endif
                         @else
@@ -87,6 +86,7 @@ use Illuminate\Support\Str;
                     </div>
                     @foreach($complaint->complaint_reply as $reply)
                     @if($reply->user)
+                    <!-- replies -->
                     <div class="bg-white border-2 rounded-lg">
                         <div class="flex justify-start items-center border-b p-4 space-x-2">
                             <div class="inline-flex space-x-2">
@@ -120,7 +120,7 @@ use Illuminate\Support\Str;
                             </a>
                             <!-- <a href="{{ Storage::url($reply->attachment) }}" class="text-sm bg-white border-2 rounded-lg px-2.5 py-2">{{ basename($reply->attachment) }}</a> -->
                             @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
-                            <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
+                            <img src="{{ Storage::url($reply->attachment) }}" class="w-1/2 bg-white border rounded-lg px-2.5 py-2">
                             @else
                             @endif
                             @else
@@ -161,7 +161,7 @@ use Illuminate\Support\Str;
                             </a>
                             <!-- <a href="{{ Storage::url($reply->attachment) }}" class="text-sm bg-white border-2 rounded-lg px-2.5 py-2">{{ basename($reply->attachment) }}</a> -->
                             @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
-                            <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
+                            <img src="{{ Storage::url($reply->attachment) }}" class="w-1/2 bg-white border rounded-lg px-2.5 py-2">
                             @else
                             @endif
                             @else
@@ -349,7 +349,7 @@ use Illuminate\Support\Str;
                                 <p class="text-sm font-medium text-right">{{ $complaint->user->nim }}</p>
                             </div>
                         </div>
-                        <!-- <div class="flex justify-between">
+                        <div class="flex justify-between">
                             <p class="text-sm text-gray-500 whitespace-nowrap">Dosen Wali</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
                                 <p class="text-sm font-medium text-right">{{ $complaint->user->homeroom }}</p>
@@ -360,7 +360,7 @@ use Illuminate\Support\Str;
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
                                 <p class="text-sm font-medium text-right">{{ $complaint->user->real_class }}</p>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Kategori</p>
                             <div class="{{ $complaint->category->bg }} px-2 py-1 rounded-md text-sm font-medium inline-flex space-x-2">
@@ -390,14 +390,6 @@ use Illuminate\Support\Str;
                                     {{ date('D, d M Y, H:i', strtotime($complaint->date)) }}
                                 </p>
                             </li>
-                            @elseif($complaint->status == 'done')
-                            <li class="mb-10 ml-4">
-                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Pengaduan ditutup</time>
-                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {{ date('D, d M Y, H:i', strtotime($complaint->closed_date)) }}
-                                </p>
-                            </li>
                             @endif
                             @foreach($complaint->complaint_reply as $replies)
                             @if($replies->user)
@@ -412,13 +404,22 @@ use Illuminate\Support\Str;
                             @elseif(!$replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membalas pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Prodi membalas pengaduan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
                             </li>
                             @endif
                             @endforeach
+                            @if($complaint->status == 'done')
+                            <li class="mb-10 ml-4">
+                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Pengaduan ditutup</time>
+                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {{ date('D, d M Y, H:i', strtotime($complaint->closed_date)) }}
+                                </p>
+                            </li>
+                            @endif
                         </ol>
                     </div>
                 </div>
