@@ -7,7 +7,7 @@
         <div class="flex justify-between py-2 mt-2 items-center">
             <!-- tabs -->
             <div class="flex space-x-2 overflow-x-auto" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-                <button id="wait-tab" role="tab" data-tabs-target="#wait" aria-selected="true" aria-controls="wait" type="button" class="hover:bg-gray-100 py-2 px-3 bg-gray-100 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
+                <button id="wait-tab" role="tab" data-tabs-target="#wait" aria-selected="true" aria-controls="wait" type="button" class="hover:bg-gray-100 py-2 px-3 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 256 256">
                         <path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path>
                     </svg>
@@ -179,7 +179,7 @@
                                 <div id="dropdownID{{ $data->id }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
                                     <ul aria-labelledby="dropdownDelete" class="py-2 text-sm text-gray-700">
                                         <li>
-                                            <button onclick="event.preventDefault()" data-modal-target="modalID{{ $data->id }}" data-modal-toggle="modalID{{ $data->id }}" class="w-full px-4 py-2 text-base hover:bg-gray-100">Hapus komplain</button>
+                                            <button onclick="event.preventDefault()" data-modal-target="modalID{{ $data->id }}" data-modal-toggle="modalID{{ $data->id }}" class="w-full px-4 py-2 text-base hover:bg-gray-100">Hapus keluhan</button>
                                         </li>
                                     </ul>
                                 </div>

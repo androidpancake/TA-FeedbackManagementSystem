@@ -35,7 +35,7 @@ use Illuminate\Support\Str;
     <div class="flex flex-col justify-between space-y-2 h-full">
         <!-- tabs < sm -->
         <div id="myTab" data-tabs-toggle="#myTabContent" role="tablist" class="md:hidden flex bg-white rounded-lg border p-3">
-            <button id="complaint-tab" data-tabs-target="#complaint" type="button" role="tab" aria-controls="complaint" aria-selected="true" class="grow text-center">Pengaduan</button>
+            <button id="complaint-tab" data-tabs-target="#complaint" type="button" role="tab" aria-controls="complaint" aria-selected="true" class="grow text-center">Keluhan</button>
             <button id="info-tab" data-tabs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="false" class="grow text-center">Informasi</button>
         </div>
         <div class="flex w-full md:flex justify-between space-x-3 h-full">
@@ -263,7 +263,7 @@ use Illuminate\Support\Str;
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda mengirim pengaduan</div>
+                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda mengirim keluhan</div>
                                 <time class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
                                 </time>
@@ -271,7 +271,7 @@ use Illuminate\Support\Str;
                             @if($complaint->status == 'read')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->date)) }}
                                 </p>
@@ -289,7 +289,7 @@ use Illuminate\Support\Str;
                             @if($replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
@@ -298,7 +298,7 @@ use Illuminate\Support\Str;
                             @elseif(!$replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membalas pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membalas keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
@@ -385,7 +385,7 @@ use Illuminate\Support\Str;
                             @if($complaint->status == 'read')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca keluhan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Prodi membaca keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->date)) }}
                                 </p>
@@ -404,7 +404,7 @@ use Illuminate\Support\Str;
                             @elseif(!$replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Prodi membalas pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Prodi membalas keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
@@ -414,7 +414,7 @@ use Illuminate\Support\Str;
                             @if($complaint->status == 'done')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Pengaduan ditutup</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Keluhan ditutup</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->closed_date)) }}
                                 </p>

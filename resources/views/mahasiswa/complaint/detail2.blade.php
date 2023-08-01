@@ -34,7 +34,7 @@ use Illuminate\Support\Str;
     <div class="flex flex-col justify-between space-y-2 h-full">
         <!-- tabs < sm -->
         <div id="myTab" data-tabs-toggle="#myTabContent" role="tablist" class="md:hidden flex bg-white rounded-lg border p-3">
-            <button id="complaint-tab" data-tabs-target="#complaint" type="button" role="tab" aria-controls="complaint" aria-selected="true" class="grow text-center">Pengaduan</button>
+            <button id="complaint-tab" data-tabs-target="#complaint" type="button" role="tab" aria-controls="complaint" aria-selected="true" class="grow text-center">Keluhan</button>
             <button id="info-tab" data-tabs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="false" class="grow text-center">Informasi</button>
         </div>
         <div class="flex w-full md:flex justify-between space-x-3 h-full">
@@ -311,7 +311,7 @@ use Illuminate\Support\Str;
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda mengirim pengaduan</div>
+                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda mengirim keluhan</div>
                                 <time class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
                                 </time>
@@ -319,7 +319,7 @@ use Illuminate\Support\Str;
                             @if($complaint->status == 'read')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->date)) }}
                                 </p>
@@ -327,7 +327,7 @@ use Illuminate\Support\Str;
                             @elseif($complaint->status == 'done')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Pengaduan ditutup</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Keluhan ditutup</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->closed_date)) }}
                                 </p>
@@ -337,7 +337,7 @@ use Illuminate\Support\Str;
                             @if($replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
@@ -346,7 +346,7 @@ use Illuminate\Support\Str;
                             @elseif(!$replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membalas pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membalas keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
@@ -474,7 +474,7 @@ use Illuminate\Support\Str;
                             @if($complaint->status == 'done')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Pengaduan ditutup</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Keluhan ditutup</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->closed_date)) }}
                                 </p>
@@ -486,14 +486,41 @@ use Illuminate\Support\Str;
                     @if($complaint->status != 'done')
                     <div class="border-t py-2 flex flex-col space-y-2">
                         <p class="text-sm text-gray-600">Jika puas dengan respon dan tindakan admin, klik untuk menyelesaikan proses umpan balik</p>
-                        <form action="{{ route('mahasiswa.complaint.done', $complaint->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="w-full inline-flex items-center justify-center space-x-2 bg-white border hover:bg-gray-100 hover:shadow-smfocus:ring-2 focus:ring-green-200 font-medium rounded px-5 py-2.5 mr-2 mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 256 256">
-                                    <path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path>
-                                </svg>
-                                <p class="text-sm text-base disabled:text-gray-500">Selesai</p>
-                            </button>
+                        @csrf
+                        <button data-modal-target="confirm" data-modal-toggle="confirm" type="submit" class="w-full inline-flex items-center justify-center space-x-2 bg-white border hover:bg-gray-100 hover:shadow-smfocus:ring-2 focus:ring-green-200 font-medium rounded px-5 py-2.5 mr-2 mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path>
+                            </svg>
+                            <p class="text-sm text-base disabled:text-gray-500">Selesai</p>
+                        </button>
+                        <!-- modal -->
+                        <div id="confirm" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <div class="z-20 w-full max-w-md max-h-full">
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="confirm">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                    <div class="p-6">
+                                        <p class="text-md font-semibold text-md text-gray-700">Konfirmasi Penyelesaian</p>
+                                        <p class="text-sm pb-4 text-gray-500">Apakah Anda yakin ingin menandai keluhan ini sebagai selesai? Aksi ini akan memberitahu prodi bahwa Anda puas dengan respon dan tindakan yang telah diambil.</p>
+                                        <div class="flex flex-row space-x-3">
+                                            <button data-modal-hide="confirm" type="button" class="w-full text-center justify-center text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                                Batal
+                                            </button>
+                                            <form class="w-full" action="{{ route('mahasiswa.complaint.done', $complaint->id) }}" method="POST">
+                                                @csrf
+                                                <button data-modal-hide="confirm" type="submit" class="w-full h-full text-center justify-center text-white bg-green-500 hover:bg-green-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                                    Konfirmasi
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
                         </form>
@@ -545,7 +572,7 @@ use Illuminate\Support\Str;
                         <ol class="relative border-l border-gray-200 mt-3 ml-2">
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda mengirim pengaduan</div>
+                                <div class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda mengirim keluhan</div>
                                 <time class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->created_at)) }}
                                 </time>
@@ -553,7 +580,7 @@ use Illuminate\Support\Str;
                             @if($complaint->status == 'read')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Admin membaca keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->date)) }}
                                 </p>
@@ -561,7 +588,7 @@ use Illuminate\Support\Str;
                             @elseif($complaint->status == 'done')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Pengaduan ditutup</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Keluhan ditutup</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($complaint->closed_date)) }}
                                 </p>
@@ -571,7 +598,7 @@ use Illuminate\Support\Str;
                             @if($replies->user)
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas pengaduan</time>
+                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas keluhan</time>
                                 <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
                                     {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
                                 </p>
