@@ -11,8 +11,10 @@ use App\Models\Feedback;
 use App\Models\Lab;
 use App\Models\Lecturer;
 use App\Models\LecturerReply;
+use App\Models\Periode;
 use App\Models\Reply;
 use App\Models\User;
+use App\Notifications\FeedbackDoneNotification;
 use App\Notifications\FeedbackNotification;
 use App\Notifications\LabReplyNotification;
 use App\Notifications\LecturerReplyNotification;
@@ -53,14 +55,19 @@ class FeedbackController extends Controller
 
         $category = Category::where('for', 'feedback')->get();
 
-        return view('mahasiswa.feedback.index', [
+        $periode = Periode::all();
+        // dd($periode[1]);
+        $sortByPeriod = $request->get('periode');
+
+        return view('mahasiswa.feedback.index2', [
             'feedback' => $feedback,
             'wait' => $wait,
             'read' => $read,
             'process' => $process,
             'done' => $done,
             'sortBy' => $sortBy,
-            'category' => $category
+            'category' => $category,
+            'period' => $periode
             // 'test' => $testdata
         ]);
     }
@@ -164,20 +171,20 @@ class FeedbackController extends Controller
         }
 
         if ($request->hasFile('file')) {
-            $uploadedFile = $request->file('file');
-            $extension = $uploadedFile->getClientOriginalExtension();
-            $size = $uploadedFile->getSize();
-            $filename = $uploadedFile->getClientOriginalName(); // Mengambil nama file
-        
-            $data['file'] = $uploadedFile->store('file', 'public');
-        
-            $data['file_extension'] = $extension;
-            $data['file_size'] = $size;
-            $data['file_name'] = $filename; // Menyimpan nama file dalam array $data
+            $file = $request->file('file');
+            $filename = $file->getClientOriginalName();
+
+            $path = $file->storeAs('file', $filename, 'public');
+
+            $data['file'] = $path;
         }
         
             
-        $data['user_id'] = Auth::user()->id;
+        $user_id = $data['user_id'] = Auth::user()->id;
+
+        if(Feedback::userLimitFeedback($user_id, $data['kelas_id'])){
+            return redirect()->back()->with('error', 'Anda sudah mencapai batas maksimal pengiriman per-hari');
+        }
 
         $feedback = Feedback::create($data);
 
@@ -194,21 +201,24 @@ class FeedbackController extends Controller
             $lab->notify(new FeedbackNotification($feedback));
         }
 
-        
-
         return redirect()->route('mahasiswa.feedback.index');
     }
 
     public function detail($id)
     {
-
         $feedback = Feedback::with([
             'user', 'category', 'class', 'reply'
         ])->findOrFail($id);
         
-
+        $filename = $feedback->file_name;
+        $filesize = $feedback->file_size;
+        $fileExtension = $feedback->file_extension;
+        // dd($filename);
         return view('mahasiswa.feedback.detail.detail2', [
             'feedback' => $feedback,
+            'filename' => $filename,
+            'filesize' => $filesize,
+            'fileextension' => $fileExtension
         ]);
     }
 
@@ -258,12 +268,16 @@ class FeedbackController extends Controller
 
         $data['feedback_id'] = $feedback->id;
 
-        if($request->hasFile('attachment')){
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $filename = $file->getClientOriginalName();
 
-            $data['attachment'] = $request->file('attachment')->store(
-                'replies', 'public'
-            );
+            $path = $file->storeAs('replies', $filename, 'public');
+
+            $data['attachment'] = $path;
         }
+
+        
 
         Reply::create($data);
 
@@ -288,6 +302,15 @@ class FeedbackController extends Controller
         $feedback->closed_date = now();
 
         $feedback->save();
+
+        if($feedback->class->lecturer)
+        {
+            $feedback->class->lecturer->notify(new FeedbackDoneNotification($feedback));
+        } 
+        elseif ($feedback->class->lab) 
+        {    
+            $feedback->class->lab->notify(new FeedbackDoneNotification($feedback));
+        }
 
         return redirect()->route('mahasiswa.feedback.detail', $feedback->id);
     }

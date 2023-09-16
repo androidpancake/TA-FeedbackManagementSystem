@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ComplainReplyRequest;
+use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Complaint;
 use App\Models\complaintReply;
@@ -19,7 +20,8 @@ class ComplaintController extends Controller
             'category', 'user', 'admin', 'complaint_reply'
         ])->get();
         
-        $wait = Complaint::where('status', 'sent')->get();
+        
+        $wait = $complaint->where('status', 'sent')->values();
         $read = Complaint::where('status', 'read')->get();
         $process = Complaint::where('status', 'response')->get();
         $done = Complaint::where('status', 'done')->get();
@@ -87,6 +89,8 @@ class ComplaintController extends Controller
 
     public function detail($id)
     {
+        $admin = Admin::where('id', '!=', Auth()->id())->get();
+        
         $complaint = Complaint::with([
             'user', 'category', 'admin', 'complaint_reply'
         ])->findOrFail($id);
@@ -101,7 +105,8 @@ class ComplaintController extends Controller
         $complaint->save();
 
         return view('admin.complaint.detail2', [
-            'complaint' => $complaint
+            'complaint' => $complaint,
+            'admin' => $admin
         ]);
     }
 
@@ -132,5 +137,98 @@ class ComplaintController extends Controller
         // dd($complaint);
 
         return redirect()->route('admin.complaint.detail', $complaintId);
+    }
+
+    public function assign(Request $request, $id)
+    {
+        $complaint = Complaint::findOrFail($id);
+
+        $data = $request->validate([
+            'id' => 'exists:complaint.id',
+            'assigned_to' => 'exists:admin,id'
+        ]);
+
+        $assignedAdmin = Admin::findOrFail($data['assigned_to']);
+
+        $complaint->assigned_to = $assignedAdmin->id;
+        $complaint->save();
+
+        return redirect()->route('admin.complaint.detail', $id);
+    }
+
+    public function assigned(Request $request, $adminId)
+    {
+
+        $adminId = Auth()->id();
+        $category = Category::where('for', 'complaint')->get();
+        $complaint = Complaint::with([
+            'category', 'user', 'admin', 'complaint_reply'
+        ])->where('assigned_to', $adminId)->get();
+        
+        // dd($complaint);
+        
+        $wait = $complaint->where('status', 'sent')->values();
+        $read = $complaint->where('status', 'read')->values();
+        $process = $complaint->where('status', 'response')->values();
+        $done = $complaint->where('status', 'done')->values();
+        
+
+        $sortBy = $request->get('sort');
+
+        if($sortBy === 'latest'){
+            $complaint = Complaint::orderBy('created_at', 'desc')->where('assigned_to', auth()->id())->get();
+        } elseif($sortBy === 'oldest') {
+            $complaint = Complaint::orderBy('created_at', 'asc')->where('assigned_to', auth()->id())->get();
+        } else {
+            $complaint = Complaint::orderBy('created_at', 'desc')->where('assigned_to', auth()->id())->get();
+        }
+
+        return view('admin.complaint.assign', [
+            'complaint' => $complaint,
+            'category' => $category,
+            'wait' => $wait,
+            'read' => $read,
+            'process' => $process,
+            'done' => $done,
+            'sortBy' => $sortBy
+        ]);
+    }
+
+    public function category_assigned(Request $request, $categoryName)
+    {
+        $category = Category::where('name', $categoryName)->firstOrFail();
+
+        // dd($category);
+
+        $listCategory = Category::where('for', 'complaint')->get();
+
+        $complaint = Complaint::where('category_id', $category->id)->where('assigned_to', auth()->id())->get();
+        
+        
+        $wait = $complaint->where('status', 'sent')->values();
+        $read = $complaint->where('status', 'read')->values();
+        $process = $complaint->where('status', 'response')->values();
+        $done = $complaint->where('status', 'done')->values();
+
+        $sortBy = $request->get('sort');
+
+        if($sortBy === 'latest'){
+            $complaint = Complaint::orderBy('created_at', 'desc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        } 
+        elseif($sortBy === 'oldest') {
+            $complaint = Complaint::orderBy('created_at', 'asc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        } else {
+            $complaint = Complaint::orderBy('created_at', 'desc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
+        }
+
+        return view('admin.complaint.filter.assign', [
+            'category' => $category,
+            'listCategory' => $listCategory,
+            'complaint' => $complaint,
+            'wait' => $wait,
+            'read' => $read,
+            'process' => $process,
+            'done' => $done
+        ]);
     }
 }

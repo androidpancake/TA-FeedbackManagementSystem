@@ -7,6 +7,7 @@ use App\Http\Requests\ReplyRequest;
 use App\Models\Category;
 use App\Models\Feedback;
 use App\Models\Lecturer;
+use App\Models\Periode;
 use App\Models\Reply;
 use App\Notifications\ReplyNotification;
 use Illuminate\Http\Request;
@@ -61,6 +62,25 @@ class FeedbackController extends Controller
             })->get();
         }
 
+
+        $listPeriod = Periode::all();
+        // dd($periodeData);
+        $sortByPeriod = $request->get('period');
+
+        $periode = DB::table('period')->where('periode', $sortByPeriod)->first();
+
+        if($periode)
+        {
+            $feedback = Feedback::whereBetween('created_at', [$periode->periode_start, $periode->periode_end])->get();
+            dd($feedback);
+        } 
+        else
+        {
+            //
+        }         
+        // dd($periodeData);
+        // dd($periode['periode']);
+
         return view('dosen.feedback.index', [
             'feedback' => $feedback,
             'wait' => $wait,
@@ -68,7 +88,8 @@ class FeedbackController extends Controller
             'process' => $process,
             'done' => $done,
             'sortBy' => $sortBy,
-            'category' => $category
+            'category' => $category,
+            'period' => $listPeriod
         ]);
     }
 
@@ -93,6 +114,8 @@ class FeedbackController extends Controller
 
         $listCategory = Category::where('for', 'feedback')->get();
 
+        $periode = Periode::all();
+
         $sortBy = $request->get('sort');
 
         if($sortBy === 'latest'){
@@ -111,7 +134,8 @@ class FeedbackController extends Controller
             'process' => $process,
             'done' => $done,
             'category' => $listCategory,
-            'categoryName' => $category
+            'categoryName' => $category,
+            'period' => $periode
         ]);
     }
 
@@ -147,11 +171,13 @@ class FeedbackController extends Controller
 
         $feedback->status = 'response';
 
-        if($request->hasFile('attachment')){
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $filename = $file->getClientOriginalName();
 
-            $data['attachment'] = $request->file('attachment')->store(
-                'replies', 'public'
-            );
+            $path = $file->storeAs('replies', $filename, 'public');
+
+            $data['attachment'] = $path;
         }
 
         Reply::create($data);

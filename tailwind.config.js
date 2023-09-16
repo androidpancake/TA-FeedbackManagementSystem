@@ -4,7 +4,9 @@ module.exports = {
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
     "./node_modules/flowbite/**/*.js",
-    "./node_modules/chart.js/**/*.js"
+    "./node_modules/chart.js/**/*.js",
+    "./node_modules/tw-elements/dist/js/**/*.js"
+
   ],
   theme: {
     extend: {
@@ -14,7 +16,8 @@ module.exports = {
     },
   },
   plugins: [
-    require('flowbite/plugin')
+    require('flowbite/plugin'),
+    require('tw-elements/dist/plugin.cjs')
   ],
 }
 

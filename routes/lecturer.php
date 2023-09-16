@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:lecturer'], function(){
     //quick survey
     Route::get('dosen/quicksurvey', [SurveyController::class, 'index'])->name('lecturer.survey.index');
     Route::get('dosen/quicksurvey/search', [SurveyController::class, 'search'])->name('lecturer.survey.search');
+    Route::get('getSurveyByType/{type}', [SurveyController::class, 'getSurveyByType']);
     Route::get('getAllSurvey', [SurveyController::class, 'getAllSurvey']);
     Route::get('dosen/quicksurvey/create', [SurveyController::class, 'create'])->name('lecturer.survey.create');
     Route::post('dosen/quicksurvey/post', [SurveyController::class, 'store'])->name('lecturer.survey.post');
@@ -44,6 +45,8 @@ Route::group(['middleware' => 'auth:lecturer'], function(){
 
     //notification
     Route::get('dosen/notification', [NotificationController::class, 'index'])->name('lecturer.notification');
+    Route::get('dosen/notification/{id}/read', [NotificationController::class, 'markAsRead'])->name('lecturer.notification.read');
+
     Route::get('dosen/quicksurvey/detail', function(){
         return view('dosen.survey.detail');
     });

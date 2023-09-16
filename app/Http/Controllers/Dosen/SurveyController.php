@@ -10,24 +10,39 @@ use App\Models\Survey;
 use App\Models\User;
 use App\Notifications\SurveyNotification;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use SimpleSoftwareIO\QrCide\Facades\QrCode;
 
 class SurveyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $lecturer = Lecturer::with('class.course')->find(auth()->id());
         $dosen = Auth::user();
+
         $surveys = Survey::with([
             'class.user','responses' 
         ])
         ->whereHas('class.lecturer', function($query) use ($dosen){
             $query->where('id', $dosen->id);
-        })
+        })->orderBy('created_at', 'desc')
         ->paginate(10);
+
+        $type = $request->get('type');
+        
+        if($type === 'online')
+        {
+            $surveys = Survey::where('type', 'online')->paginate(10);
+        }
+        elseif($type === 'onsite')
+        {
+            $surveys = Survey::where('type', 'onsite')->paginate(10);
+        }
+        
 
         $surveys->getCollection()->transform(function ($survey) {
             $now = now();
@@ -52,6 +67,7 @@ class SurveyController extends Controller
             $surveys = $surveys->whereBetween('date', [$startDate, $endDate]);
         }
 
+
         return view('dosen.survey.index', [
             'surveys' => $surveys,
             'course' => $course
@@ -66,9 +82,48 @@ class SurveyController extends Controller
     
             $surveys = Survey::whereBetween('date', [$startDate, $endDate])->paginate(10);
         }
-        dd($surveys);
+        // dd($surveys);
 
         return view('dosen.survey.filter.survey', compact('surveys'));
+    }
+
+    public function getSurveyByType(Request $request, $type)
+    {
+        try {
+            //code...
+            $dosen = Auth::user();
+
+            $type = $request->get('type');
+
+            if($type === 'online'){
+                $surveys = Survey::where('type', 'online')->whereHas('class.lecturer', function($query) use ($dosen){
+                    $query->where('id', $dosen);
+                })->get()->paginate(10);
+                // dd($surveys);
+                
+            } 
+            elseif($type === 'onsite') {
+                $surveys = Survey::where('type', 'onsite')->whereHas('class.lecturer', function($query) use ($dosen){
+                    $query->where('id', $dosen);
+                })->get()->paginate(10);
+
+            }
+            else{
+                $surveys = Survey::where('type', 'onsite')->whereHas('class.lecturer', function($query) use ($dosen){
+                    $query->where('id', $dosen);
+                })->get()->paginate(10);
+
+            }
+
+            return view('dosen.survey.filter.survey', compact('surveys'));
+
+        } catch (Exception $e) {
+            Log::error($e);
+
+            // Return an error response
+            return response()->json(['error' => 'error'], 500);
+        }
+        
     }
 
     public function getAllSurvey()
@@ -81,6 +136,7 @@ class SurveyController extends Controller
         ->whereHas('class.lecturer', function($query) use ($dosen){
             $query->where('id', $dosen->id);
         })  
+        ->where('type', 'onsite')
         ->paginate(10);
 
         $surveys->getCollection()->transform(function ($survey) {

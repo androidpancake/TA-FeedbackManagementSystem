@@ -41,9 +41,9 @@ class FeedbackNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-
+        //dari mahasiswa ke dosen
         $anonymous = $this->feedback->anonymous ? 'Anonymous' : 'Not anonymous';
-        $message = $this->feedback->anonymous ? 'Ada feedback baru' : 'Ada feedback baru oleh';
+        $message = $this->feedback->anonymous ? 'Ada umpan balik baru dari' : 'mengirim umpan balik tentang';
         return [
             'message' => $message,
             'name' => $this->feedback->user->name,

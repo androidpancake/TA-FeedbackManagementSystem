@@ -22,9 +22,19 @@ class SurveyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => 'date',
-            'kelas_id' => 'exists:class,id',
-            'limit_date' => 'date'
+            'date' => 'date|required',
+            'kelas_id' => 'exists:class,id|required',
+            'limit_date' => 'date',
+            'type' => 'nullable',
+        ];
+    }
+
+    public function message()
+    {
+        return [
+            'date.required' => 'masukkan tanggal',
+            'kelas_id.required' => 'masukkan kelas',
+            'type' => 'masukkan tipe pengajaran'
         ];
     }
 }

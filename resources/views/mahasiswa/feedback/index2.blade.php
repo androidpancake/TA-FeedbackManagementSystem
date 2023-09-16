@@ -2,13 +2,7 @@
 
 @section('content')
 <div class="px-8">
-    <div class="inline-flex space-x-2 items-center">
-        <h1 class="font-semibold text-gray-700 text-2xl">Umpan Balik</h1>
-        <span class="{{ $categoryName->bg }} inline-flex text-xs font-medium mr-2 px-2.5 py-1.5 rounded-lg">
-            <img src="{{ Storage::url($categoryName->label) }}" class="w-4" alt="">
-            {{ $categoryName->name }}
-        </span>
-    </div>
+    <h1 class="font-semibold text-gray-700 text-2xl">Umpan Balik</h1>
     <div class="flex justify-between py-2 mt-2 items-center">
         <div class="flex space-x-2 overflow-x-auto" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <button id="all-tab" role="tab" data-tabs-target="#all" aria-selected="true" aria-controls="all" type="button" class="py-2 px-2 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
@@ -29,12 +23,13 @@
                 <p>{{ count($process) }}</p>
             </button>
             <button id="done-tab" role="tab" data-tabs-target="#done" aria-selected="false" aria-controls="done" type="button" class="py-2 px-2 rounded-lg font-semibold text-gray-700 text-sm inline-flex items-center space-x-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>                <p>Selesai</p>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>                
+                <p>Selesai</p>
                 <p>{{ count($done) }}</p>
             </button>
         </div>
 
-        <div class="flex sm:w-auto space-x-2">
+        <div class="flex w-auto space-x-2">
             <button id="dropdownCategory" data-dropdown-toggle="dropdown" class="grow bg-white border hover:bg-gray-200 focus:border-green-500 focus:ring-green-500 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex justify-between items-center" type="button">
                 Kategori
                 <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -79,9 +74,17 @@
                     <div class="flex flex-row items-center justify-between space-x-2 mb-2">
                         <div class="flex items-center space-x-2">
                             @if($data->class->lecturer)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
+                                @if($data->class->lecturer->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lecturer->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
                             @elseif($data->class->lab)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
+                             @if($data->class->lab->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lab->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
 
                             @endif
                             <p class="hidden md:flex text-sm text-gray-500">•</p>
@@ -117,7 +120,7 @@
                                             <p class="text-md font-semibold text-md text-gray-700">Konfirmasi Penghapusan</p>
                                             <p class="text-sm pb-4 text-gray-500">Apakah Anda yakin ingin menghapus umpan balik "{{ $data->subject }}"? <br> Aksi ini tidak dapat dibatalkan dan semua data terkait umpan balik ini akan hilang.</p>
                                             <div class="flex flex-row space-x-3 w-full">
-                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.complaint.delete' , $data->id) }}">
+                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.feedback.delete' , $data->id) }}">
                                                     <button data-modal-hide="modalID{{ $data->id }}" type="button" class="w-full text-center justify-center text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                                                         Batal
                                                     </button>
@@ -172,9 +175,17 @@
                     <div class="flex flex-row items-center justify-between space-x-2 mb-2">
                         <div class="flex items-center space-x-2">
                             @if($data->class->lecturer)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
+                                @if($data->class->lecturer->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lecturer->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
                             @elseif($data->class->lab)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
+                                @if($data->class->lab->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lab->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
 
                             @endif
                             <p class="hidden md:flex text-sm text-gray-500">•</p>
@@ -210,7 +221,7 @@
                                             <p class="text-md font-semibold text-md text-gray-700">Konfirmasi Penghapusan</p>
                                             <p class="text-sm pb-4 text-gray-500">Apakah Anda yakin ingin menghapus umpan balik "{{ $data->subject }}"? <br> Aksi ini tidak dapat dibatalkan dan semua data terkait umpan balik ini akan hilang.</p>
                                             <div class="flex flex-row space-x-3 w-full">
-                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.complaint.delete' , $data->id) }}">
+                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.feedback.delete' , $data->id) }}">
                                                     <button data-modal-hide="modalWait{{ $data->id }}" type="button" class="w-full text-center justify-center text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                                                         Batal
                                                     </button>
@@ -265,9 +276,17 @@
                     <div class="flex flex-row items-center justify-between space-x-2 mb-2">
                         <div class="flex items-center space-x-2">
                             @if($data->class->lecturer)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
+                                @if($data->class->lecturer->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lecturer->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
                             @elseif($data->class->lab)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
+                                @if($data->class->lab->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lab->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
 
                             @endif
                             <p class="hidden md:flex text-sm text-gray-500">•</p>
@@ -303,7 +322,7 @@
                                             <p class="text-md font-semibold text-md text-gray-700">Konfirmasi Penghapusan</p>
                                             <p class="text-sm pb-4 text-gray-500">Apakah Anda yakin ingin menghapus umpan balik "{{ $data->subject }}"? <br> Aksi ini tidak dapat dibatalkan dan semua data terkait umpan balik ini akan hilang.</p>
                                             <div class="flex flex-row space-x-3 w-full">
-                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.complaint.delete' , $data->id) }}">
+                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.feedback.delete' , $data->id) }}">
                                                     <button data-modal-hide="modalID{{ $data->id }}" type="button" class="w-full text-center justify-center text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                                                         Batal
                                                     </button>
@@ -358,9 +377,17 @@
                     <div class="flex flex-row items-center justify-between space-x-2 mb-2">
                         <div class="flex items-center space-x-2">
                             @if($data->class->lecturer)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
+                                @if($data->class->lecturer->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lecturer->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
                             @elseif($data->class->lab)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
+                                @if($data->class->lab->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lab->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
 
                             @endif
                             <p class="hidden md:flex text-sm text-gray-500">•</p>
@@ -396,7 +423,7 @@
                                             <p class="text-md font-semibold text-md text-gray-700">Konfirmasi Penghapusan</p>
                                             <p class="text-sm pb-4 text-gray-500">Apakah Anda yakin ingin menghapus umpan balik "{{ $data->subject }}"? <br> Aksi ini tidak dapat dibatalkan dan semua data terkait umpan balik ini akan hilang.</p>
                                             <div class="flex flex-row space-x-3 w-full">
-                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.complaint.delete' , $data->id) }}">
+                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.feedback.delete' , $data->id) }}">
                                                     <button data-modal-hide="modalID{{ $data->id }}" type="button" class="w-full text-center justify-center text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                                                         Batal
                                                     </button>
@@ -451,9 +478,17 @@
                     <div class="flex flex-row items-center justify-between space-x-2 mb-2">
                         <div class="flex items-center space-x-2">
                             @if($data->class->lecturer)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
+                                @if($data->class->lecturer->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lecturer->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lecturer->name }}</p>
                             @elseif($data->class->lab)
-                            <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
+                                @if($data->class->lab->profile_photo)
+                                    <img src="{{ Storage::url($data->class->lab->profile_photo) }}" class="w-8 h-8 rounded-full" alt="">
+                                @else
+                                @endif
+                                <p class="text-lg font-bold text-gray-800">{{ $data->class->lab->name }}</p>
 
                             @endif
                             <p class="hidden md:flex text-sm text-gray-500">•</p>
@@ -489,7 +524,7 @@
                                             <p class="text-md font-semibold text-md text-gray-700">Konfirmasi Penghapusan</p>
                                             <p class="text-sm pb-4 text-gray-500">Apakah Anda yakin ingin menghapus umpan balik "{{ $data->subject }}"? <br> Aksi ini tidak dapat dibatalkan dan semua data terkait umpan balik ini akan hilang.</p>
                                             <div class="flex flex-row space-x-3 w-full">
-                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.complaint.delete' , $data->id) }}">
+                                                <form class="flex flex-row space-x-3 w-full" method="POST" action="{{ route('mahasiswa.feedback.delete' , $data->id) }}">
                                                     <button data-modal-hide="modalDone{{ $data->id }}" type="button" class="w-full text-center justify-center text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                                                         Batal
                                                     </button>

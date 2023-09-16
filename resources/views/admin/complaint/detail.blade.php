@@ -140,8 +140,11 @@
                             <div class="flex justify-between items-center">
                                 <p class="text-sm text-gray-500">Mahasiswa</p>
                                 <div class="px-2 py-1 rounded-lg text-sm font-medium inline-flex items-center space-x-2">
+                                    @if($complaint->user->profile_photo)
                                     <img src="{{ Storage::url($complaint->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
-                                    <p>{{ $complaint->user->name }}</p>
+                                    @else
+                                    @endif
+                                    <p class="whitespace-nowrap">{{ $complaint->user->name }}</p>
                                 </div>
                             </div>
                             

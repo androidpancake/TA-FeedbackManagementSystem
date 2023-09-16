@@ -7,10 +7,19 @@
     <!-- <link rel="stylesheet" href="../../css/tailwind.css"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    @vite(['resource/css/app.css', 'resource/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     @stack('script')
-    <title>Test</title>
+    <title>Admin</title>
+    <style>
+        .selected {
+            background-color: rgb(243 244 246);
+        }
+
+        .selected:hover {
+            color: #374151;
+        }
+    </style>
 </head>
 <body>
 
@@ -26,8 +35,8 @@
                             <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                             </svg>
                         </button>
-                        <a href="#" class="flex ml-2 md:mr-24">
-                            <img src="{{ asset('storage/image/logo-si.png') }}" class="w-8 sm:w-72 h-auto mr-3" alt="FRI Logo" />
+                        <a href="" class="flex ml-2 md:mr-24">
+                            <img src="{{ asset('storage/image/logo-si.png') }}" class="w-8 h-8 mr-3" alt="FRI Logo" />
                         </a>
                     </div>
                     <div>
@@ -68,17 +77,38 @@
                             <span class="ml-3 font-semibold text-gray-700">Umpan Balik</span>
                         </a>
                     </li> -->
+                    @if(Auth::user()->role === 'admin')
                     <li>
                         <a href="{{ route('admin.complaint.index') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M240,120a48.05,48.05,0,0,0-48-48H152.2c-2.91-.17-53.62-3.74-101.91-44.24A16,16,0,0,0,24,40V200a16,16,0,0,0,26.29,12.25c37.77-31.68,77-40.76,93.71-43.3v31.72A16,16,0,0,0,151.12,214l11,7.33A16,16,0,0,0,186.5,212l11.77-44.36A48.07,48.07,0,0,0,240,120ZM40,199.93V40h0c42.81,35.91,86.63,45,104,47.24v65.48C126.65,155,82.84,164.07,40,199.93Zm131,8,0,.11-11-7.33V168h21.6ZM192,152H160V88h32a32,32,0,1,1,0,64Z"></path></svg>                            <span class="ml-3 font-semibold text-gray-700">Keluhan</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M240,120a48.05,48.05,0,0,0-48-48H152.2c-2.91-.17-53.62-3.74-101.91-44.24A16,16,0,0,0,24,40V200a16,16,0,0,0,26.29,12.25c37.77-31.68,77-40.76,93.71-43.3v31.72A16,16,0,0,0,151.12,214l11,7.33A16,16,0,0,0,186.5,212l11.77-44.36A48.07,48.07,0,0,0,240,120ZM40,199.93V40h0c42.81,35.91,86.63,45,104,47.24v65.48C126.65,155,82.84,164.07,40,199.93Zm131,8,0,.11-11-7.33V168h21.6ZM192,152H160V88h32a32,32,0,1,1,0,64Z"></path></svg>                            
+                            <span class="ml-3 font-semibold text-gray-700">Keluhan</span>
                         </a>
                     </li>
+                    @else
                     <li>
+                        <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M240,120a48.05,48.05,0,0,0-48-48H152.2c-2.91-.17-53.62-3.74-101.91-44.24A16,16,0,0,0,24,40V200a16,16,0,0,0,26.29,12.25c37.77-31.68,77-40.76,93.71-43.3v31.72A16,16,0,0,0,151.12,214l11,7.33A16,16,0,0,0,186.5,212l11.77-44.36A48.07,48.07,0,0,0,240,120ZM40,199.93V40h0c42.81,35.91,86.63,45,104,47.24v65.48C126.65,155,82.84,164.07,40,199.93Zm131,8,0,.11-11-7.33V168h21.6ZM192,152H160V88h32a32,32,0,1,1,0,64Z"></path></svg>                            
+                            <span class="flex-1 ml-3 text-left font-semibold whitespace-nowrap">Keluhan</span>
+                            <svg class="w-3 h-3 text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
+                        <ul id="dropdown-example" class="hidden py-2 space-y-2">
+                            <li>
+                                <a href="{{ route('admin.complaint.index') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Daftar Keluhan</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.complaint.assigned', auth()->id()) }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Ditugaskan ke saya</a>
+                            </li>
+                        </ul>
+                    </li>
+                    @endif
+                    <!-- <li>
                         <a href="{{ route('admin.course.index') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z"></path></svg>
                             <span class="ml-3 font-semibold text-gray-700">Mata Kuliah</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="{{ route('admin.notification.index') }}" class="flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             <div class="flex flex-row">
@@ -119,7 +149,7 @@
         </div>
     </aside>
         
-    <div class="p-4 bg-white sm:ml-64 pt-16 h-screen">
+    <div class="p-4 sm:ml-64 pt-16">
         @yield('content')
     </div>
     @yield('right-sidebar')

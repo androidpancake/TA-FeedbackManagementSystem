@@ -40,9 +40,14 @@ class ReplyLabNotification extends Notification
     public function toArray(object $notifiable): array
     {
         $latestReply = $this->feedback->reply()->latest()->first();
+        //dari lab ke mahasiswa
         return [
             'feedback' => $this->feedback->id,
-            'message' => 'Balasan feedback anda oleh '.$this->feedback->class->lab->name,
+            'subject' => $this->feedback->subject,
+            'name' => $this->feedback->class->lab->name,
+            'message' => 'membalas umpan balik anda tentang',
+            'class' => $this->feedback->class->name,
+            'course' => $this->feedback->class->course->name,
             'reply' => $latestReply ? $latestReply->reply : null,
             'url' => route('mahasiswa.feedback.detail', ['id' => $this->feedback->id]),
             'img' => $this->feedback->class->lab->profile_photo

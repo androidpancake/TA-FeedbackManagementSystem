@@ -87,7 +87,34 @@ class DashboardController extends Controller
             }
         }
         
+        $feedback = Feedback::with([
+            'category', 'class', 'user', 'reply'
+        ])->whereHas('class', function($query) use ($dosenId){
+            $query->whereHas('lecturer', function($query) use ($dosenId){
+                $query->where('id', $dosenId);
+            });
+        })->get();
+
+        // dd($feedback);
+
+        $wait = Feedback::where('status', 'sent')->whereHas('class.lecturer', function($query) use ($dosenId){
+            $query->where('id', $dosenId);
+        })->get();
+        $read = Feedback::where('status', 'read')->whereHas('class.lecturer', function($query) use ($dosenId){
+            $query->where('id', $dosenId);
+        })->get();
+        $process = Feedback::where('status', 'response')->whereHas('class.lecturer', function($query) use ($dosenId){
+            $query->where('id', $dosenId);
+        })->get();
+        $done = Feedback::where('status', 'done')->whereHas('class.lecturer', function($query) use ($dosenId){
+            $query->where('id', $dosenId);
+        })->get();
+
         return view('dosen.dashboard.index', [
+            'wait' => $wait,
+            'read' => $read,
+            'process' => $process,
+            'done' => $done,
             'feedbacks' => $feedbacks,
             'feedbackByCategory' => $feedbackByCategory,
             'feedbackDaily' => $feedbackDailyArray,

@@ -37,9 +37,12 @@ class ProfileController extends Controller
 
             $user = User::findOrFail($id);
             $user->update($data);
+
+            return redirect()->route('mahasiswa.profile', $user->id);
+
         }
-        
-        return redirect()->route('mahasiswa.profile', $user->id);
+
+        return redirect()->back()->with('error');
     }
 
     public function delete($id)

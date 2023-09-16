@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('surveys', function (Blueprint $table) {
+        Schema::create('period', function (Blueprint $table) {
             $table->id();
-            $table->datetime('date');
-            $table->datetime('limit_date');
-            $table->string('url');
-            $table->unsignedBigInteger('class_id');
+            $table->string('periode');
+            $table->datetime('periode_start');
+            $table->datetime('periode_end');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('surveys');
+        Schema::dropIfExists('period');
     }
 };

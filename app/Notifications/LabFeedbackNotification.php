@@ -39,6 +39,7 @@ class LabFeedbackNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        //dari mahasiswa ke lab
         $anonymous = $this->feedback->anonymous ? 'Anonymous' : 'Not anonymous';
         $message = $this->feedback->anonymous ? 'Ada feedback baru' : 'Ada feedback baru oleh';
         return [

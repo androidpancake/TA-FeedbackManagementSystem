@@ -7,7 +7,7 @@
     <!-- <link rel="stylesheet" href="../../css/tailwind.css"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    @vite(['resource/css/app.css', 'resource/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     @stack('script')
     <title>Test</title>
@@ -27,7 +27,7 @@
                             </svg>
                         </button>
                         <a href="#" class="flex ml-2 md:mr-24">
-                            <img src="{{ asset('storage/image/logo-si.png') }}" class="w-8 sm:w-72 h-auto mr-3" alt="FRI Logo" />
+                            <img src="{{ asset('storage/image/logo-si.png') }}" class="w-8 h-auto mr-3" alt="FRI Logo" />
                         </a>
                     </div>
                     <div>

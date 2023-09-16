@@ -28,9 +28,21 @@ class FeedbackRequest extends FormRequest
             'date' => 'date',
             'category_id' => 'required|exists:category,id',
             'status' => 'required',
-            'file' => 'nullable|file',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             'anonymous' => 'boolean',
             'kelas_id' => 'required|exists:class,id'
+        ];
+    }
+
+    public function message()
+    {
+        return [
+            'kelas_id.required' => 'Silakan memilih tujuan dosen beserta kelas',
+            'category_id.required' => 'Silahkan pilih kategori',
+            'subject.required' => 'Subjek tidak boleh kosong',
+            'content.required' => 'Komentar tidak boleh kosong',
+            'file.mimes' => 'Format file hanya jpg, jpeg, png, pdf'
+            // You can specify other custom messages here
         ];
     }
 }

@@ -117,7 +117,6 @@
                 </div>
             </div>
             @endif
-            
             @endforeach
         </div>
         <form action="{{ route('mahasiswa.reply.m_send', $feedback->id) }}" method="POST" class="block" enctype="multipart/form-data">

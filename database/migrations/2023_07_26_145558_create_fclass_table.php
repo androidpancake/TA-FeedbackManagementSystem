@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_survey', function (Blueprint $table) {
+        Schema::create('fclass', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('survey_id');
+            $table->string('name');
+            $table->unsignedBigInteger('lecturer_id');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_survey');
+        Schema::dropIfExists('fclass');
     }
 };

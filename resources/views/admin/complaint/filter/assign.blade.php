@@ -2,7 +2,7 @@
 @section('content')
 <div class="">
     <div class="flex flex-row items-center space-x-2 px-8">
-        <h1 class="font-semibold text-gray-700 text-2xl">Keluhan</h1>
+        <h1 class="font-semibold text-gray-700 text-2xl">Keluhan Penugasan {{ Auth()->user()->name }}</h1>
         <span class="flex items-center space-x-1 {{ $category->bg }} text-sm font-medium mr-2 px-2.5 py-0.5 rounded-md">
             <img src="{{ Storage::url($category->label) }}" class="w-4 h-4 mr-1" alt="">
             {{ $category->name }}

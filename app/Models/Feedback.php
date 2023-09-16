@@ -44,4 +44,11 @@ class Feedback extends Model
         return $this->hasMany(Reply::class);
     }
 
+    public static function userLimitFeedback($user_id, $kelas_id)
+    {
+        $todayCount = self::where('user_id', $user_id)->where('kelas_id', $kelas_id)->whereDate('created_at', now())->count();
+
+        return $todayCount >= 2;
+    }
+
 }

@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
     @stack('date-picker')
     <script src="../../../../node_modules/anime-master/lib/anime.min.js"></script>
-    @vite(['resource/css/app.css', 'resource/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     @stack('script')
     <script src="https://unpkg.com/@phosphor-icons/web"></script>

@@ -7,11 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AdminReplyNotification extends Notification
+class ComplaintDoneNotification extends Notification
 {
     use Queueable;
-
     private $complaint;
+
     /**
      * Create a new notification instance.
      */
@@ -30,6 +30,7 @@ class AdminReplyNotification extends Notification
         return ['database'];
     }
 
+
     /**
      * Get the array representation of the notification.
      *
@@ -37,14 +38,12 @@ class AdminReplyNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $latestReply = $this->complaint->complaint_reply()->latest()->first();
-        //dari admin ke mahasiswa
         return [
-            'complaint' => $this->complaint->id,
-            'message' => 'Prodi membalas keluhan anda tentang',
+            'message' => 'telah menyelesaikan keluhan',
+            'name' => $this->complaint->user->name,
             'subject' => $this->complaint->subject,
-            'reply' => $latestReply ? $latestReply->reply : null,
-            'url' => route('mahasiswa.complaint.detail', ['id' => $this->complaint->id]),
+            'img' => $this->complaint->user->profile_photo,
+            'url' => route('admin.complaint.detail', ['id' => $this->complaint->id]),
         ];
     }
 }

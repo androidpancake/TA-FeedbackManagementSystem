@@ -31,4 +31,16 @@ class ComplaintRequest extends FormRequest
             'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
         ];
     }
+
+    public function message()
+    {
+        return [
+            'category_id.required' => 'Silahkan pilih kategori',
+            'subject.required' => 'Subjek tidak boleh kosong',
+            'content.required' => 'Komentar tidak boleh kosong',
+            'file.required' => 'Harus menambahkan file',
+            'file.mimes' => 'Format file hanya jpg, jpeg, png, pdf'
+            // You can specify other custom messages here
+        ];
+    }
 }

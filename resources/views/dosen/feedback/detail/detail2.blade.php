@@ -35,10 +35,10 @@
             <button id="info-tab" data-tabs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="false" class="grow text-center">Informasi</button>
         </div>
         <div class="flex w-full md:flex justify-between space-x-3 h-screen">
-            <!-- chat room -->
+            <!-- chat box & replies  -->
             <div class="flex flex-col md:flex space-y-2 h-max grow min-h-screen" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
                 <!-- header -->
-                <div class="bg-white rounded-lg border border-gray-200 space-y-2 p-6">
+                <div class="bg-white rounded-lg border border-gray-200 space-y-2 p-6 h-fit overflow-y-auto">
                     <div class="flex justify-start space-x-2 border-b pb-2">
                         @if($feedback->anonymous == 0)
                             @if($feedback->user->profile_photo)
@@ -57,18 +57,22 @@
                         <p class="text-gray-700">{{ $feedback->content }}</p>
                     </div>
                     <div class="flex flex-row w-full space-x-2">
-                        @if($feedback->attachment)
-                        <div class="bg-white rounded-lg border-2 px-2.5 py-2 grow">
+                        @if($feedback->file)
+                        <div class="bg-white rounded-lg border-2 px-2.5 py-2 grow hover:bg-gray-50">
                             <div class="flex space-x-2 items-center">
+                                @if(Str::endsWith($feedback->file, '.pdf'))
                                 <!-- icon -->
                                 <span class="bg-gray-200 rounded-lg p-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256"><path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path></svg>
                                 </span>
                                 <div>
                                     <!-- file name -->
-                                    <a href="{{ Storage::url($feedback->file) }}" class="font-medium text-sm">{{ $feedback->file }}</a>
-                                    <!-- size -->
+                                    <a href="{{ Storage::url($feedback->file) }}" class="text-sm">{{ \Illuminate\Support\Str::afterLast($feedback->file, '/') }}</a>
+                                    
                                 </div>
+                                @elseif(Str::endsWith($feedback->file, ['.jpg', '.jpeg', '.png', '.gif']))
+                                <img src="{{ Storage::url($feedback->file) }}" class="h-96 rounded-lg" alt="">
+                                @endif
                             </div>
                         </div>
                         @else
@@ -77,7 +81,7 @@
                 </div>
             
                 <!-- replies -->
-                <div class="flex flex-col h-72 border-gray-200 rounded-lg p-2 space-y-3 overflow-y-auto grow max-h-fit md:h-96">
+                <div class="flex flex-col rounded-lg p-2 space-y-3 overflow-y-auto grow max-h-fit md:h-96">
                     @foreach($feedback->reply as $reply)
                         @if($reply->user)
                         <div class="bg-white border rounded-lg p-4 text-gray-800 space-y-2">
@@ -99,7 +103,21 @@
                             <p>{{ $reply->reply }}</p>
                             @if($reply->attachment)
                                 @if (Str::endsWith($reply->attachment, '.pdf'))
-                                <a href="{{ Storage::url($reply->attachment) }}" class="bg-white border-2 rounded-lg px-2.5 py-2">{{ $reply->attachment }}</a>
+                                <a href="{{ Storage::url($reply->file) }}" class="bg-white rounded-md border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                    <div class="flex space-x-2 items-center">
+                                        <!-- icon -->
+                                        <span class="bg-gray-200 rounded-md p-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                                <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                            </svg>
+                                        </span>
+                                        <div>
+                                            <!-- file name -->
+                                            <p class="text-sm">{{ basename($reply->attachment) }}</p>
+                                            <!-- size -->
+                                        </div>
+                                    </div>
+                                </a>
                                 @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
                                 <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
                                 @else
@@ -112,7 +130,10 @@
                         <div class="bg-white border-2 rounded-lg p-4 space-y-2">
                             <div class="flex justify-between border-b py-2">
                                 <div class="inline-flex space-x-2">
-                                    <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                    @if($feedback->class->lecturer->profile_photo)
+                                        <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                    @else
+                                    @endif
                                     <p>{{ $feedback->class->lecturer->name }}</p>
                                 </div>
                                 <p class="font-base text-sm text-gray-100">{{ $reply->created_at->diffForHumans() }}</p>
@@ -121,7 +142,21 @@
                                 <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
                                 @if($reply->attachment)
                                     @if (Str::endsWith($reply->attachment, '.pdf'))
-                                    <a href="{{ Storage::url($reply->attachment) }}" class="bg-white border-2 rounded-lg px-2.5 py-2">{{ $reply->attachment }}</a>
+                                    <a href="{{ Storage::url($reply->attachment) }}" class="bg-white rounded-md border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                        <div class="flex space-x-2 items-center">
+                                            <!-- icon -->
+                                            <span class="bg-gray-200 rounded-md p-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                                    <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                                </svg>
+                                            </span>
+                                            <div>
+                                                <!-- file name -->
+                                                <p class="text-sm">{{ basename($reply->attachment) }}</p>
+                                                <!-- size -->
+                                            </div>
+                                        </div>
+                                    </a>
                                     @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
                                     <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
                                     @else
@@ -215,7 +250,7 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Kategori</p>
-                            <div class="bg-red-100 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border border-red-400">
+                            <div class="{{ $feedback->category->bg }} px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
                                 <span>
                                     <img src="{{ Storage::url($feedback->category->label) }}" class="w-4 h-4" alt="">
                                 </span>
@@ -279,26 +314,51 @@
 
             <!-- information -->
             <div class="hidden md:flex">
-                <div class="flex flex-col bg-white p-2 w-72">
+                <div class="flex flex-col bg-white p-2 rounded-lg w-72">
                     <!-- header -->
                     <div class="flex flex-col space-y-3 w-full">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Status</p>
-                            <div class="bg-gray-200 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
-                                <p>{{ $feedback->status }}</p>
+                            @if($feedback->status == 'sent')
+                            <div class="bg-gray-100 px-2 p-1 text-gray-700 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Menunggu Respon</p>
                             </div>
+                            @elseif($feedback->status == 'read')
+                            <div class="bg-gray-100 px-2 p-1 text-gray-700 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Dibaca</p>
+                            </div>
+                            @elseif($feedback->status == 'response')
+                            <div class="bg-yellow-100 px-2 p-1 text-yellow-500 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Dalam Proses</p>
+                            </div>
+                            @elseif($feedback->status == 'done')
+                            <div class="bg-green-100 px-2 p-1 text-green-500 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Selesai</p>
+                            </div>
+                            @endif
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Mahasiswa</p>
                             <div class="px-2 py-1 rounded-lg text-sm font-medium inline-flex items-center space-x-2">
                                 @if($feedback->anonymous == 0)
-                                <p>{{ $feedback->user->name }}</p>
+                                <p class="whitespace-nowrap">{{ $feedback->user->name }}</p>
                                 @else
                                 <img src="{{ asset('storage/image/Study.png') }}" class="rounded-full w-6 h-6" alt="">
                                 <p>Anonymous</p>
                                 @endif
                             </div>
                         </div>
+                        @if($feedback->anonymous == 0)
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500">Wali Dosen</p>
+                            <p class="text-sm whitespace-nowrap">{{ $feedback->user->fclass->lecturer->name }}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500">Kelas Asal</p>
+                            <p class="text-sm whitespace-nowrap">{{ $feedback->user->fclass->name }}</p>
+                        </div>
+                        @else
+                        @endif
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Mata Kuliah</p>
                             <p class="text-sm whitespace-nowrap">{{ $feedback->class->course->name }}</p>
@@ -319,11 +379,11 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Kategori</p>
-                            <div class="bg-red-100 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border border-red-400">
+                            <div class="{{ $feedback->category->bg }} px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
                                 <span>
                                     <img src="{{ Storage::url($feedback->category->label) }}" class="w-4 h-4" alt="">
                                 </span>
-                                <p class="text-red-600">{{ $feedback->category->name }}</p>
+                                <p>{{ $feedback->category->name }}</p>
                             </div>
                         </div>
                     </div>

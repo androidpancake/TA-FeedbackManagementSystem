@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mahasiswa;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class NotificationController extends Controller
 {
@@ -11,15 +12,30 @@ class NotificationController extends Controller
     {
         $notifications = auth()->user()->notifications;
 
+        $groupedNotification = $notifications->groupBy(function ($notification){
+            return Carbon::parse($notification->created_at)->format('j F Y');
+        });
         // dd($notifications);
-        if(auth()->user()->unreadNotifications){
-            foreach(auth()->user()->unreadNotifications as $notification){
-                $notification->markAsRead();
+        // if(auth()->user()->unreadNotifications){
+        //     foreach(auth()->user()->unreadNotifications as $notification){
+        //         $notification->markAsRead();
 
                 
-            }
+        //     }
+        // }
+        
+        return view('mahasiswa.notification.index', compact('notifications', 'groupedNotification'));
+    }
+
+    public function markAsRead($id)
+    {
+        $notification = auth()->user()->notifications->find($id);
+    
+        if($notification) {
+            $notification->markAsRead();
+            return redirect($notification->data['url']);
         }
         
-        return view('mahasiswa.notification.index', compact('notifications'));
+        return back();
     }
 }

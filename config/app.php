@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'id',
+    'locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -184,7 +184,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+        'QrCode' => \SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'GoogleTranslate' => Stichoza\GoogleTranslate\GoogleTranslate::class
     ])->toArray(),
 
 ];

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ReplyNotification extends Notification
+class FeedbackDoneNotification extends Notification
 {
     use Queueable;
     private $feedback;
@@ -30,6 +30,7 @@ class ReplyNotification extends Notification
         return ['database'];
     }
 
+
     /**
      * Get the array representation of the notification.
      *
@@ -37,17 +38,17 @@ class ReplyNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $latestReply = $this->feedback->reply()->latest()->first();
+        $anonymous = $this->feedback->anonymous ? 'Anonymous' : 'Not anonymous';
+        $message = $this->feedback->anonymous ? 'telah menyelesaikan umpan balik' : 'telah menyelesaikan umpan balik';
         return [
-            'feedback' => $this->feedback->id,
-            'message' => 'membalas umpan balik anda tentang',
+            'message' => $message,
+            'name' => $this->feedback->user->name,
             'subject' => $this->feedback->subject,
-            'lecturer' => $this->feedback->class->lecturer->name,
-            'reply' => $latestReply ? $latestReply->reply : null,
             'class' => $this->feedback->class->name,
             'course' => $this->feedback->class->course->name,
-            'url' => route('mahasiswa.feedback.detail', ['id' => $this->feedback->id]),
-            'img' => $this->feedback->class->lecturer->profile_photo
+            'img' => $this->feedback->user->profile_photo,
+            'anonymous' => $anonymous,
+            'url' => route('lecturer.feedback.detail', ['id' => $this->feedback->id]),
         ];
     }
 }

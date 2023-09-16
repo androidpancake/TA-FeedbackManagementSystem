@@ -30,12 +30,17 @@ class DashboardController extends Controller
         ->pluck('total_complaints', 'day');
 
         // dd($complaintDaily);
-
+        
+        if($complaintDaily->isEmpty())
+        {
+            $complaintDailyArray = [];
+        }
         foreach($complaintDaily as $day => $count){
             $complaintDailyArray[] = [
                 'day' => $day,
                 'count' => $count,
             ];
+            // dd($complaintDailyArray);
         }
 
         $countComplaintSent = Complaint::where('status', 'sent')->count();
@@ -49,13 +54,18 @@ class DashboardController extends Controller
         // });
         // $counts = $complaintDaily->pluck('count');
         // dd($complaints);
-
-        foreach($complaints as $data){
-            $complaintCategory[] = [
-                'name' => $data->name,
-                'count' => $data->count
-            ];
+        
+        if($complaints->isEmpty()){
+            $complaintCategory = [];
+        } else {
+            foreach($complaints as $data){
+                $complaintCategory[] = [
+                    'name' => $data->name,
+                    'count' => $data->count
+                ];
+            }
         }
+        
 
         // dd($complaintCategory);
 

@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Survey::class);
     }
+
+    public function fclass()
+    {
+        return $this->belongsTo(FKelas::class);
+    }
 }

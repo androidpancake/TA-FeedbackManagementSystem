@@ -31,12 +31,12 @@
         </div>
 
         <!-- qr code -->
-        <div>
+        <!-- <div>
             <label for="category_id" class="block mb-2 text-sm font-medium text-gray-500 dark:text-white">Kode QR</label>
             <button class="w-full bg-white rounded border py-2 px-3 text-center hover:bg-gray-100 focus:ring-4 focus:ring-green-200">
                 <p>Tampilkan QR</p>
             </button>
-        </div>
+        </div> -->
 
         <!-- divider -->
         <div class="border-b border-gray-400"></div>

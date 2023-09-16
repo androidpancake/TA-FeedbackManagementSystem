@@ -41,7 +41,9 @@ class UserComplaintReplyNotification extends Notification
         $latestReply = $this->complaint->complaint_reply()->latest()->first();
         return [
             'complaint' => $this->complaint->id,
-            'message' => 'Anda mendapatkan balasan pengaduan dari'.$this->complaint->user->name,
+            'message' => 'Anda mendapatkan balasan pengaduan dari',
+            'subject' => $this->complaint->subject,
+            'name' => $this->complaint->user->name,
             'img' => $this->complaint->user->profile_photo,
             'reply' => $latestReply ? $latestReply->reply : null,
             'url' => route('admin.complaint.detail', ['id' => $this->complaint->id]),

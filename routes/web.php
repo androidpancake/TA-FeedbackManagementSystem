@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
+use App\Http\Controllers\LangController;
 use App\Http\Controllers\Mahasiswa\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,8 @@ Route::group(['middleware' => 'auth:admin'], function(){
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
 });
+
+Route::get('lang', [LangController::class, 'change'])->name('lang');
 
 
 

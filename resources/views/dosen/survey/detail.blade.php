@@ -15,7 +15,7 @@
 
                         <div class="inline-flex space-x-2">
                             <p>{{ $survey->class->name }}</p>
-                            <p>•</p>
+                            <p class="text-gray-600 text-sm">•</p>
                             <p>{{ Carbon\Carbon::parse($survey->date)->translatedFormat('d F Y H:i') }}</p>
                         </div>
                 </div>
@@ -47,11 +47,11 @@
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ count($survey->responses) }} dari {{ $survey->class->user->count() }} mahasiswa</p>
             @foreach($ratingsCount as $rating => $count)
             <div class="flex items-center mt-4">
-                <span class="text-sm font-medium text-blue-600 dark:text-blue-500">{{ $rating }} star</span>
+                <span class="text-sm font-medium text-gray-800 dark:text-blue-500">{{ $rating }} star</span>
                 <div class="grow h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
                     <div class="h-5 bg-yellow-400 rounded" style="width: {{ $ratingPrecentage[$rating] }}%"></div>
                 </div>
-                <span class="text-sm font-medium text-blue-600 dark:text-blue-500">{{ $count }}</span>
+                <span class="text-sm font-medium text-gray-800 dark:text-blue-500">{{ $count }}</span>
             </div>
             @endforeach  
         </div>
@@ -61,17 +61,17 @@
             <h1 class="font-semibold">Komentar {{($commentCount)}}</h1>
             <div class="mt-2 space-y-2 h-96 overflow-y-auto">
                 @foreach($survey->responses as $data)
-                <div class="w-full bg-white rounded-lg border-2">
-                    <div class="p-4 space-y-1">
+                <div class="w-full bg-white rounded-lg border border-gray-300">
+                    <div class="p-3 space-y-1">
                         <div class="flex space-x-2 items-center border-b border-gray-300 pb-3">
                             @if($data->user->profile_photo)
                             <img src="{{ Storage::url($data->user->profile_photo) }}" alt="" class="w-6 h-6 rounded-full">
                             @else
-                            <img src="{{ asset('storage/image/book.png') }}" class="w-6 h-6" alt="">
+                            <img src="{{ asset('storage/image/person.png') }}" class="w-6 h-6" alt="">
                             @endif
-                            <h1 class="text-gray-500 font-semibold">{{ $data->user->name }}</h1>
-                            <p>•</p>
-                            <p class="text-sm text-gray-500 font-medium">{{ $data->created_at->diffForHumans() }}</p>
+                            <h1 class="text-gray-700 font-semibold">{{ $data->user->name }}</h1>
+                            <p class="text-gray-400">•</p>
+                            <p class="text-sm text-gray-400 font-base">{{ $data->created_at->diffForHumans() }}</p>
                         </div>
                         
                         <div class="flex items-center my-5">
@@ -87,16 +87,16 @@
                         <div class="mt-4">
                             <p class="text-gray-800 text-lg">{{ $data->comment }}</p>
                         </div>
-                        <!-- <div class="space-y-1">
+                        <div class="space-y-1">
                             @if($data->additional)
                                 @if($data->rating <= 3)
                                     <h1 class="text-sm text-gray-500">Yang perlu ditingkatkan</h1>
                                 @else
                                     <h1 class="text-sm text-gray-500">Yang sudah ditingkatkan</h1>
                                 @endif
-                                <div class="grid grid-cols-2 gap-2">
+                                <div class="grid grid-cols-2 gap-1">
                                     @foreach(explode(',', $data->additional) as $additional)
-                                    <div class="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2  border-gray-200 rounded-lg">                           
+                                    <div class="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border border-gray-400 rounded-lg">                           
                                         <div class="block">
                                             <div class="w-full text-base font-semibold">{{ $additional }}</div>
                                         </div>
@@ -105,7 +105,7 @@
                                 </div>
                             @else
                             @endif
-                        </div> -->
+                        </div>
                         
                     </div>
                 </div>

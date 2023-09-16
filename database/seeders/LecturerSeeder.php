@@ -15,11 +15,11 @@ class LecturerSeeder extends Seeder
     public function run(): void
     {
         Lecturer::create([
-            'username' => 'Widyatasya Nurtrisha',
+            'username' => 'Nia Ambarsari',
             'role' => 'dosen',
-            'name' => 'widyastika',
-            'nim' => '122112',
-            'email' => 'widya@gmail.com',
+            'name' => 'niaambarsari',
+            'nim' => '1234567',
+            'email' => 'niaambarsari@gmail.com',
             'password' => Hash::make('test1234'),
         ]);
     }

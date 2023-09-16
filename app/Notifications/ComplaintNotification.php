@@ -39,8 +39,9 @@ class ComplaintNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        //dari mahasiswa ke admin
         return [
-            'message' => 'Anda mendapatkan pengaduan',
+            'message' => 'mengirim keluhan tentang',
             'name' => $this->complaint->user->name,
             'subject' => $this->complaint->subject,
             'img' => $this->complaint->user->profile_photo,

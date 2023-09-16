@@ -7,7 +7,7 @@
     <!-- <link rel="stylesheet" href="../../public/css/tailwind.css"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    @vite('resource/css/app.css')
+    @vite('resources/css/app.css')
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <title>Document</title>
 </head>
@@ -37,7 +37,7 @@
                         <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
                     </div>
                 </div>
-                <button class="btn-sm btn-primary bg-green-500 p-2 rounded text-white w-full font-medium">Sign in</button>
+                <button class="btn-sm bg-green-500 hover:bg-green-800 p-2 rounded text-white w-full font-medium">Sign in</button>
             </form>
         </div>
     </div>

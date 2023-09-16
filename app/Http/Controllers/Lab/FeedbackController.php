@@ -46,16 +46,16 @@ class FeedbackController extends Controller
         $sortBy = $request->get('sort');
 
         if($sortBy === 'latest'){
-            $feedback = Feedback::orderBy('created_at', 'desc')->whereHas('class.lecturer', function($query) use ($labId){
+            $feedback = Feedback::orderBy('created_at', 'desc')->whereHas('class.lab', function($query) use ($labId){
                 $query->where('id', $labId);
             })->get();
         }
         elseif($sortBy === 'oldest') {
-            $feedback = Feedback::orderBy('created_at', 'asc')->whereHas('class.lecturer', function($query) use ($labId){
+            $feedback = Feedback::orderBy('created_at', 'asc')->whereHas('class.lab', function($query) use ($labId){
                 $query->where('id', $labId);
             })->get();
         } else {
-            $feedback = Feedback::orderBy('created_at', 'desc')->whereHas('class.lecturer', function($query) use ($labId){
+            $feedback = Feedback::orderBy('created_at', 'desc')->whereHas('class.lab', function($query) use ($labId){
                 $query->where('id', $labId);
             })->get();
         }
@@ -105,6 +105,15 @@ class FeedbackController extends Controller
 
         $feedback->status = 'response';
 
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $filename = $file->getClientOriginalName();
+
+            $path = $file->storeAs('replies', $filename, 'public');
+
+            $data['file'] = $path;
+        }
+        
         Reply::create($data);
 
         // dd($reply);

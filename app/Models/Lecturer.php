@@ -40,4 +40,9 @@ class Lecturer extends Authenticatable
         return $this->hasMany(Kelas::class, 'lecturer_id');
     }
 
+    public function fclass()
+    {
+        return $this->hasMany(FKelas::class);
+    }
+
 }

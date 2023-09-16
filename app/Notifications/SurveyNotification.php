@@ -47,7 +47,10 @@ class SurveyNotification extends Notification implements ShouldQueue
 
         return [
             'survey_id' => $this->survey->id,
-            'message' => $this->survey->class->lecturer->name . ' membagikan survey kelas ' . $this->survey->class->course->name .' '. $this->survey->class->name,
+            'lecturer' => $this->survey->class->lecturer->name,
+            'course' => $this->survey->class->course->name,
+            'class' => $this->survey->class->name,
+            'message' => 'membagikan survey kelas',
             'url' => route('mahasiswa.survey.fill', ['id' => $this->survey->id]),
             'survey_filled' => $hasFilled,
             'img' => $this->survey->class->lecturer->profile_photo

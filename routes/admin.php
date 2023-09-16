@@ -18,6 +18,7 @@ Route::group(['middleware' => 'auth:admin'], function(){
     Route::put('admin/profile/update/{id}', [ProfileController::class, 'update'])->name('admin.profile.update');
     Route::delete('admin/profile/delete/{id}', [ProfileController::class, 'delete'])->name('admin.profile.delete');
     Route::put('admin/profile/update_photo/{id}', [ProfileController::class, 'update_profile_photo'])->name('admin.profile.update_photo');
+    
     //matkul
     Route::get('admin/course', [CourseController::class, 'index'])->name('admin.course.index');
 
@@ -33,6 +34,9 @@ Route::group(['middleware' => 'auth:admin'], function(){
     Route::get('admin/complaint/{categoryName}', [ComplaintController::class, 'byCategory'])->name('admin.complaint.category');
     Route::get('admin/complaint/detail/{id}', [ComplaintController::class, 'detail'])->name('admin.complaint.detail');
     Route::post('admin/send_complaint_reply/{complaintId}', [ComplaintController::class, 'a_send_complaint_reply'])->name('admin.complaint.a_send_complaint_reply');
+    Route::post('admin/complaint/assign/{id}', [ComplaintController::class, 'assign'])->name('admin.complaint.assign');
+    Route::get('admin/complaint/assigned/{adminId}', [ComplaintController::class, 'assigned'])->name('admin.complaint.assigned');
+    Route::get('admin/complaint/assigned_category/{categoryName}', [ComplaintController::class, 'category_assigned'])->name('admin.complaint.categoryAssigned');
 
     //setting
     Route::get('admin/setting', [SettingController::class, 'index'])->name('admin.setting.index');
@@ -48,5 +52,7 @@ Route::group(['middleware' => 'auth:admin'], function(){
 
     // notifikasi
     Route::get('admin/notification', [NotificationController::class, 'index'])->name('admin.notification.index');
+    Route::get('admin/notification/{id}/read', [NotificationController::class, 'markAsRead'])->name('admin.notification.read');
+
 })
 ?>

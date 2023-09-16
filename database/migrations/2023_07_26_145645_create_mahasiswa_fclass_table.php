@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('category', function (Blueprint $table) {
-            $table->enum('for', ['complaint','feedback']);
+        Schema::create('mahasiswa_fclass', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('fclass_id');
+            $table->unsignedBigInteger('user_id');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('category', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('mahasiswa_fclass');
     }
 };

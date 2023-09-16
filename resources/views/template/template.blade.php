@@ -7,10 +7,31 @@
     <!-- <link rel="stylesheet" href="../../css/tailwind.css"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    @vite(['resource/css/app.css', 'resource/js/app.js'])
+    <script type="text/javascript" src="../node_modules/tw-elements/dist/js/tw-elements.umd.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     @stack('script')
-    <title>Test</title>
+    <title>Mahasiswa</title>
+    <style>
+        .selected {
+            background-color: rgb(243 244 246);
+        }
+
+        .selected:hover {
+            color: #374151;
+        }
+        .google-te-banner-frame {
+            display: none;
+            margin-top: -20px;
+        }
+        .goog-logo-link {
+            display: none !important;
+        }
+        .goog-te-gadget {
+            color: transparent !important;
+        }
+        
+    </style>
 </head>
 <body>
 
@@ -18,7 +39,7 @@
     <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex justify-between items-center">
-                <div class="flex items-center justify-start space-x-8">
+                <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                             <span class="sr-only">Open sidebar</span>
@@ -27,18 +48,18 @@
                             </svg>
                         </button>
                         <a href="#" class="flex ml-2 md:mr-24">
-                            <img src="{{ asset('storage/image/logo-si.png') }}" class="w-8 sm:w-72 h-auto mr-3" alt="FRI Logo" />
+                            <img src="{{ asset('storage/image/logo-si.png') }}" class="w-8 h-8 mr-3" alt="FRI Logo" />
                         </a>
                     </div>
                     <div>
                         @yield('breadcrumb')
                     </div>
                 </div>
-                
                 <div>
                     @yield('button-right')
                 </div>
-                <div>
+                <div class="flex">
+                    <div id="google_translate_element"></div>
                     <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{ Auth()->user()->role }}</span>
                 </div>
             </div>
@@ -59,7 +80,7 @@
                     <li>
                         <a href="{{ url('mahasiswa/dashboard') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path></svg>                          
-                            <span class="ml-3 font-semibold text-gray-700">Beranda</span>
+                            <span class="ml-3 font-semibold text-gray-700">{{ GoogleTranslate::trans('Beranda', app()->getLocale()) }}</span>
                         </a>
                     </li>
                     <li>
@@ -107,6 +128,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 256 256"><path d="M112,216a8,8,0,0,1-8,8H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h56a8,8,0,0,1,0,16H48V208h56A8,8,0,0,1,112,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L196.69,120H104a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,221.66,122.34Z"></path></svg>
                                 <span class="ml-3 font-semibold text-gray-700">Log out</span>
                             </button>
+                            <!-- modal logout -->
                         </form>
                     </li>
                 </ul>   
@@ -114,7 +136,7 @@
         </div>
     </aside>
         
-    <div class="p-4 bg-white sm:ml-64 pt-16 h-screen">
+    <div class="p-4 sm:ml-64 pt-16">
         @yield('content')
     </div>
     @yield('right-sidebar')
@@ -122,5 +144,41 @@
 </section>
 @stack('star')
 @stack('reason')
+<script>
+    // Initialization for ES Users
+    import {
+    Rating,
+    initTE,
+    } from "tw-elements";
+
+    initTE({ Rating });
+</script>
+@stack('lang')
+<script type="text/javascript">
+    var url = "{{ route('lang') }}";
+    $('.lang').change(function(event){
+        alert();
+        window.location.href = url+"?lang="+$(this).val();
+    });
+</script>
+<!-- <script>window.gtranslateSettings = {
+    "default_language":"id",
+    "languages":["en", "id"],
+    "wrapper_selector":".gtranslate_wrapper",
+    "switcher_horizontal_position":"inline",
+    "float_switcher_open_direction":"bottom"
+    }
+</script> -->
+<!-- <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script> -->
+<!-- <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
+<script type="text/javascript">
+    function loadGoogleTranslate()
+    {
+        new google.translate.TranslateElement(
+            {pageLanguange: 'en', includedLanguanges: 'en, id'},
+            'google_translate_element'
+        );
+    }
+</script> -->
 </body>
 </html>

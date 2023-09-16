@@ -3,6 +3,8 @@
 @section('content')
 @php
     use Illuminate\Support\Str;
+    use Illuminate\Support\Facades\Storage;
+
 @endphp
 <!-- breadcrumb -->
 @section('breadcrumb')
@@ -26,35 +28,60 @@
 
 @endsection
 
-<div class="h-full bg-white rounded-lg p-2 w-full space-y-3">    
+<div class="h-full bg-gray-100 rounded-lg p-2 w-full space-y-3">    
     <!-- layout -->
-    <div class="flex flex-col justify-between space-y-2 h-full">
+    <div class="space-y-2 h-full">
         <!-- tabs < sm -->
         <div id="myTab" data-tabs-toggle="#myTabContent" role="tablist" class="md:hidden flex bg-white rounded-lg border p-3">
             <button id="feedback-tab" data-tabs-target="#feedback" type="button" role="tab" aria-controls="feedback" aria-selected="true" class="grow text-center">Feedback</button>
             <button id="info-tab" data-tabs-target="#information" type="button" role="tab" aria-controls="information" aria-selected="false" class="grow text-center">Informasi</button>
         </div>
-        <div class="flex w-full md:flex justify-between space-x-3 h-full">
-            <!-- chat room -->
-            <div class="flex flex-col md:flex space-y-2 h-max grow min-h-screen" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
+        <div class="flex w-full md:flex justify-between space-x-3 h-screen">
+            <!-- chat box, heade & replies -->
+            <div class="flex flex-col md:flex space-y-2 grow max-h-screen" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
                 <!-- header -->
-                <div class="bg-white rounded-lg border-2 border-gray-200 p-4">
-                    <div class="flex justify-start space-x-2 items-center border-b pb-2">
+                <div class="bg-white rounded-lg border border-gray-200 space-y-2 p-6 h-fit overflow-y-auto">
+                    <div class="flex justify-start space-x-2 border-b pb-2">
                         @if($feedback->user->profile_photo)
                             <img src="{{ Storage::url($feedback->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
                         @else
-
+                            
                         @endif
                         <h1 class="font-semibold text-base">{{ $feedback->user->name }}</h1>
                         <p class="text-sm text-gray-400">•</p>
                         <p class="text-sm text-gray-500">{{ $feedback->created_at->diffForHumans() }}</p>
                     </div>
-                    <p class="font-semibold text-gray-700">{{ $feedback->subject }}</p>
-                    <p class="text-gray-700">{{ $feedback->content }}</p>
+                    <div>
+                        <p class="font-semibold text-gray-700">{{ $feedback->subject }}</p>
+                        <p class="text-gray-700">{{ $feedback->content }}</p>
+                    </div>
+
+                    @if($feedback->file)
+                    <div class="flex flex-row w-full space-x-2">
+                        <div class="bg-white rounded-lg border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                            <div class="flex space-x-2 items-center">
+                                @if(Str::endsWith($feedback->file, '.pdf'))
+                                <!-- icon -->
+                                <span class="bg-gray-200 rounded-lg p-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256"><path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path></svg>
+                                </span>
+                                <div>
+                                    <!-- file name -->
+                                    <a href="{{ Storage::url($feedback->file) }}" class="text-sm">{{ \Illuminate\Support\Str::afterLast($feedback->file, '/') }}</a>
+                                    
+                                </div>
+                                @elseif(Str::endsWith($feedback->file, ['.jpg', '.jpeg', '.png', '.gif']))
+                                <img src="{{ Storage::url($feedback->file) }}" class="h-96 max-w-lg rounded-lg" alt="">
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @else
+                    @endif
                 </div>
             
                 <!-- replies -->
-                <div class="flex flex-col h-72 bg-white border-2 border-gray-200 rounded-lg p-2 space-y-3 overflow-y-auto grow max-h-fit md:h-96">
+                <div class="flex flex-col rounded-lg p-2 space-y-3 overflow-y-auto grow max-h-fit">
                     @foreach($feedback->reply as $reply)
                         @if($reply->user)
                         <div class="bg-white border-2 rounded-lg p-4 text-gray-800 space-y-2">
@@ -70,44 +97,91 @@
                                     <p class="font-semibold">Anonymous</p>
                                     @endif
                                 </div>
-                                <p class="font-base text-gray-100 text-sm">{{ $reply->created_at->diffForHumans() }}</p>
+                                <p class="font-base text-gray-700 text-sm">{{ $reply->created_at->diffForHumans() }}</p>
                             </div>
-                            <p>{{ $reply->reply }}</p>
-                            @if($reply->attachment)
-                            <a href="{{ Storage::url($reply->attachment) }}">{{ $reply->attachment }}</a>
-                            @else
-                            @endif
+                            <div class="flex flex-col space-y-2">
+                                <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
+                                @if($reply->attachment)
+                                    @if (Str::endsWith($reply->attachment, '.pdf'))
+                                    <a href="{{ Storage::url($reply->attachment) }}" class="bg-white rounded-md border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                        <div class="flex space-x-2 items-center">
+                                            <!-- icon -->
+                                            <span class="bg-gray-200 rounded-md p-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                                    <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                                </svg>
+                                            </span>
+                                            <div>
+                                                <!-- file name -->
+                                                <p class="text-sm">{{ basename($reply->attachment) }}</p>
+                                                <!-- size -->
+                                            </div>
+                                        </div>
+                                    </a>
+                                    @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
+                                    <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
+                                    @else
+                                    @endif
+                                @endif  
+                            </div>
                         </div>
                         @else
                         <div class="bg-white border rounded-lg p-4 space-y-2">
                             <div class="flex justify-between border-b py-2">
                                 <div class="inline-flex space-x-2">
                                     @if($feedback->class->lecturer)
+                                        @if($feedback->class->lecturer->profile_photo)
                                         <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                        @else
+                                        @endif
                                         <p>{{ $feedback->class->lecturer->name }}</p>
                                     @elseif($feedback->class->lab)
-                                        <img src="{{ Storage::url($feedback->class->lab->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                        @if($feedback->class->lab->profile_photo)
+                                            <img src="{{ Storage::url($feedback->class->lab->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                        @else
+                                        @endif
                                         <p>{{ $feedback->class->lab->name }}</p>
                                     @endif
                                 </div>
-                                <p class="font-base text-sm text-gray-100">{{ $reply->created_at->diffForHumans() }}</p>
+                                <p class="font-base text-sm text-gray-700">{{ $reply->created_at->diffForHumans() }}</p>
                             </div>
-                            <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
-                            @if($reply->attachment)
-                            <a href="{{ Storage::url($reply->attachment) }}">{{ $reply->attachment }}</a>
-                            @else
-                            @endif
+                            <div class="flex flex-col space-y-2">
+                                <p class="font-base text-sm text-gray-700">{{ $reply->reply }}</p>
+                                @if($reply->attachment)
+                                    @if (Str::endsWith($reply->attachment, '.pdf'))
+                                    <a href="{{ Storage::url($reply->attachment) }}" class="bg-white rounded-md border-2 px-2.5 py-2 grow hover:bg-gray-50">
+                                        <div class="flex space-x-2 items-center">
+                                            <!-- icon -->
+                                            <span class="bg-gray-200 rounded-md p-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 256 256">
+                                                    <path d="M216.49,79.52l-56-56A12,12,0,0,0,152,20H56A20,20,0,0,0,36,40V216a20,20,0,0,0,20,20H200a20,20,0,0,0,20-20V88A12,12,0,0,0,216.49,79.52ZM160,57l23,23H160ZM60,212V44h76V92a12,12,0,0,0,12,12h48V212Z"></path>
+                                                </svg>
+                                            </span>
+                                            <div>
+                                                <!-- file name -->
+                                                <p class="text-sm">{{ basename($reply->attachment) }}</p>
+                                                <!-- size -->
+                                            </div>
+                                        </div>
+                                    </a>
+                                    @elseif (Str::endsWith($reply->attachment, ['.jpg', '.jpeg', '.png', '.gif']))
+                                    <img src="{{ Storage::url($reply->attachment) }}" class="bg-white border rounded-lg px-2.5 py-2">
+                                    @else
+                                    @endif
+                                @endif  
+                            </div>
                         </div>
                         @endif
                     @endforeach
                 </div>
+
                 <!-- chat box -->
                 <form action="{{ route('mahasiswa.reply.m_send', $feedback->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="flex">
                         @if ($errors->any())
                         <div class="bg-red py-2 px-3">
-                        <div>
+                            <div>
                                 @foreach ($errors->all() as $error)
                                     <p>{{ $error }}</p>
                                 @endforeach
@@ -144,6 +218,7 @@
                     </div>
                 </form>
             </div>
+
             <!-- information < sm -->
             <div id="information" role="tabpanel" aria-labelledby="info-tab" class="flex w-full md:hidden">
                 <div class="flex flex-col w-full bg-white p-4 rounded-lg">
@@ -159,7 +234,10 @@
                             <p class="text-sm text-gray-500">Mahasiswa</p>
                             <div class="px-2 py-1 rounded-lg text-sm font-medium inline-flex items-center space-x-2">
                                 @if($feedback->anonymous == 0)
+                                @if($feedback->user->profile_photo)
                                 <img src="{{ Storage::url($feedback->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @else
+                                @endif
                                 <p>{{ $feedback->user->name }}</p>
                                 @else
                                 <img src="{{ asset('storage/image/Study.png') }}" class="rounded-full w-6 h-6" alt="">
@@ -179,24 +257,31 @@
                             @if($feedback->class->lecturer)
                             <p class="text-sm text-gray-500">Dosen</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
-                                <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @if($feedback->class->lecturer->profile_photo)
+                                    <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @else
+
+                                @endif
                                 <p class="text-sm font-medium">{{ $feedback->class->lecturer->name }}</p>
                             </div>
                             @elseif($feedback->class->lab)
                             <p class="text-sm text-gray-500">Lab</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
-                                <img src="{{ Storage::url($feedback->class->lab->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @if($feedback->class->lab->profile_photo)
+                                    <img src="{{ Storage::url($feedback->class->lab->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @else
+                                @endif
                                 <p class="text-sm font-medium">{{ $feedback->class->lab->name }}</p>
                             </div>
                             @endif
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Kategori</p>
-                            <div class="bg-red-100 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border border-red-400">
+                            <div class="{{ $feedback->category->bg }} px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
                                 <span>
                                     <img src="{{ Storage::url($feedback->category->label) }}" class="w-4 h-4" alt="">
                                 </span>
-                                <p class="text-red-600">{{ $feedback->category->name }}</p>
+                                <p>{{ $feedback->category->name }}</p>
                             </div>
                         </div>
                     </div>
@@ -220,33 +305,32 @@
                                 </p>
                             </li>
                             @elseif($feedback->status == 'done')
-                            <li class="mb-10 ml-4">
-                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Feedback ditutup</time>
-                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {{ date('D, d M Y, H:i', strtotime($feedback->closed_date)) }}
-                                </p>
-                            </li>
+                                <li class="mb-10 ml-4">
+                                    <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                    <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Feedback ditutup</time>
+                                    <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        {{ date('D, d M Y, H:i', strtotime($feedback->closed_date)) }}
+                                    </p>
+                                </li>
                             @endif
                             @foreach($feedback->reply as $replies)
-                            @if($replies->user)
-                            <li class="mb-10 ml-4">
-                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas feedback</time>
-                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
-                                </p>
-                            </li>
-                            
-                            @elseif(!$replies->user)
-                            <li class="mb-10 ml-4">
-                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Dosen membalas feedback</time>
-                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
-                                </p>
-                            </li>
-                            @endif
+                                @if($replies->user)
+                                <li class="mb-10 ml-4">
+                                    <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                    <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas feedback</time>
+                                    <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
+                                    </p>
+                                </li>
+                                @elseif(!$replies->user)
+                                <li class="mb-10 ml-4">
+                                    <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                    <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Dosen membalas feedback</time>
+                                    <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
+                                    </p>
+                                </li>
+                                @endif
                             @endforeach
                             
                         </ol>
@@ -267,27 +351,52 @@
             </div>
 
             <!-- information -->
-            <div class="hidden md:flex rounded-lg">
-                <div class="flex flex-col bg-white p-2 w-72 rounded">
+            <div class="hidden md:flex rounded-lg border-l">
+                <div class="flex flex-col bg-white p-2 w-72 rounded-lg">
                     <!-- header -->
-                    <div class="flex flex-col space-y-2 w-full">
+                    <div class="flex flex-col space-y-3 w-full">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Status</p>
-                            <div class="bg-gray-200 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1">
-                                <p>{{ $feedback->status }}</p>
+                            @if($feedback->status == 'sent')
+                            <div class="bg-gray-100 px-2 p-1 text-gray-700 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Menunggu Respon</p>
                             </div>
+                            @elseif($feedback->status == 'read')
+                            <div class="bg-gray-100 px-2 p-1 text-gray-700 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Dibaca</p>
+                            </div>
+                            @elseif($feedback->status == 'response')
+                            <div class="bg-yellow-100 px-2 p-1 text-yellow-500 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Dalam Proses</p>
+                            </div>
+                            @elseif($feedback->status == 'done')
+                            <div class="bg-green-100 px-2 p-1 text-green-500 rounded-md text-xs font-medium inline-flex space-x-1">
+                                <p>Selesai</p>
+                            </div>
+                            @endif
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Mahasiswa</p>
                             <div class="px-2 py-1 rounded-lg text-sm font-medium inline-flex items-center space-x-2">
                                 @if($feedback->anonymous == 0)
-                                <img src="{{ Storage::url($feedback->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
-                                <p>{{ $feedback->user->name }}</p>
+                                    @if($feedback->user->profile_photo)
+                                        <img src="{{ Storage::url($feedback->user->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                    @else
+                                    @endif
+                                <p class="whitespace-nowrap">{{ $feedback->user->name }}</p>
                                 @else
                                 <img src="{{ asset('storage/image/Study.png') }}" class="rounded-full w-6 h-6" alt="">
                                 <p>Anonymous</p>
                                 @endif
                             </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500">Wali Dosen</p>
+                            <p class="text-sm">{{ $feedback->user->fclass->lecturer->name }}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500">Asal Kelas</p>
+                            <p class="text-sm">{{ $feedback->user->fclass->name }}</p>
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Mata Kuliah</p>
@@ -301,24 +410,30 @@
                             @if($feedback->class->lecturer)
                             <p class="text-sm text-gray-500">Dosen</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
-                                <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @if($feedback->class->lecturer->profile_photo)
+                                    <img src="{{ Storage::url($feedback->class->lecturer->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @else
+                                @endif
                                 <p class="text-sm font-medium">{{ $feedback->class->lecturer->name }}</p>
                             </div>
                             @elseif($feedback->class->lab)
                             <p class="text-sm text-gray-500">Lab</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
+                                @if($feedback->class->lab->profile_photo)
                                 <img src="{{ Storage::url($feedback->class->lab->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                @else
+                                @endif
                                 <p class="text-sm font-medium">{{ $feedback->class->lab->name }}</p>
                             </div>
                             @endif
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-500">Kategori</p>
-                            <div class="bg-red-100 px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border border-red-400">
+                            <div class="{{ $feedback->category->bg }} px-2 py-1 rounded-lg text-sm font-medium inline-flex space-x-1 border">
                                 <span>
                                     <img src="{{ Storage::url($feedback->category->label) }}" class="w-4 h-4" alt="">
                                 </span>
-                                <p class="text-red-600">{{ $feedback->category->name }}</p>
+                                <p>{{ $feedback->category->name }}</p>
                             </div>
                         </div>
                     </div>
@@ -341,7 +456,30 @@
                                     {{ date('D, d M Y, H:i', strtotime($feedback->date)) }}
                                 </p>
                             </li>
-                            @elseif($feedback->status == 'done')
+                            @endif
+                            
+                            @foreach($feedback->reply as $replies)
+                                @if($replies->user)
+                                <li class="mb-10 ml-4">
+                                    <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                    <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas feedback</time>
+                                    <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
+                                    </p>
+                                </li>
+                                
+                                @elseif(!$replies->user)
+                                <li class="mb-10 ml-4">
+                                    <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                    <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Dosen membalas feedback</time>
+                                    <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
+                                    </p>
+                                </li>
+                                @endif
+                            @endforeach
+
+                            @if($feedback->status == 'done')
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                 <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Feedback ditutup</time>
@@ -350,48 +488,55 @@
                                 </p>
                             </li>
                             @endif
-                            @foreach($feedback->reply as $replies)
-                            @if($replies->user)
-                            <li class="mb-10 ml-4">
-                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Anda membalas feedback</time>
-                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
-                                </p>
-                            </li>
-                            
-                            @elseif(!$replies->user)
-                            <li class="mb-10 ml-4">
-                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                <time class="mb-1 text-sm font-semibold leading-none text-gray-800">Dosen membalas feedback</time>
-                                <p class="mb-4 text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    {{ date('D, d M Y, H:i', strtotime($replies->created_at)) }}
-                                </p>
-                            </li>
-                            @endif
-                            @endforeach
-                            
                         </ol>
                     </div>
                     <!-- done -->
+                    @if($feedback->status != 'done')
                     <div class="border-t py-2 flex flex-col space-y-2">
-                        <p class="text-center text-sm text-gray-600">Jika puas dengan respon dan tindakan dosen, klik untuk menyelesaikan proses umpan balik</p>
-                        <form action="{{ route('mahasiswa.feedback.done', $feedback->id) }}" method="POST">
-                            @csrf
-                            @method('POST')
-                            @if($feedback->status == 'done')
-                                <button type="submit" class="w-full inline-flex justify-center space-x-2 bg-white border hover:bg-gray-200 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2" disabled>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
-                                    <p class="text-base disabled:text-gray-500">Selesai</p>
-                                </button>
-                            @else
-                                <button type="submit" class="w-full inline-flex justify-center space-x-2 bg-white border hover:bg-gray-200 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
-                                    <p class="text-base disabled:text-gray-500">Selesai</p>
-                                </button>
-                            @endif
-                        </form>
+                        <p class="text-center text-sm text-gray-600">Jika puas dengan respon dan tindakan dosen atau lab, klik untuk menyelesaikan proses umpan balik</p>
+                        <button data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="w-full inline-flex justify-center space-x-2 bg-white border hover:bg-gray-200 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                            <p class="text-base disabled:text-gray-500">Selesai</p>
+                        </button>
+                        <!-- modal confirm -->
+                        <div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <div class="relative w-full max-w-2xl max-h-full">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <!-- Modal header -->
+                                    <div class="flex items-start justify-between p-4 rounded-t dark:border-gray-600">
+                                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <div class="p-6 space-y-1">
+                                        <p class="font-semibold text-2xl text-center leading-relaxed text-gray-800">
+                                            Selesaikan umpan balik?
+                                        </p>
+                                        <p class="text-base text-center leading-relaxed text-gray-500 dark:text-gray-400">
+                                            Dengan menyelesaikan umpan balik, anda tidak dapat mengubah lagi.
+                                        </p>
+                                    </div>
+                                    <!-- Modal footer -->
+                                    <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
+                                        <form action="{{ route('mahasiswa.feedback.done', $feedback->id) }}" method="POST" class="grow">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="submit" class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">Kirim</button>
+                                        </form>
+                                        <button data-modal-hide="defaultModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 grow">Batalkan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end modal -->
                     </div>
+                    @else
+                    @endif
                 </div>
             </div>
         </div>

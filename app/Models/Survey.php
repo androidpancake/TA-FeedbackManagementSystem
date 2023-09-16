@@ -17,6 +17,7 @@ class Survey extends Model
         'limit_date',
         'avg_rating',
         'qrcode',
+        'type',
         'url'
     ];
 

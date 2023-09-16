@@ -30,4 +30,11 @@ class ResponseRequest extends FormRequest
             'additional.*' => 'nullable|string'
         ];
     }
+
+    public function message()
+    {
+        return [
+            'rating.required' => 'Wajib memasukkan rating'
+        ];
+    }
 }

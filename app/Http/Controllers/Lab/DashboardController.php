@@ -85,10 +85,27 @@ class DashboardController extends Controller
                 ];
             }
         }
+
+        $wait = Feedback::where('status', 'sent')->whereHas('class.lecturer', function($query) use ($labId){
+            $query->where('id', $labId);
+        })->get();
+        $read = Feedback::where('status', 'read')->whereHas('class.lecturer', function($query) use ($labId){
+            $query->where('id', $labId);
+        })->get();
+        $process = Feedback::where('status', 'response')->whereHas('class.lecturer', function($query) use ($labId){
+            $query->where('id', $labId);
+        })->get();
+        $done = Feedback::where('status', 'done')->whereHas('class.lecturer', function($query) use ($labId){
+            $query->where('id', $labId);
+        })->get();
         // dd($feedbackDailyArray);
 
         // dd($feedbackByCategory);
         return view('lab.dashboard.index', [
+            'wait' => $wait,
+            'read' => $read,
+            'process' => $process,
+            'done' => $done,
             'feedbacks' => $feedbacks,
             'feedbackByCategory' => $feedbackByCategory,
             'feedbackDaily' => $feedbackDailyArray,

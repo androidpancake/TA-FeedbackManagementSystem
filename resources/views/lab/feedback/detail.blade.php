@@ -163,7 +163,7 @@
                         <div class="flex justify-between">
                             <p class="text-sm text-gray-500">Dosen</p>
                             <div class="text-sm font-medium inline-flex items-center space-x-2">
-                                <img src="{{ Storage::url($feedback->class->lab->profile_photo) }}" class="rounded-full w-6 h-6" alt="">
+                                
                                 <p class="text-sm font-medium">{{ $feedback->class->lab->name }}</p>
                             </div>
                         </div>

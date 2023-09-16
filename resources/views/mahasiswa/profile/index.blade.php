@@ -20,20 +20,32 @@
                 <img src="{{ asset('storage/image/Teacher.png') }}" class="rounded-full" alt="">
             </div>
             @endif
-            <div class="inline-flex items-center space-x-3">
-                <form action="{{ route('mahasiswa.profile.update', Auth()->id()) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <input type="file" name="profile_photo">
-                    <button type="submit" class="bg-transparent font-semibold text-green-500">Update</button>
-                </form>
-                <form action="{{ route('mahasiswa.profile.delete', Auth()->id()) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-transparent font-semibold text-gray-500">Delete</button>
-                </form>
+            <div class="flex flex-col">
+                <div class="inline-flex items-center space-x-3">
+                    <form action="{{ route('mahasiswa.profile.update', Auth()->id()) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div>
+                            <input type="file" name="profile_photo">
+                            <button type="submit" class="bg-transparent font-semibold text-green-500">Update</button>
+                        </div>
+                        
+
+                    </form>
+                    <form action="{{ route('mahasiswa.profile.delete', Auth()->id()) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-transparent font-semibold text-gray-500">Delete</button>
+                    </form>
+                </div>
+                <div>
+                    @error('profile_photo')
+                    <div class="text-sm text-red-600">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
             </div>
-            
         </div>
     </div>
     <div class="grid grid-cols-1 border-b border-gray-200 py-5 sm:flex items-start">

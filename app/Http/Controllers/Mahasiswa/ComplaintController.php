@@ -9,6 +9,7 @@ use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Complaint;
 use App\Models\complaintReply;
+use App\Notifications\ComplaintDoneNotification;
 use App\Notifications\ComplaintNotification;
 use App\Notifications\UserComplaintReplyNotification;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class ComplaintController extends Controller
 
         $wait = Complaint::where('status', 'sent')->where('user_id', auth()->id())->get();
         $read = Complaint::where('status', 'read')->where('user_id', auth()->id())->get();
-        $process = Complaint::where('status', 'process')->where('user_id', auth()->id())->get();
+        $process = Complaint::where('status', 'response')->where('user_id', auth()->id())->get();
         $done = Complaint::where('status', 'done')->where('user_id', auth()->id())->get();
         
         $sortBy = $request->get('sort');
@@ -94,14 +95,15 @@ class ComplaintController extends Controller
     {
         $data = $request->all();
 
-        if($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $file = $request->file('file');
+            $filename = $file->getClientOriginalName();
 
-            $path = $file->store('complaint_files', 'public');
+            $path = $file->storeAs('complaint_files', $filename, 'public');
 
             $data['file'] = $path;
         }
-            
+        
 
         $data['user_id'] = Auth::user()->id;
 
@@ -171,8 +173,15 @@ class ComplaintController extends Controller
         $complaint = Complaint::findOrFail($id);
 
         $complaint->status = 'done';
+        $complaint->closed_date = now();
 
         $complaint->save();
+
+        $admins = Admin::all();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new ComplaintDoneNotification($complaint));
+        }
 
         return redirect()->route('mahasiswa.complaint.detail', $id);
     }

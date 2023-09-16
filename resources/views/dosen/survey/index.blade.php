@@ -44,9 +44,9 @@
 
         </div>
         <!-- select > sm -->
-        <div class="hidden lg:flex flex-row space-x-2">
+        <div class="flex flex-row space-x-2">
             <div class="flex space-x-2">
-                <select id="course-select" class="flex sm:bg-white border border-gray-300 hover:bg-gray-200 focus:border-green-500 focus:ring-green-300 rounded-lg text-sm px-4 py-2.5 text-center inline-flex justify-start items-center">
+                <select id="course-select" class="bg-white border border-gray-300 hover:bg-gray-200 focus:border-green-500 focus:ring-green-500 rounded-lg text-sm px-4 py-2.5 text-center inline-flex justify-start items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-3" fill="#000000" viewBox="0 0 256 256"><path d="M80,64a8,8,0,0,1,8-8H216a8,8,0,0,1,0,16H88A8,8,0,0,1,80,64Zm136,56H88a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Zm0,64H88a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16ZM44,52A12,12,0,1,0,56,64,12,12,0,0,0,44,52Zm0,64a12,12,0,1,0,12,12A12,12,0,0,0,44,116Zm0,64a12,12,0,1,0,12,12A12,12,0,0,0,44,180Z"></path></svg>
                     <option value="" selected>Pilih Mata Kuliah</option>
                     @foreach($course as $data)
@@ -54,30 +54,23 @@
                     @endforeach
                 </select>
 
-                <select id="class-select" class="grow sm:bg-white border border-gray-300 hover:bg-gray-200 focus:border-green-500 focus:ring-green-300 rounded-lg text-sm px-4 py-2.5 text-center inline-flex justify-start items-center" disabled>
+                <select id="class-select" class="grow sm:bg-white border border-gray-300 hover:bg-gray-200 focus:border-green-500 focus:ring-green-500 rounded-lg text-sm px-4 py-2.5 text-center inline-flex justify-start items-center" disabled>
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-3" fill="#000000" viewBox="0 0 256 256"><path d="M80,64a8,8,0,0,1,8-8H216a8,8,0,0,1,0,16H88A8,8,0,0,1,80,64Zm136,56H88a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Zm0,64H88a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16ZM44,52A12,12,0,1,0,56,64,12,12,0,0,0,44,52Zm0,64a12,12,0,1,0,12,12A12,12,0,0,0,44,116Zm0,64a12,12,0,1,0,12,12A12,12,0,0,0,44,180Z"></path></svg>
                     <option value="" selected>Pilih Kelas</option>
                 </select>
-            </div>
 
-            <!-- <div class="flex flex-row items-center">
-                <div class="relative grow">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                    </div>
-                    <input name="start_date" type="date" id="start_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Select date start">
-                </div>
-                <span class="mx-4 text-gray-500">to</span>
-                <div class="relative grow">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                    </div>
-                    <input name="end_date" type="date" id="end_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Select date end">
-                </div>
-            </div> -->
+                <form action="{{ route('lecturer.survey.index') }}" method="GET">
+                    @csrf
+                    <select name="type" onchange="this.form.submit()" class="flex justify-between border-gray-300 hover:bg-gray-200 focus:border-green-500 focus:ring-green-500 rounded-lg text-sm px-4 py-2.5">
+                        <option value="all">Pilih tipe perkuliahan</option>
+                        <option value="online" {{ request()->get('type') == 'online' ? 'selected' : '' }}>Online</option>
+                        <option value="onsite" {{ request()->get('type') == 'onsite' ? 'selected' : '' }}>Onsite</option>
+                    </select>
+                </form>
+            </div>
         </div>
-        <div class="flex lg:w-auto">
-            <div class="flex">
+        <div class="w-full lg:w-auto">
+            <div class="w-full">
                 <a href="{{ route('lecturer.survey.create') }}" class="inline-flex space-x-2 p-4 sm:px-3 py-2.5 bg-green-600 text-white rounded">
                     <p>+</p>
                     <p>Buat quick survey</p>
@@ -97,6 +90,11 @@
                             <div class="flex items-center">
                                 Tanggal
                                 <a href="#"><svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 ml-1" aria-hidden="true" fill="currentColor" viewBox="0 0 320 512"><path d="M27.66 224h264.7c24.6 0 36.89-29.78 19.54-47.12l-132.3-136.8c-5.406-5.406-12.47-8.107-19.53-8.107c-7.055 0-14.09 2.701-19.45 8.107L8.119 176.9C-9.229 194.2 3.055 224 27.66 224zM292.3 288H27.66c-24.6 0-36.89 29.77-19.54 47.12l132.5 136.8C145.9 477.3 152.1 480 160 480c7.053 0 14.12-2.703 19.53-8.109l132.3-136.8C329.2 317.8 316.9 288 292.3 288z"/></svg></a>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center">
+                                Tipe
                             </div>
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -184,6 +182,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js"></script>
 @endpush
 @push('select-course')
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <script>
     function getAllSurveys() {
         $.ajax({
@@ -195,6 +194,31 @@
             error: function(xhr, status, error) {
                 console.log(error);
             }
+        });
+    }
+
+    function getSurveyByType(type){
+        var type = $('#type').val();
+        var url = '/getSurveyByType/';
+        if(type) {
+            url += type
+        } else {
+            getAllSurveys();
+            return;
+        }
+
+        $.ajax({
+            url: url, // Ganti URL dengan endpoint yang tepat untuk mendapatkan semua survei
+            method: 'GET',
+            success: function(response) {
+                $('#survey-container').html(response);
+                console.log("function called");
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+
+            },
+           
         });
     }
 
@@ -280,6 +304,11 @@
         $('#class-select').change(function() {
             var classId = $(this).val();
             getSurveysByClass(classId);
+        });
+
+        $('#type').change(function(){
+            var type = $(this).val();
+            getSurveyByType(type);
         });
 
         $('#start_date, #end_date').change(fetchDataByDate);
