@@ -20,15 +20,17 @@ class FeedbackSeeder extends Seeder
             'date' => now(),
             'category_id' => 1,
             'user_id' => 1,
-            'class_id' => 2
-        ],[
+            'kelas_id' => 1,
+            'lecturer_id' => 1
+        ], [
             'subject' => 'Halo halo',
             'content' => 'lorem ipsum',
             'status' => 'sent',
             'date' => now(),
             'category_id' => 1,
             'user_id' => 1,
-            'class_id' => 2 
+            'kelas_id' => 2,
+            'lecturer_id' => 1
         ]);
     }
 }

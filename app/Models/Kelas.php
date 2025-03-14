@@ -13,9 +13,9 @@ class Kelas extends Model
 
     protected $fillable = [
         'name',
-        'header',
-        'course_id',
+        'class_id',
         'lecturer_id',
+        'course_id',
         'lab_id'
     ];
 
@@ -26,7 +26,7 @@ class Kelas extends Model
     }
 
     //mata kuliah
-    public function course() 
+    public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
     }
@@ -34,7 +34,7 @@ class Kelas extends Model
     //dosen
     public function lecturer()
     {
-        return $this->belongsTo(Lecturer::class, 'lecturer_id');    
+        return $this->belongsTo(Lecturer::class, 'lecturer_id');
     }
 
     //lab
@@ -50,12 +50,11 @@ class Kelas extends Model
 
     public function survey()
     {
-        return $this->hasMany(Survey::class);
+        return $this->hasMany(Survey::class, 'kelas_id');
     }
 
     public function responses()
     {
         return $this->hasManyThrough(Response::class, Survey::class);
     }
-
 }

@@ -25,7 +25,7 @@ class DashboardController extends Controller
         ->get();
 
         $complaintDaily = Complaint::select(DB::raw('CONCAT(DAY(date), " ", MONTHNAME(date)) as day'), DB::raw('count(*) as total_complaints'))
-        ->groupBy('day')
+        ->groupBy('date')
         ->orderByRaw('DATE_FORMAT(date, "%m-%d") ASC')
         ->pluck('total_complaints', 'day');
 

@@ -4,10 +4,10 @@
 <div class="grid justify-center pb-4">
     <div class="flex items-start gap-2 mt-6">
         <div>
-            <div class="relative bg-gray-300 p-6">
+            <!-- <div class="relative bg-gray-300 p-6">
                 <img src="{{ asset('storage/image/Teacher.png') }}" class="w-8 h-8" alt="">
                 <img src="{{ asset('storage/image/Teacher.png') }}" class="w-4 h-4 z-10" alt="">
-            </div>
+            </div> -->
         </div>
         <div class="col-span-2">
             <h2 class="text-2xl font-semibold">Beri umpan balik ke dosen</h2>

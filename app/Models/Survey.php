@@ -34,5 +34,4 @@ class Survey extends Model
     {
         return $this->belongsTo(Kelas::class, 'kelas_id');
     }
-
 }

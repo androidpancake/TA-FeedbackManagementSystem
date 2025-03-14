@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
             'name' => 'Asti Nur Amaliah',
             'nim' => '123456',
             'role' => 'admin',
-            'email' => 'ilham@gmail.com',
+            'email' => 'asti@gmail.com',
             'password' => Hash::make('tes1234'),
         ]);
     }

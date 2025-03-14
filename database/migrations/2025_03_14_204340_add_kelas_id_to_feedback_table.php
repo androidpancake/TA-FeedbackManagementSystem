@@ -11,14 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('surveys', function (Blueprint $table) {
-            $table->id();
-            $table->datetime('date');
-            $table->datetime('limit_date');
-            $table->string('url');
-            $table->string('type');
+        Schema::table('feedback', function (Blueprint $table) {
             $table->unsignedBigInteger('kelas_id');
-            $table->timestamps();
         });
     }
 
@@ -27,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('surveys');
+        Schema::table('feedback', function (Blueprint $table) {
+            Schema::dropColumns('feedback', 'kelas_id');
+        });
     }
 };

@@ -25,24 +25,22 @@ class SurveyController extends Controller
         $dosen = Auth::user();
 
         $surveys = Survey::with([
-            'class.user','responses' 
+            'class.user',
+            'responses'
         ])
-        ->whereHas('class.lecturer', function($query) use ($dosen){
-            $query->where('id', $dosen->id);
-        })->orderBy('created_at', 'desc')
-        ->paginate(10);
+            ->whereHas('class.lecturer', function ($query) use ($dosen) {
+                $query->where('id', $dosen->id);
+            })->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         $type = $request->get('type');
-        
-        if($type === 'online')
-        {
+
+        if ($type === 'online') {
             $surveys = Survey::where('type', 'online')->paginate(10);
-        }
-        elseif($type === 'onsite')
-        {
+        } elseif ($type === 'onsite') {
             $surveys = Survey::where('type', 'onsite')->paginate(10);
         }
-        
+
 
         $surveys->getCollection()->transform(function ($survey) {
             $now = now();
@@ -51,10 +49,10 @@ class SurveyController extends Controller
             } else {
                 $survey->remaining_time = '0';
             }
-    
+
             $survey->commentCount = $survey->responses()->whereNotNull('comment')->count();
             $survey->avgrating = round($survey->responses()->average('rating'), 1);
-    
+
             return $survey;
         });
 
@@ -63,7 +61,7 @@ class SurveyController extends Controller
         if (request()->has('start_date') && request()->has('end_date')) {
             $startDate = request()->input('start_date');
             $endDate = request()->input('end_date');
-    
+
             $surveys = $surveys->whereBetween('date', [$startDate, $endDate]);
         }
 
@@ -79,7 +77,7 @@ class SurveyController extends Controller
         if (request()->has('start_date') && request()->has('end_date')) {
             $startDate = $request->input('start_date');
             $endDate = $request->input('end_date');
-    
+
             $surveys = Survey::whereBetween('date', [$startDate, $endDate])->paginate(10);
         }
         // dd($surveys);
@@ -95,49 +93,44 @@ class SurveyController extends Controller
 
             $type = $request->get('type');
 
-            if($type === 'online'){
-                $surveys = Survey::where('type', 'online')->whereHas('class.lecturer', function($query) use ($dosen){
+            if ($type === 'online') {
+                $surveys = Survey::where('type', 'online')->whereHas('class.lecturer', function ($query) use ($dosen) {
                     $query->where('id', $dosen);
                 })->get()->paginate(10);
                 // dd($surveys);
-                
-            } 
-            elseif($type === 'onsite') {
-                $surveys = Survey::where('type', 'onsite')->whereHas('class.lecturer', function($query) use ($dosen){
+
+            } elseif ($type === 'onsite') {
+                $surveys = Survey::where('type', 'onsite')->whereHas('class.lecturer', function ($query) use ($dosen) {
                     $query->where('id', $dosen);
                 })->get()->paginate(10);
-
-            }
-            else{
-                $surveys = Survey::where('type', 'onsite')->whereHas('class.lecturer', function($query) use ($dosen){
+            } else {
+                $surveys = Survey::where('type', 'onsite')->whereHas('class.lecturer', function ($query) use ($dosen) {
                     $query->where('id', $dosen);
                 })->get()->paginate(10);
-
             }
 
             return view('dosen.survey.filter.survey', compact('surveys'));
-
         } catch (Exception $e) {
             Log::error($e);
 
             // Return an error response
             return response()->json(['error' => 'error'], 500);
         }
-        
     }
 
     public function getAllSurvey()
-    {   
+    {
         $dosen = Auth::user();
 
         $surveys = Survey::with([
-            'class.user','responses' 
+            'class.user',
+            'responses'
         ])
-        ->whereHas('class.lecturer', function($query) use ($dosen){
-            $query->where('id', $dosen->id);
-        })  
-        ->where('type', 'onsite')
-        ->paginate(10);
+            ->whereHas('class.lecturer', function ($query) use ($dosen) {
+                $query->where('id', $dosen->id);
+            })
+            ->where('type', 'onsite')
+            ->paginate(10);
 
         $surveys->getCollection()->transform(function ($survey) {
             $now = now();
@@ -146,10 +139,10 @@ class SurveyController extends Controller
             } else {
                 $survey->remaining_time = '0';
             }
-    
+
             $survey->commentCount = $survey->responses()->whereNotNull('comment')->count();
             $survey->avgrating = round($survey->responses()->average('rating'), 1);
-    
+
             return $survey;
         });
 
@@ -169,7 +162,8 @@ class SurveyController extends Controller
 
         // dd($course);
         return view('dosen.survey.create', [
-            'course' => $course
+            'course' => $course,
+            'lecturer' => $lecturer
         ]);
     }
 
@@ -191,17 +185,16 @@ class SurveyController extends Controller
 
         $survey = Survey::create($data);
 
-        // dd($survey);
         // dd($survey->class_id);
         $class = Kelas::find($survey->kelas_id);
         // dd($class);
         $students = $class->user;
         // dd($students);
-        foreach($students as $student){
+        foreach ($students as $student) {
             Notification::send($student, new SurveyNotification($survey));
         }
         $survey->url = url('mahasiswa/quicksurvey/fill_survey', $survey->id);
-        $survey->save();         
+        $survey->save();
         // dd($survey->class_id);
 
 
@@ -219,23 +212,24 @@ class SurveyController extends Controller
     public function detail($id)
     {
         $survey = Survey::with([
-            'responses', 'class'
+            'responses',
+            'class'
         ])->findOrFail($id);
-        
+
         $responses = $survey->responses;
 
         // dd($responses->where('additional'));
 
         // $additional = explode(',', $responses->additional);
-        
+
         $totalResponses = 0;
         $ratingsCount = [];
         $ratingsPercentage = [];
         $totalRating = 0;
-        
-        if($responses->isNotEmpty()){
+
+        if ($responses->isNotEmpty()) {
             $totalResponses = $responses->count();
-        
+
             for ($i = 1; $i <= 5; $i++) {
                 $ratingsCount[$i] = $responses->where('rating', $i)->count();
                 $ratingsPercentage[$i] = $totalResponses > 0 ? ($ratingsCount[$i] / $totalResponses) * 100 : 0;
@@ -244,14 +238,14 @@ class SurveyController extends Controller
         }
 
         $averageRating = $totalResponses > 0 ? round($totalRating / $totalResponses, 1) : 0;
-        
+
         krsort($ratingsCount); //sort kebalik dari 5
         krsort($ratingsPercentage);
 
         $survey->averageRating = $averageRating;
         $survey->ratingsCount = $ratingsCount;
         $survey->ratingsPercentage = $ratingsPercentage;
-            
+
         $commentCount = $survey->responses()->whereNotNull('comment')->count();
 
         return view('dosen.survey.detail', [
@@ -270,5 +264,4 @@ class SurveyController extends Controller
 
         return redirect()->route('lecturer.survey.index');
     }
-
 }

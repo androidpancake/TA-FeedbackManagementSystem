@@ -16,7 +16,9 @@ class CategorySeeder extends Seeder
         Category::create([
             'name' => 'akhlak',
             'desc' => 'akhlak dosen',
-            'for' => 'feedback'
+            'for' => 'survey',
+            'label' => 'akhlak',
+            'bg' => ''
         ]);
     }
 }

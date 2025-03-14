@@ -63,7 +63,7 @@
                 
             <div class="w-full mt-4 sm:col-span-2 space-x-5">
                 <div>
-                    <input type="text" class="block w-full p-2 border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-green-500 focus:border-green-500" placeholder="{{ $admin->nim }}">
+                    <input type="text" class="block w-full p-2 border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-green-500 focus:border-green-500" placeholder="{{ $admin->nip }}">
                 </div>
             </div>
         </div>

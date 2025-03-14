@@ -11,16 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lab', function (Blueprint $table) {
-            $table->id();
-            $table->string('username');
+        Schema::table('lecturer', function (Blueprint $table) {
             $table->string('name');
-            $table->string('nim');
-            $table->string('profile_photo');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->string('role');
         });
     }
 
@@ -29,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lab');
+        Schema::table('lecturer', function (Blueprint $table) {
+            Schema::dropColumns('lecturer', 'role');
+        });
     }
 };

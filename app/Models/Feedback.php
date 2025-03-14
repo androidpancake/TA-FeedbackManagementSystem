@@ -50,5 +50,4 @@ class Feedback extends Model
 
         return $todayCount >= 2;
     }
-
 }

@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('subject');
             $table->string('content');
-            $table->enum('status', ['sent','read','response','done'])->default('sent');
+            $table->enum('status', ['sent', 'read', 'response', 'done'])->default('sent');
             $table->datetime('date');
             $table->boolean('anonymous')->default(false);
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('lecturer_id');
             $table->unsignedBigInteger('lab_id');
+            $table->unsignedBigInteger('kelas_id');
             $table->timestamps();
         });
     }

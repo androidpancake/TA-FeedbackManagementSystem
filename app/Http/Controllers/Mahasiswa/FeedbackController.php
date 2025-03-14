@@ -30,13 +30,17 @@ class FeedbackController extends Controller
     public function index(Request $request)
     {
         $feedback = Feedback::with([
-            'user', 'class', 'category', 'reply'
+            'user',
+            'class',
+            'category',
+            'reply'
         ])
-        ->where('user_id', auth()->id())
-        ->get();
+            ->where('user_id', auth()->id())
+            ->get();
 
+        // dd($feedback);
         // dd(count($feedback));
-        
+
         $wait = Feedback::where('status', 'sent')->where('user_id', auth()->id())->get();
         $read = Feedback::where('status', 'read')->where('user_id', auth()->id())->get();
         $process = Feedback::where('status', 'response')->where('user_id', auth()->id())->get();
@@ -44,10 +48,9 @@ class FeedbackController extends Controller
 
         $sortBy = $request->get('sort');
 
-        if($sortBy === 'latest'){
+        if ($sortBy === 'latest') {
             $feedback = Feedback::orderBy('created_at', 'desc')->where('user_id', auth()->id())->get();
-        } 
-        elseif($sortBy === 'oldest') {
+        } elseif ($sortBy === 'oldest') {
             $feedback = Feedback::orderBy('created_at', 'asc')->where('user_id', auth()->id())->get();
         } else {
             $feedback = Feedback::orderBy('created_at', 'desc')->where('user_id', auth()->id())->get();
@@ -89,10 +92,9 @@ class FeedbackController extends Controller
 
         $sortBy = $request->get('sort');
 
-        if($sortBy === 'latest'){
+        if ($sortBy === 'latest') {
             $feedback = Feedback::orderBy('created_at', 'desc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
-        } 
-        elseif($sortBy === 'oldest') {
+        } elseif ($sortBy === 'oldest') {
             $feedback = Feedback::orderBy('created_at', 'asc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
         } else {
             $feedback = Feedback::orderBy('created_at', 'desc')->where('category_id', $category->id)->where('user_id', auth()->id())->get();
@@ -112,9 +114,9 @@ class FeedbackController extends Controller
     public function choice(Request $request)
     {
 
-        if($request->input('page') === "lab"){
+        if ($request->input('page') === "lab") {
             return redirect()->route('mahasiswa.feedback.create.lab');
-        } elseif($request->input('page') === "dosen") {
+        } elseif ($request->input('page') === "dosen") {
             return redirect()->route('mahasiswa.feedback.create.dosen');
         }
         // dd($request->input('page'));
@@ -131,7 +133,7 @@ class FeedbackController extends Controller
         // dd($kelas);
 
         $category = Category::where('for', 'feedback')->get();
-        
+
         return view('mahasiswa.feedback.create.dosen.create', [
             'user' => $user,
             'class' => $kelas,
@@ -160,14 +162,13 @@ class FeedbackController extends Controller
     public function store(FeedbackRequest $request)
     {
         $data = $request->all();
-        if(empty($request['date'])){
+        if (empty($request['date'])) {
             $data['date'] = now();
         }
         $data['date'] = now();
 
-        if(empty($checkbox)){
+        if (empty($checkbox)) {
             $request['anonymous'] = 0;
-
         }
 
         if ($request->hasFile('file')) {
@@ -178,11 +179,11 @@ class FeedbackController extends Controller
 
             $data['file'] = $path;
         }
-        
-            
+
+
         $user_id = $data['user_id'] = Auth::user()->id;
 
-        if(Feedback::userLimitFeedback($user_id, $data['kelas_id'])){
+        if (Feedback::userLimitFeedback($user_id, $data['kelas_id'])) {
             return redirect()->back()->with('error', 'Anda sudah mencapai batas maksimal pengiriman per-hari');
         }
 
@@ -190,13 +191,11 @@ class FeedbackController extends Controller
 
         $class = $feedback->class;
 
-        if($class->lecturer)
-        {
+        if ($class->lecturer) {
             $dosen = Lecturer::find($feedback->class->lecturer->id);
             $dosen->notify(new FeedbackNotification($feedback));
         }
-        if($class->lab)
-        {
+        if ($class->lab) {
             $lab = Lab::find($feedback->class->lab->id);
             $lab->notify(new FeedbackNotification($feedback));
         }
@@ -207,9 +206,12 @@ class FeedbackController extends Controller
     public function detail($id)
     {
         $feedback = Feedback::with([
-            'user', 'category', 'class', 'reply'
+            'user',
+            'category',
+            'class',
+            'reply'
         ])->findOrFail($id);
-        
+
         $filename = $feedback->file_name;
         $filesize = $feedback->file_size;
         $fileExtension = $feedback->file_extension;
@@ -229,15 +231,16 @@ class FeedbackController extends Controller
 
         $data['feedback_id'] = $feedback->id;
 
-        if($request->hasFile('attachment')){
+        if ($request->hasFile('attachment')) {
 
             $files = $request->file('attachment');
             $attachment = [];
 
-            foreach($files as $file)
-            $path = $file->store(
-                'replies', 'public'
-            );
+            foreach ($files as $file)
+                $path = $file->store(
+                    'replies',
+                    'public'
+                );
             $attachment[] = [
                 'path' => $path,
                 'name' => $file->getClientOriginalName()
@@ -245,16 +248,14 @@ class FeedbackController extends Controller
         }
 
         $data['attachment'] = json_encode($attachment);
-        
+
         Reply::create($data);
 
-        if($feedback->class->lecturer)
-        {
+        if ($feedback->class->lecturer) {
             $feedback->class->lecturer->notify(new LecturerReplyNotification($feedback));
         }
 
-        if($feedback->class->lab)
-        {
+        if ($feedback->class->lab) {
             $feedback->class->lab->notify(new LabReplyNotification($feedback));
         }
 
@@ -277,17 +278,15 @@ class FeedbackController extends Controller
             $data['attachment'] = $path;
         }
 
-        
+
 
         Reply::create($data);
 
-        if($feedback->class->lecturer)
-        {
+        if ($feedback->class->lecturer) {
             $feedback->class->lecturer->notify(new LecturerReplyNotification($feedback));
         }
 
-        if($feedback->class->lab)
-        {
+        if ($feedback->class->lab) {
             $feedback->class->lab->notify(new LabReplyNotification($feedback));
         }
 
@@ -303,12 +302,9 @@ class FeedbackController extends Controller
 
         $feedback->save();
 
-        if($feedback->class->lecturer)
-        {
+        if ($feedback->class->lecturer) {
             $feedback->class->lecturer->notify(new FeedbackDoneNotification($feedback));
-        } 
-        elseif ($feedback->class->lab) 
-        {    
+        } elseif ($feedback->class->lab) {
             $feedback->class->lab->notify(new FeedbackDoneNotification($feedback));
         }
 
